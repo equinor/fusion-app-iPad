@@ -10,10 +10,11 @@ spec:
     - name: prod
       build:
         from: prod
+
   components:
     - name: frontend
-    - src: ./frontend
-    - ports:
+      src: frontend
+      ports:
         - name: http
           port: 3000
-    - publicPort: http  
+      publicPort: http
