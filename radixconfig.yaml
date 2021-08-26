@@ -1,0 +1,19 @@
+apiVersion: radix.equinor.com/v1
+kind: RadixApplication
+metadata:
+  name: fusion-app-ipad
+  spec:
+  environments:
+    - name: dev
+      build:
+        from: main
+    - name: prod
+      build:
+        from: prod
+  components:
+    - name: frontend
+    - src: ./frontend
+    - ports:
+        - name: http
+          port: 3000
+    - publicPort: http  
