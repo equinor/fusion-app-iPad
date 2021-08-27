@@ -4,9 +4,8 @@
     "description": "iPad Service app",
     "main": "src/index.tsx",
     "scripts": {
-        "start": "docker-compose up --build",
-        "build": "fusion build-app",
-        "dev": "fusion start-app"
+        "start": "fusion start-app",
+        "build": "fusion build-app"
     },
     "author": "",
     "license": "ISC",
