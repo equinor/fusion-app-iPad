@@ -1,47 +1,26 @@
-import { FC, useEffect } from 'react';
-import { registerApp, useCurrentUser, useNotificationCenter } from '@equinor/fusion';
-import { Button, usePopoverRef } from '@equinor/fusion-components';
-
-import * as styles from './styles.less';
+import { FC } from 'react';
+import { registerApp } from '@equinor/fusion';
+import { Route, Switch } from 'react-router-dom'
+import Welcome from './Welcome';
+import Order from './Order';
+import Support from './Support';
+import Return from './Return';
 
 const App: FC = () => {
-    const currentUser = useCurrentUser();
-    const sendNotification = useNotificationCenter();
-
-    const [popoverRef] = usePopoverRef(
-        <div className={styles.popover}>What a lovely popover 💩</div>,
-        {
-            placement: 'below',
-        }
-    );
-    
-    const sendWelcomeNotification = async () => {
-        await sendNotification({
-            id: 'This is a unique id which means the notification will only be shown once',
-            level: 'medium',
-            title:
-                'Welcome to your new fusion app! Open up src/index.tsx to start building your app!',
-        });
-    };
-
-    useEffect(() => {
-        sendWelcomeNotification();
-    }, []);
-
-    if (!currentUser) {
-        return null;
-    }
 
     return (
-        <div className={styles.hello}>
-            <h1>Oh hello there, {currentUser.fullName}</h1>
-            <Button ref={popoverRef}>Click me!</Button>
-        </div>
+        <Switch>
+            <Route path="/order" exact component={Order} />
+            <Route path="/support" exact component={Support} />
+            <Route path="/return" exact component={Return} />
+            <Route path="" exact component={Welcome} />
+        </Switch>
     );
 };
 
 registerApp('iPad', {
     AppComponent: App,
+    name: 'iPad Service'
 });
 
 if (module.hot) {
