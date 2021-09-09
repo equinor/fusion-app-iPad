@@ -3,6 +3,7 @@ import { SearchableDropdown, SearchableDropdownOption, TextInput } from '@equino
 import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core';
 
+import { createDropdownOptions } from './helpers'
 import { exClasses, userTypes, dummyList } from './api/models'
 
 const Order = () => {
@@ -18,33 +19,13 @@ const Order = () => {
     const [radioCheckedSIM, setRadioCheckedSIM] = useState('wifi')
     const [shortname, setShortname] = useState('')
 
-    const dropdownOptions: SearchableDropdownOption[] = dummyList.map((item, index) => ({
-        title: item,
-        key: index.toString(),
-        isSelected: item === selectedOption,
-    }))
-
-    const exClassOptions: SearchableDropdownOption[] = exClasses.map((item, index) => ({
-        title: item,
-        key: index.toString(),
-        isSelected: item === selectedExClass,
-    }))
-
-    const userTypeOptions: SearchableDropdownOption[] = userTypes.map((item, index) => ({
-        title: item,
-        key: index.toString(),
-        isSelected: item === selectedUserType,
-    }))
+    const dropdownOptions = createDropdownOptions(dummyList, selectedOption)
+    const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
+    const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
 
     const validateIPadCount = (numberOfIPads: string) => {
-        if (Number(numberOfIPads) > 0) {
-            setIpadCount(numberOfIPads)
-            setNumberOfiPadsError(false)
-        }
-        else {
-            setIpadCount(numberOfIPads)
-            setNumberOfiPadsError(true)
-        }
+        setIpadCount(numberOfIPads)
+        Number(numberOfIPads) > 0 ? setNumberOfiPadsError(false) : setNumberOfiPadsError(true)
     }
    
     return (
@@ -142,7 +123,7 @@ const Order = () => {
             </Grid>
             <EdsProvider density="compact">
                 <Button variant="outlined" href='/'> Cancel </Button>
-                <Button> Create </Button>
+                <Button disabled={numberOfiPadsError}> Create </Button>
             </EdsProvider>
         </div>
 
