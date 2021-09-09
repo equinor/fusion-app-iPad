@@ -3,88 +3,62 @@ import { SearchableDropdown, SearchableDropdownOption, TextInput } from '@equino
 import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core';
 
+import { exClasses, userTypes, dummyList } from './api/models'
+
 const Order = () => {
-    const dropdownDummy = [
-        {
-            key: '1',
-            title: 'First option'
-        },
-        {
-            key: '2',
-            title: 'Second option'
-        },
-        {
-            key: '3',
-            title: 'Last option'
-        }
-    ]
 
-    const exClass = [
-        {
-            key: '1',
-            title: 'Non-EX'
-        },
-        {
-            key: '2',
-            title: 'EX Zone 1'
-        },
-        {
-            key: '3',
-            title: 'EX Zone 2'
-        }
-    ]
-
-    const userType = [
-        {
-            key: '1',
-            title: 'Equinor personnel',
-            isSelected: true,
-        },
-        {
-            key: '2',
-            title: 'External hire or Contractor'
-
-        }
-    ]
-
-    const [options, setOptions] = useState<SearchableDropdownOption[]>(dropdownDummy)
-    const [exClassOptions, setExClassOptions] = useState<SearchableDropdownOption[]>(exClass)
-    const [userTypeOptions, setUserTypeOptions] = useState<SearchableDropdownOption[]>(userType)
-    const [wbs, setWbs] = useState('');
-    const [address, setAddress] = useState('');
-    const [ipadCount, setIpadCount] = useState('');
+    const [selectedOption, setSelectedOption] = useState<string>('')
+    const [selectedExClass, setSelectedExClass] = useState<string>('')
+    const [selectedUserType, setSelectedUserType] = useState<string>('')
+    const [wbs, setWbs] = useState('')
+    const [address, setAddress] = useState('')
+    const [ipadCount, setIpadCount] = useState('')
     const [radioChecked, setRadioChecked] = useState('personal')
     const [radioCheckedSIM, setRadioCheckedSIM] = useState('wifi')
     const [shortname, setShortname] = useState('')
 
-    const updateOptions = (item: { key: string }, options: SearchableDropdownOption[]) =>
-        options.map((option) => {
-            return { ...option, isSelected: item.key === option.key };
-        })
+    const dropdownOptions: SearchableDropdownOption[] = dummyList.map((item, index) => ({
+        title: item,
+        key: index.toString(),
+        isSelected: item === selectedOption,
+    }))
 
+    const exClassOptions: SearchableDropdownOption[] = exClasses.map((item, index) => ({
+        title: item,
+        key: index.toString(),
+        isSelected: item === selectedExClass,
+    }))
+
+    const userTypeOptions: SearchableDropdownOption[] = userTypes.map((item, index) => ({
+        title: item,
+        key: index.toString(),
+        isSelected: item === selectedUserType,
+    }))
+   
+   
     return (
         <div>
             <Grid container>
                 <Grid item xs={6}>
                     <SearchableDropdown
                         label='Project'
-                        options={options}
-                        onSelect={(item) => setOptions(updateOptions(item, options))}
+                        options={dropdownOptions}
+                        onSelect={item => setSelectedOption(item.title)}
                     />
                 </Grid>
                 <Grid item xs={6}>
                     <SearchableDropdown
                         label='Country'
-                        options={options}
-                        onSelect={(item) => setOptions(updateOptions(item, options))}
+                        options={dropdownOptions}
+                        onSelect={item => setSelectedOption(item.title)}
                     />
                 </Grid>
             </Grid>
             <Grid item sm={6}>
                 <SearchableDropdown
                     label='Ordering on behalf of'
-                    options={options}
-                    onSelect={(item) => setOptions(updateOptions(item, options))}
+                    options={dropdownOptions}
+                    onSelect={item => setSelectedOption(item.title)}
                 />
             </Grid>
             <Grid item xs={6}>
@@ -105,7 +79,7 @@ const Order = () => {
                 <SearchableDropdown
                     label='EX classification'
                     options={exClassOptions}
-                    onSelect={(item) => setExClassOptions(updateOptions(item, exClassOptions))}
+                    onSelect={(item) => setSelectedExClass(item.title)}
                 />
             </Grid>
             <Radio
@@ -123,9 +97,8 @@ const Order = () => {
             <Grid item xs={6}>
                 <SearchableDropdown
                     label='User type'
-
                     options={userTypeOptions}
-                    onSelect={(item) => setUserTypeOptions(updateOptions(item, userTypeOptions))}
+                    onSelect={(item) => setSelectedUserType(item.title)}
                 />
             </Grid>
             <Radio
