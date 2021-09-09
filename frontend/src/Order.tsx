@@ -7,12 +7,13 @@ import { exClasses, userTypes, dummyList } from './api/models'
 
 const Order = () => {
 
-    const [selectedOption, setSelectedOption] = useState<string>('')
-    const [selectedExClass, setSelectedExClass] = useState<string>('')
-    const [selectedUserType, setSelectedUserType] = useState<string>('')
+    const [selectedOption, setSelectedOption] = useState('')
+    const [selectedExClass, setSelectedExClass] = useState('')
+    const [selectedUserType, setSelectedUserType] = useState('Equinor personnel')
     const [wbs, setWbs] = useState('')
     const [address, setAddress] = useState('')
     const [ipadCount, setIpadCount] = useState('')
+    const [numberOfiPadsError, setNumberOfiPadsError] = useState(false)
     const [radioChecked, setRadioChecked] = useState('personal')
     const [radioCheckedSIM, setRadioCheckedSIM] = useState('wifi')
     const [shortname, setShortname] = useState('')
@@ -34,7 +35,17 @@ const Order = () => {
         key: index.toString(),
         isSelected: item === selectedUserType,
     }))
-   
+
+    const validateIPadCount = (numberOfIPads: string) => {
+        if (Number(numberOfIPads) > 0) {
+            setIpadCount(numberOfIPads)
+            setNumberOfiPadsError(false)
+        }
+        else {
+            setIpadCount(numberOfIPads)
+            setNumberOfiPadsError(true)
+        }
+    }
    
     return (
         <div>
@@ -58,9 +69,9 @@ const Order = () => {
                 <SearchableDropdown
                     label='Ordering on behalf of'
                     options={dropdownOptions}
-                    onSelect={item => setSelectedOption(item.title)}
+                        onSelect={item => setSelectedOption(item.title)}
                 />
-            </Grid>
+             </Grid>
             <Grid item xs={6}>
                 <TextInput
                     label='Project wbs'
@@ -117,7 +128,9 @@ const Order = () => {
                 <TextInput
                     label='Number of iPads'
                     value={ipadCount}
-                    onChange={(value) => { setIpadCount(value) }}
+                    onChange={(value) => { validateIPadCount(value) }}
+                    error={numberOfiPadsError}
+                    errorMessage='Number of iPads must a number greater than 0'
                 />
             </Grid>
             <Grid item xs={6}>
