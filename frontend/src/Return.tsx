@@ -1,7 +1,4 @@
-import { FC } from 'react';
-
-
-const Return: FC = () => {
+const Return = () => {
     return (
         <>
             <p> Return page</p>

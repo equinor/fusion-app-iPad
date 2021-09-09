@@ -1,11 +1,9 @@
-import { FC, useState } from 'react';
-import { AuthUser, useCurrentUser } from '@equinor/fusion';
+import { useState } from 'react';
 import { SearchableDropdown, SearchableDropdownOption, TextInput } from '@equinor/fusion-components';
 import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core';
 
-
-const Order: FC = () => {
+const Order = () => {
     const dropdownDummy = [
         {
             key: '1',

@@ -1,7 +1,4 @@
-import { FC } from 'react';
-
-
-const Support: FC = () => {
+const Support = () => {
     return (
         <>
             <p> Support page</p>

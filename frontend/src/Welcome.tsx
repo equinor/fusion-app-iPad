@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import { Button } from '@equinor/fusion-components'
 
 
-const Welcome: FC = () => {
+const Welcome = () => {
     return (
         <div>
             <Button relativeUrl='/order'> Order </Button>

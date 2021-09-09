@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { registerApp } from '@equinor/fusion';
 import { Route, Switch } from 'react-router-dom'
 import Welcome from './Welcome';
@@ -6,7 +5,7 @@ import Order from './Order';
 import Support from './Support';
 import Return from './Return';
 
-const App: FC = () => {
+const App = () => {
 
     return (
         <Switch>
