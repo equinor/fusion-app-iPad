@@ -3,7 +3,7 @@ const Return = () => {
         <>
             <p> Return page</p>
         </>
-    );
+    )
 }
 
-export default Return;
+export default Return
