@@ -27,6 +27,7 @@
         "@types/react-router-dom": "^5.1.7",
         "@types/webpack-env": "^1.13.9",
         "history": "^4.9.0",
+        "prettier": "^2.4.0",
         "react-hot-loader": "^4.13.0",
         "react-router-dom": "^5.2.0",
         "styled-components": "^5.3.1",
