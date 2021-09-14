@@ -1,4 +1,4 @@
-#Frontend
+# Frontend
 frontend/node_modules/
 frontend/out/
 
@@ -12,3 +12,6 @@ venv
 
 # Environment variables
 .env
+
+# Cypress
+frontend/cypress/videos
