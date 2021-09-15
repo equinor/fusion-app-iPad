@@ -3,7 +3,7 @@ import { SearchableDropdown, SearchableDropdownOption, TextInput } from '@equino
 import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
-import { createDropdownOptions } from './helpers'
+import { createDropdownOptions } from './utils/helpers'
 import { exClasses, userTypes, dummyList } from './api/models'
 
 const Order = () => {
