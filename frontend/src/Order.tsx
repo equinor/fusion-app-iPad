@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
-import { Radio, Button, EdsProvider, Tooltip, Icon } from '@equinor/eds-core-react'
-import { help } from '@equinor/eds-icons'
+import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions } from './utils/helpers'
 import { exClasses, userTypes, dummyList } from './api/models'
+import { HelpIcon } from './components/HelpIcon'
 
 const Order = () => {
     const [selectedOption, setSelectedOption] = useState('')
@@ -36,17 +36,13 @@ const Order = () => {
                         <SearchableDropdown label="Project" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                     <Grid item xs={2}>
                         <SearchableDropdown label="Country" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
@@ -58,9 +54,7 @@ const Order = () => {
                         />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
@@ -74,9 +68,7 @@ const Order = () => {
                         />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
@@ -90,9 +82,7 @@ const Order = () => {
                         />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
@@ -104,9 +94,7 @@ const Order = () => {
                         />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
                 <Grid container xs={6}>
@@ -140,9 +128,7 @@ const Order = () => {
                         />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
                 <Grid item xs={4}>
@@ -187,9 +173,7 @@ const Order = () => {
                         />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
@@ -204,9 +188,7 @@ const Order = () => {
                         />
                     </Grid>
                     <Grid item xs={1}>
-                        <Tooltip placement="right" title="info text">
-                            <Icon data={help}></Icon>
-                        </Tooltip>
+                        {HelpIcon('info text')}
                     </Grid>
                 </Grid>
             </Grid>
