@@ -103,7 +103,6 @@ Cypress.Commands.add('login', (user: User) => {
                 let fusion = {
                     USER: userData,
                     'FUSION_AUTH_CACHE:5a842df8-3238-415d-b168-9f16a6a6031b:TOKEN': idToken,
-                    'FUSION_AUTH_CACHE:8829d4ca-93e8-499a-8ce1-bc0ef4840176:TOKEN': accessToken,
                 }
                 tokens.set(user, JSON.stringify(fusion))
                 window.localStorage.setItem(CACHE_ENTRY, tokens.get(user)!)
