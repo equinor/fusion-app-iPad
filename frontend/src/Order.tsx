@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
@@ -119,47 +119,85 @@ const Order = () => {
                         />
                     </Grid>
                 </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={2}>
-                        <SearchableDropdown
-                            label="User type"
-                            options={userTypeOptions}
-                            onSelect={item => setSelectedUserType(item.title)}
-                        />
-                    </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
-                </Grid>
-                <Grid item xs={4}>
-                    Due to tax regulations, Equinor can not supply personal SIM subscriptions for any external personnel. We have a
-                    procedure for this, and PDC Device Service will be in contact to solve this with the relevant staffing agency or with
-                    your contractor.
-                    <br />
-                    <br /> Do you want the contractor to order SIM?
-                </Grid>
-                <Grid container xs={6}>
-                    <Grid item xs={3}>
-                        <Radio
-                            label="No, WIFI only"
-                            value="wifi"
-                            checked={radioCheckedSIM === 'wifi'}
-                            onChange={() => {
-                                setRadioCheckedSIM('wifi')
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Radio
-                            label="Yes, SIM with 4G"
-                            value="sim"
-                            checked={radioCheckedSIM === 'sim'}
-                            onChange={() => {
-                                setRadioCheckedSIM('sim')
-                            }}
-                        />
-                    </Grid>
-                </Grid>
+                {radioChecked === 'personal' ? (
+                    selectedUserType === 'Equinor personnel' ? (
+                        <>
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={2}>
+                                    <SearchableDropdown
+                                        label="User type"
+                                        options={userTypeOptions}
+                                        onSelect={item => setSelectedUserType(item.title)}
+                                    />
+                                </Grid>
+                                <Grid item xs={1}>
+                                    {HelpIcon('info text')}
+                                </Grid>
+                            </Grid>
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={4}>
+                                    <TextInput
+                                        label="Shortname users"
+                                        value={shortname}
+                                        isOptional={true}
+                                        onChange={value => {
+                                            setShortname(value)
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={1}>
+                                    {HelpIcon('info text')}
+                                </Grid>
+                            </Grid>
+                        </>
+                    ) : (
+                        <>
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={2}>
+                                    <SearchableDropdown
+                                        label="User type"
+                                        options={userTypeOptions}
+                                        onSelect={item => setSelectedUserType(item.title)}
+                                    />
+                                </Grid>
+                                <Grid item xs={1}>
+                                    {HelpIcon('info text')}
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={4}>
+                                Due to tax regulations, Equinor can not supply personal SIM subscriptions for any external personnel. We
+                                have a procedure for this, and PDC Device Service will be in contact to solve this with the relevant
+                                staffing agency or with your contractor.
+                                <br />
+                                <br /> Do you want the contractor to order SIM?
+                            </Grid>
+                            <Grid container xs={6}>
+                                <Grid item xs={3}>
+                                    <Radio
+                                        label="No, WIFI only"
+                                        value="wifi"
+                                        checked={radioCheckedSIM === 'wifi'}
+                                        onChange={() => {
+                                            setRadioCheckedSIM('wifi')
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Radio
+                                        label="Yes, SIM with 4G"
+                                        value="sim"
+                                        checked={radioCheckedSIM === 'sim'}
+                                        onChange={() => {
+                                            setRadioCheckedSIM('sim')
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </>
+                    )
+                ) : (
+                    <></>
+                )}
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={2}>
                         <TextInput
@@ -170,21 +208,6 @@ const Order = () => {
                             }}
                             error={numberOfiPadsError}
                             errorMessage="Number of iPads must a number greater than 0"
-                        />
-                    </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={4}>
-                        <TextInput
-                            label="Shortname users"
-                            value={shortname}
-                            isOptional={true}
-                            onChange={value => {
-                                setShortname(value)
-                            }}
                         />
                     </Grid>
                     <Grid item xs={1}>
