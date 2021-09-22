@@ -6,12 +6,12 @@ on:
   pull_request:
     branches: [ main ]
 
-defaults:
-  run:
-    working-directory: ./frontend
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,13 +29,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Start mock auth
+        run: docker-compose -f docker-compose.cypress.yml up -d mock-auth
+
+      - name: Start frontend
+        run: docker-compose -f docker-compose.cypress.yml up -d frontend
+
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
          working-directory: ./frontend
+         config-file: cypress.json
+         env: FRONTEND_URL=http://localhost:3000,API_URL=http://localhost:5000,AUTH_URL=http://localhost:8080
 
   test_frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v2
