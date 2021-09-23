@@ -37,15 +37,11 @@ const Order = () => {
                     <Grid item xs={2}>
                         <SearchableDropdown label="Project" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
-                    <Grid item xs={1}>
-                        <HelpIcon helpText={'info text'} />
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                     <Grid item xs={2}>
                         <SearchableDropdown label="Country" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
-                    <Grid item xs={1}>
-                        <HelpIcon helpText={'info text'} />
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={2}>
@@ -55,9 +51,7 @@ const Order = () => {
                             onSelect={item => setSelectedOption(item.title)}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        <HelpIcon helpText={'info text'} />
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={4}>
@@ -69,9 +63,7 @@ const Order = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        <HelpIcon helpText={'info text'} />
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={4}>
@@ -83,9 +75,7 @@ const Order = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        <HelpIcon helpText={'info text'} />
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={2}>
@@ -95,9 +85,7 @@ const Order = () => {
                             onSelect={item => setSelectedExClass(item.title)}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        <HelpIcon helpText={'info text'} />
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid container xs={6}>
                     <Grid item xs={3}>
@@ -137,9 +125,7 @@ const Order = () => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={1}>
-                                    <HelpIcon helpText={'info text'} />
-                                </Grid>
+                                <HelpIcon helpText={'info text'} />
                             </Grid>
                         </>
                     ) : (
@@ -165,9 +151,7 @@ const Order = () => {
                             errorMessage="Number of iPads must a number greater than 0"
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        <HelpIcon helpText={'info text'} />
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
             </Grid>
             <Grid container spacing={3}>
