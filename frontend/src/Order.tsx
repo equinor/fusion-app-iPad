@@ -154,18 +154,14 @@ const Order = () => {
                     <HelpIcon helpText={'info text'} />
                 </Grid>
             </Grid>
-            <Grid container spacing={10}>
+            <Grid container spacing={4}>
                 <Grid item>
-                    <EdsProvider density="compact">
-                        <Button variant="outlined" href="/">
-                            Cancel
-                        </Button>
-                    </EdsProvider>
+                    <Button variant="outlined" href="/">
+                        Cancel
+                    </Button>
                 </Grid>
                 <Grid item>
-                    <EdsProvider density="compact">
-                        <Button disabled={numberOfiPadsError}> Create </Button>
-                    </EdsProvider>
+                    <Button disabled={numberOfiPadsError}> Create </Button>
                 </Grid>
             </Grid>
         </div>
