@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
@@ -6,6 +6,8 @@ import { Grid } from '@material-ui/core'
 import { createDropdownOptions } from './utils/helpers'
 import { exClasses, userTypes, dummyList } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
+import { SimOrderRadio } from './components/SimOrderRadio'
+import { UserTypeDropdown } from './components/UserTypeDropdown'
 
 const Order = () => {
     const [selectedOption, setSelectedOption] = useState('')
@@ -29,36 +31,30 @@ const Order = () => {
     }
 
     return (
-        <div style={{ margin: 25 }}>
+        <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
             <Grid container spacing={4} direction="column">
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={2}>
+                    <Grid item xs={10} sm={5}>
                         <SearchableDropdown label="Project" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
-                    <Grid item xs={2}>
+                    <HelpIcon helpText={'info text'} />
+                    <Grid item xs={10} sm={5}>
                         <SearchableDropdown label="Country" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={2}>
+                    <Grid item xs={10} sm={5}>
                         <SearchableDropdown
                             label="Ordering on behalf of"
                             options={dropdownOptions}
                             onSelect={item => setSelectedOption(item.title)}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={4}>
+                    <Grid item xs={10} sm={5}>
                         <TextInput
                             label="Project wbs"
                             value={wbs}
@@ -67,12 +63,10 @@ const Order = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={4}>
+                    <Grid item xs={10} sm={5}>
                         <TextInput
                             label="Delivery address"
                             value={address}
@@ -81,24 +75,20 @@ const Order = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={2}>
+                    <Grid item xs={10} sm={5}>
                         <SearchableDropdown
                             label="EX classification"
                             options={exClassOptions}
                             onSelect={item => setSelectedExClass(item.title)}
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
-                <Grid container xs={6}>
-                    <Grid item xs={3}>
+                <Grid container>
+                    <Grid item xs={10} sm={3}>
                         <Radio
                             label="Personal device"
                             value="personal"
@@ -108,7 +98,7 @@ const Order = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={10} sm={3}>
                         <Radio
                             label="Multi-user device"
                             value="multi"
@@ -119,49 +109,38 @@ const Order = () => {
                         />
                     </Grid>
                 </Grid>
+                {radioChecked === 'personal' ? (
+                    selectedUserType === 'Equinor personnel' ? (
+                        //Personal equinor employee device
+                        <>
+                            <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={10} sm={5}>
+                                    <TextInput
+                                        label="Shortname users"
+                                        value={shortname}
+                                        isOptional={true}
+                                        onChange={value => {
+                                            setShortname(value)
+                                        }}
+                                    />
+                                </Grid>
+                                <HelpIcon helpText={'info text'} />
+                            </Grid>
+                        </>
+                    ) : (
+                        //Personal external employee device
+                        <>
+                            <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                            <SimOrderRadio radioCheckedSIM={radioCheckedSIM} setRadioCheckedSIM={setRadioCheckedSIM} />
+                        </>
+                    )
+                ) : (
+                    // Multi-device order
+                    <></>
+                )}
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={2}>
-                        <SearchableDropdown
-                            label="User type"
-                            options={userTypeOptions}
-                            onSelect={item => setSelectedUserType(item.title)}
-                        />
-                    </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
-                </Grid>
-                <Grid item xs={4}>
-                    Due to tax regulations, Equinor can not supply personal SIM subscriptions for any external personnel. We have a
-                    procedure for this, and PDC Device Service will be in contact to solve this with the relevant staffing agency or with
-                    your contractor.
-                    <br />
-                    <br /> Do you want the contractor to order SIM?
-                </Grid>
-                <Grid container xs={6}>
-                    <Grid item xs={3}>
-                        <Radio
-                            label="No, WIFI only"
-                            value="wifi"
-                            checked={radioCheckedSIM === 'wifi'}
-                            onChange={() => {
-                                setRadioCheckedSIM('wifi')
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Radio
-                            label="Yes, SIM with 4G"
-                            value="sim"
-                            checked={radioCheckedSIM === 'sim'}
-                            onChange={() => {
-                                setRadioCheckedSIM('sim')
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={2}>
+                    <Grid item xs={10} sm={5}>
                         <TextInput
                             label="Number of iPads"
                             value={ipadCount}
@@ -172,38 +151,17 @@ const Order = () => {
                             errorMessage="Number of iPads must a number greater than 0"
                         />
                     </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={4}>
-                        <TextInput
-                            label="Shortname users"
-                            value={shortname}
-                            isOptional={true}
-                            onChange={value => {
-                                setShortname(value)
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={1}>
-                        {HelpIcon('info text')}
-                    </Grid>
+                    <HelpIcon helpText={'info text'} />
                 </Grid>
             </Grid>
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
                 <Grid item>
-                    <EdsProvider density="compact">
-                        <Button variant="outlined" href="/">
-                            Cancel
-                        </Button>
-                    </EdsProvider>
+                    <Button variant="outlined" href="/">
+                        Cancel
+                    </Button>
                 </Grid>
                 <Grid item>
-                    <EdsProvider density="compact">
-                        <Button disabled={numberOfiPadsError}> Create </Button>
-                    </EdsProvider>
+                    <Button disabled={numberOfiPadsError}> Create </Button>
                 </Grid>
             </Grid>
         </div>
