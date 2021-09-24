@@ -31,7 +31,7 @@ const Order = () => {
     }
 
     return (
-        <div style={{ margin: 25, minWidth: '250px', maxWidth: '1000px' }}>
+        <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
             <Grid container spacing={4} direction="column">
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5}>
