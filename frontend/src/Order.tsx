@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
-import { Radio, Button, EdsProvider } from '@equinor/eds-core-react'
+import { Radio, Button } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions } from './utils/helpers'
