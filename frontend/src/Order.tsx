@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { PersonDetails, useCurrentUser, useFusionContext } from '@equinor/fusion'
+import { PersonDetails, useApiClients, useCurrentUser, useFusionContext } from '@equinor/fusion'
 import { PersonPicker, SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
@@ -28,16 +28,14 @@ const Order = () => {
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
 
-    const fusionContext = useFusionContext()
+    const apiClients = useApiClients()
     const currentUser = useCurrentUser()
-    const getInitialPerson = async () => {
-        if (currentUser) {
-            const person = await fusionContext.http.apiClients.people.getPersonDetailsAsync(currentUser.id)
-            setInitialPerson(person.data)
-        }
-    }
     useEffect(() => {
-        getInitialPerson()
+        if (currentUser) {
+            apiClients.people.getPersonDetailsAsync(currentUser.id).then(response => {
+                setInitialPerson(response.data)
+            })
+        }
     }, [])
 
     const validateIPadCount = (numberOfIPads: string) => {
