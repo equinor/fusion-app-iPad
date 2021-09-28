@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
-import { Radio, Button } from '@equinor/eds-core-react'
+import { useEffect, useState } from 'react'
+import { PersonDetails, useCurrentUser, useFusionContext } from '@equinor/fusion'
+import { PersonPicker, SearchableDropdown, TextInput } from '@equinor/fusion-components'
+import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions } from './utils/helpers'
@@ -20,10 +21,24 @@ const Order = () => {
     const [radioChecked, setRadioChecked] = useState('personal')
     const [radioCheckedSIM, setRadioCheckedSIM] = useState('wifi')
     const [shortname, setShortname] = useState('')
+    const [initialPerson, setInitialPerson] = useState<PersonDetails>()
+    const [selectedPerson, setSelectedPerson] = useState<PersonDetails | null>(null)
 
     const dropdownOptions = createDropdownOptions(dummyList, selectedOption)
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
+
+    const fusionContext = useFusionContext()
+    const currentUser = useCurrentUser()
+    const getInitialPerson = async () => {
+        if (currentUser) {
+            const person = await fusionContext.http.apiClients.people.getPersonDetailsAsync(currentUser.id)
+            setInitialPerson(person.data)
+        }
+    }
+    useEffect(() => {
+        getInitialPerson()
+    }, [])
 
     const validateIPadCount = (numberOfIPads: string) => {
         setIpadCount(numberOfIPads)
@@ -45,10 +60,13 @@ const Order = () => {
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5}>
-                        <SearchableDropdown
-                            label="Ordering on behalf of"
-                            options={dropdownOptions}
-                            onSelect={item => setSelectedOption(item.title)}
+                        <Typography variant="body_short" style={{ fontSize: '13px' }}>
+                            Ordering on behalf of
+                        </Typography>
+                        <PersonPicker
+                            initialPerson={initialPerson}
+                            selectedPerson={selectedPerson}
+                            onSelect={person => setSelectedPerson(person)}
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />

@@ -1,4 +1,4 @@
-import { Context, ContextTypes, registerApp, useCurrentContext } from '@equinor/fusion'
+import { Context, ContextTypes, registerApp, useCurrentContext, useCurrentUser } from '@equinor/fusion'
 import { Route, Switch } from 'react-router-dom'
 import Welcome from './Welcome'
 import Order from './Order'
@@ -6,7 +6,16 @@ import Support from './Support'
 import Return from './Return'
 
 const App = () => {
+    const currentUser = useCurrentUser()
     const currentProject = useCurrentContext()
+
+    if (!currentUser) {
+        return (
+            <>
+                <p>Please log in.</p>
+            </>
+        )
+    }
 
     if (!currentProject) {
         return (
