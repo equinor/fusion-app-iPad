@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
-import { Radio, Button } from '@equinor/eds-core-react'
+import { useEffect, useState } from 'react'
+import { PersonDetails, useApiClients, useCurrentUser } from '@equinor/fusion'
+import { PersonPicker, SearchableDropdown, TextInput } from '@equinor/fusion-components'
+import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions } from './utils/helpers'
@@ -20,10 +21,22 @@ const Order = () => {
     const [radioChecked, setRadioChecked] = useState('personal')
     const [radioCheckedSIM, setRadioCheckedSIM] = useState('wifi')
     const [shortname, setShortname] = useState('')
+    const [initialPerson, setInitialPerson] = useState<PersonDetails>()
+    const [selectedPerson, setSelectedPerson] = useState<PersonDetails | null>(null)
 
     const dropdownOptions = createDropdownOptions(dummyList, selectedOption)
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
+
+    const apiClients = useApiClients()
+    const currentUser = useCurrentUser()
+    useEffect(() => {
+        if (currentUser) {
+            apiClients.people.getPersonDetailsAsync(currentUser.id).then(response => {
+                setInitialPerson(response.data)
+            })
+        }
+    }, [])
 
     const validateIPadCount = (numberOfIPads: string) => {
         setIpadCount(numberOfIPads)
@@ -45,10 +58,13 @@ const Order = () => {
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5}>
-                        <SearchableDropdown
-                            label="Ordering on behalf of"
-                            options={dropdownOptions}
-                            onSelect={item => setSelectedOption(item.title)}
+                        <Typography variant="body_short" style={{ fontSize: '13px' }}>
+                            Ordering on behalf of
+                        </Typography>
+                        <PersonPicker
+                            initialPerson={initialPerson}
+                            selectedPerson={selectedPerson}
+                            onSelect={person => setSelectedPerson(person)}
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
@@ -148,7 +164,7 @@ const Order = () => {
                                 validateIPadCount(value)
                             }}
                             error={numberOfiPadsError}
-                            errorMessage="Number of iPads must a number greater than 0"
+                            errorMessage="The number of iPads must be a number greater than 0"
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
