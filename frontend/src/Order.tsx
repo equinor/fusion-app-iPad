@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { PersonDetails, useApiClients, useCurrentUser, useFusionContext } from '@equinor/fusion'
+import { PersonDetails, useApiClients, useCurrentUser } from '@equinor/fusion'
 import { PersonPicker, SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
@@ -164,7 +164,7 @@ const Order = () => {
                                 validateIPadCount(value)
                             }}
                             error={numberOfiPadsError}
-                            errorMessage="Number of iPads must a number greater than 0"
+                            errorMessage="The number of iPads must be a number greater than 0"
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
