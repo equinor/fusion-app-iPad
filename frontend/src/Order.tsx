@@ -34,6 +34,7 @@ const Order = () => {
         if (currentUser) {
             apiClients.people.getPersonDetailsAsync(currentUser.id).then(response => {
                 setInitialPerson(response.data)
+                setSelectedPerson(response.data)
             })
         }
     }, [])
@@ -41,6 +42,12 @@ const Order = () => {
     const validateIPadCount = (numberOfIPads: string) => {
         setIpadCount(numberOfIPads)
         Number(numberOfIPads) > 0 ? setNumberOfiPadsError(false) : setNumberOfiPadsError(true)
+    }
+
+    const isCreateDisabled = () => {
+        return (
+            selectedOption === '' || selectedPerson === null || selectedExClass === '' || wbs === '' || address === '' || numberOfiPadsError
+        )
     }
 
     return (
@@ -177,7 +184,7 @@ const Order = () => {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button disabled={numberOfiPadsError}> Create </Button>
+                    <Button disabled={isCreateDisabled()}>Create</Button>
                 </Grid>
             </Grid>
         </div>
