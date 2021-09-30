@@ -46,7 +46,13 @@ const Order = () => {
 
     const isCreateDisabled = () => {
         return (
-            selectedOption === '' || selectedPerson === null || selectedExClass === '' || wbs === '' || address === '' || numberOfiPadsError
+            selectedOption === '' ||
+            selectedPerson === null ||
+            selectedExClass === '' ||
+            wbs === '' ||
+            address === '' ||
+            ipadCount === '' ||
+            numberOfiPadsError
         )
     }
 
