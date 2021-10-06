@@ -37,7 +37,19 @@ const Order = () => {
                 setSelectedPerson(response.data)
             })
         }
-    }, [])
+    }, [currentUser])
+
+    useEffect(() => {
+        if (selectedPerson) {
+            apiClients.people.getPersonDetailsAsync(selectedPerson.azureUniqueId).then(response => {
+                if (response.data.officeLocation) {
+                    setAddress(response.data.officeLocation)
+                } else {
+                    setAddress('')
+                }
+            })
+        }
+    }, [selectedPerson])
 
     const validateIPadCount = (numberOfIPads: string) => {
         setIpadCount(numberOfIPads)
