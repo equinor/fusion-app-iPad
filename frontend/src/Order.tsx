@@ -9,10 +9,12 @@ import { exClasses, userTypes, dummyList } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { UserTypeDropdown } from './components/UserTypeDropdown'
+import { AccessorySelector } from './components/AccessorySelector'
 
 const Order = () => {
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedExClass, setSelectedExClass] = useState('')
+    const [selectedAccessories, setSelectedAccessories] = useState<string[] | undefined>(['Charger Plug', 'Neck Strap'])
     const [selectedUserType, setSelectedUserType] = useState('Equinor personnel')
     const [wbs, setWbs] = useState('')
     const [address, setAddress] = useState('')
@@ -127,6 +129,15 @@ const Order = () => {
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
+                </Grid>
+                <Grid item container xs={12} spacing={3} alignItems="center">
+                    {selectedExClass != '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
+                        <Grid item xs={10} sm={5}>
+                            <AccessorySelector selectedAccessories={selectedAccessories} setSelectedAccessories={setSelectedAccessories} />
+                        </Grid>
+                    ) : (
+                        <></>
+                    )}
                 </Grid>
                 <Grid container>
                     <Grid item xs={10} sm={3}>
