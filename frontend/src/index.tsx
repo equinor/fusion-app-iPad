@@ -39,7 +39,7 @@ registerApp('iPad', {
     AppComponent: App,
     name: 'iPad Service',
     context: {
-        types: [ContextTypes.Project],
+        types: [ContextTypes.OrgChart],
         buildUrl: (context: Context | null, url: string) => {
             if (!context) return ''
             return `/${context.id}`
