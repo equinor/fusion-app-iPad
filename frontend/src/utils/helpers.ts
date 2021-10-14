@@ -1,3 +1,4 @@
+import { PositionInstance } from '@equinor/fusion'
 import { SearchableDropdownOption } from '@equinor/fusion-components'
 import { PositionDetails } from '../api/models'
 
@@ -15,4 +16,13 @@ export const createDropdownOptionsFromPos = (list: PositionDetails[], selectedOp
         key: item.positionId,
         isSelected: item.positionId === selectedOption,
     }))
+}
+
+export const getValidPosition = (instances: PositionInstance[]) => {
+    const date = new Date()
+    return instances.filter(i => i.appliesFrom.getTime() < date.getTime() && i.appliesTo.getTime() > date.getTime())[0]
+}
+
+export const getName = (instance: PositionInstance) => {
+    return instance?.assignedPerson !== null ? instance?.assignedPerson.name : 'notValid'
 }

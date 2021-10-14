@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { PositionInstance, useApiClients, useCurrentContext } from '@equinor/fusion'
+import { useApiClients, useCurrentContext } from '@equinor/fusion'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
-import { createDropdownOptions, createDropdownOptionsFromPos } from './utils/helpers'
-import { exClasses, userTypes, dummyList, PositionDetails, getValidPosition, getName } from './api/models'
+import { createDropdownOptions, createDropdownOptionsFromPos, getValidPosition, getName } from './utils/helpers'
+import { exClasses, userTypes, dummyList, PositionDetails } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { UserTypeDropdown } from './components/UserTypeDropdown'
@@ -30,7 +30,7 @@ const Order = () => {
     const dropdownOptions = createDropdownOptions(dummyList, selectedOption)
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
-    const positionsDropdown = createDropdownOptionsFromPos(validPositions, selectedPositionId)
+    const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId)
 
     const apiClients = useApiClients()
     const currentContext = useCurrentContext()
@@ -92,8 +92,8 @@ const Order = () => {
                             Ordering on behalf of
                         </Typography>
                         <OrderBehalfofPicker
-                            pos={validPositions}
-                            positionsDropdown={positionsDropdown}
+                            positionOptions={positionOptions}
+                            positions={validPositions}
                             setSelectedPositionID={setSelectedPositionId}
                         />
                     </Grid>

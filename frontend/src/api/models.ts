@@ -1,4 +1,4 @@
-import { PersonDetails, PositionInstance } from '@equinor/fusion'
+import { PersonDetails } from '@equinor/fusion'
 
 export const exClasses: string[] = ['Non EX', 'EX Zone 1', 'EX Zone 2']
 
@@ -18,13 +18,4 @@ export type PositionDetails = {
     positionName: string
     assignedPerson: PersonDetails | null
     assignedPersonName: string
-}
-
-export const getValidPosition = (instances: PositionInstance[]) => {
-    const date = new Date()
-    return instances.filter(i => i.appliesFrom.getTime() < date.getTime() && i.appliesTo.getTime() > date.getTime())[0]
-}
-
-export const getName = (instance: PositionInstance) => {
-    return instance?.assignedPerson !== null ? instance?.assignedPerson.name : 'notValid'
 }
