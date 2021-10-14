@@ -1,5 +1,9 @@
+import { PersonDetails, PositionInstance } from '@equinor/fusion'
+
 export const exClasses: string[] = ['Non EX', 'EX Zone 1', 'EX Zone 2']
+
 export const userTypes: string[] = ['Equinor personnel', 'External hire or Contractor']
+
 export const accessories = [
     'Charger Plug',
     'Neck Strap',
@@ -8,3 +12,19 @@ export const accessories = [
     '8-port charging station incl 0,3m charge cable',
 ]
 export const dummyList: string[] = ['First option', 'Second option', 'Last option']
+
+export type PositionDetails = {
+    positionId: string
+    positionName: string
+    assignedPerson: PersonDetails | null
+    assignedPersonName: string
+}
+
+export const getValidPosition = (instances: PositionInstance[]) => {
+    const date = new Date()
+    return instances.filter(i => i.appliesFrom.getTime() < date.getTime() && i.appliesTo.getTime() > date.getTime())[0]
+}
+
+export const getName = (instance: PositionInstance) => {
+    return instance?.assignedPerson !== null ? instance?.assignedPerson.name : 'notValid'
+}
