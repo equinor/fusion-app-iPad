@@ -9,12 +9,14 @@ function setProjectCache(fusionProjectId: string) {
 }
 
 Cypress.Commands.add('visitProject', (user: User, fusionProjectId: string = '123') => {
+    cy.interceptExternal()
     setProjectCache(fusionProjectId)
 
     cy.login(user)
     const frontendUrl = Cypress.env('FRONTEND_URL') || 'http://localhost:3000'
 
     cy.visit(`${frontendUrl}/${fusionProjectId}`)
+    cy.contains('Order').should('be.visible')
 })
 
 declare global {
