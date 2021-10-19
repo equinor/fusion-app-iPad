@@ -77,17 +77,17 @@ const Order = () => {
         <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
             <Grid container spacing={4} direction="column">
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5}>
+                    <Grid item xs={10} sm={5} data-testid={'project_dropdown'}>
                         <SearchableDropdown label="Project" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
-                    <Grid item xs={10} sm={5}>
+                    <Grid item xs={10} sm={5} data-testid={'country_dropdown'}>
                         <SearchableDropdown label="Country" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5}>
+                    <Grid item xs={10} sm={5} data-testid={'person_dropdown'}>
                         <Typography variant="body_short" style={{ fontSize: '13px' }}>
                             Ordering on behalf of
                         </Typography>
@@ -107,6 +107,7 @@ const Order = () => {
                             onChange={value => {
                                 setWbs(value)
                             }}
+                            data-testid={'wbs_input'}
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
@@ -119,12 +120,13 @@ const Order = () => {
                             onChange={value => {
                                 setAddress(value)
                             }}
+                            data-testid={'address_input'}
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5}>
+                    <Grid item xs={10} sm={5} data-testid={'ex_dropdown'}>
                         <SearchableDropdown
                             label="EX classification"
                             options={exClassOptions}
@@ -135,7 +137,7 @@ const Order = () => {
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     {selectedExClass != '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
-                        <Grid item xs={10} sm={5}>
+                        <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
                             <AccessorySelector selectedAccessories={selectedAccessories} setSelectedAccessories={setSelectedAccessories} />
                         </Grid>
                     ) : (
@@ -143,7 +145,7 @@ const Order = () => {
                     )}
                 </Grid>
                 <Grid container>
-                    <Grid item xs={10} sm={3}>
+                    <Grid item xs={10} sm={3} data-testid={'personal_radio'}>
                         <Radio
                             label="Personal device"
                             value="personal"
@@ -153,7 +155,7 @@ const Order = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={10} sm={3}>
+                    <Grid item xs={10} sm={3} data-testid={'multi_user_radio'}>
                         <Radio
                             label="Multi-user device"
                             value="multi"
@@ -178,6 +180,7 @@ const Order = () => {
                                         onChange={value => {
                                             setShortname(value)
                                         }}
+                                        data-testid={'shortname_input'}
                                     />
                                 </Grid>
                                 <HelpIcon helpText={'info text'} />
@@ -204,6 +207,7 @@ const Order = () => {
                             }}
                             error={numberOfiPadsError}
                             errorMessage="The number of iPads must be a number greater than 0"
+                            data-testid={'numberipads_input'}
                         />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
@@ -211,12 +215,14 @@ const Order = () => {
             </Grid>
             <Grid container spacing={4}>
                 <Grid item>
-                    <Button variant="outlined" href="/">
+                    <Button variant="outlined" href="/" data-testid={'cancel_button'}>
                         Cancel
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button disabled={isCreateDisabled()}>Create</Button>
+                    <Button disabled={isCreateDisabled()} data-testid={'create_button'}>
+                        Create
+                    </Button>
                 </Grid>
             </Grid>
         </div>
