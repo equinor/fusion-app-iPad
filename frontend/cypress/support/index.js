@@ -15,3 +15,4 @@
 
 import './auth'
 import './visit'
+import './mock/external'

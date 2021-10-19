@@ -24,6 +24,7 @@ export const SimOrderRadio = ({ radioCheckedSIM, setRadioCheckedSIM }: Props) =>
                         onChange={() => {
                             setRadioCheckedSIM('wifi')
                         }}
+                        data-testid={'wifi_radio'}
                     />
                 </Grid>
                 <Grid item xs={10} sm={3}>
@@ -34,6 +35,7 @@ export const SimOrderRadio = ({ radioCheckedSIM, setRadioCheckedSIM }: Props) =>
                         onChange={() => {
                             setRadioCheckedSIM('sim')
                         }}
+                        data-testid={'4g_radio'}
                     />
                 </Grid>
             </Grid>
