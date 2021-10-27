@@ -27,4 +27,23 @@ spec:
             limits:
               memory: "3000Mi"
               cpu: "1000m"
+          variables:
+            API_URL: "https://backend-fusion-app-ipad-dev.playground.radix.equinor.com/"
+          runAsNonRoot: true
+
+    - name: backend
+      src: backend
+      ports:
+        - name: http
+          port: 5000
+      publicPort: http
+      environmentConfig:
+        - environment: dev
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
           runAsNonRoot: true
