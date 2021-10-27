@@ -18,8 +18,8 @@ export const createDropdownOptionsFromPos = (
     if (!hasFetched) {
         return [
             {
-                title: 'Searching...',
-                key: 'searching',
+                title: 'Loading...',
+                key: 'loading',
                 isDisabled: true,
             },
         ]
@@ -27,7 +27,7 @@ export const createDropdownOptionsFromPos = (
     if (list.length === 0) {
         return [
             {
-                title: 'No people found', //What to display here? Unrealistic case?
+                title: 'No eligible people found', //What to display here? Unrealistic case?
                 key: 'empty',
                 isDisabled: true,
             },

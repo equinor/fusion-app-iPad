@@ -10,7 +10,7 @@ interface Props {
 export const OrderBehalfofPicker = ({ positionOptions, positions, setSelectedPositionID }: Props) => {
     const ItemComponent = (item: any) => {
         if (item.item) {
-            if (item.item.key === 'empty' || item.item.key === 'searching') {
+            if (item.item.key === 'empty' || item.item.key === 'loading') {
                 return <div>{item.item.title}</div>
             }
             const posDetails = positions.find(p => p.positionId === item.item.key)
