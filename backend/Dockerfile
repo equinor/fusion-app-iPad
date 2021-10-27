@@ -5,7 +5,7 @@ WORKDIR /source
 # Copy the source files over
 COPY . .
 
-# Set the working directory where to where the actual source files reside and run build/publish
+# Set the working directory where the actual source files reside and run build/publish
 WORKDIR /source/src
 RUN dotnet publish -c release -o /app
 
