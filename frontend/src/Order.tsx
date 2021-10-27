@@ -26,11 +26,11 @@ const Order = () => {
     const [shortname, setShortname] = useState('')
     const [validPositions, setValidPositions] = useState<PositionDetails[]>([])
     const [selectedPositionId, setSelectedPositionId] = useState('')
+    const [hasFetched, setHasFetched] = useState(false)
 
     const dropdownOptions = createDropdownOptions(dummyList, selectedOption)
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
-    const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId)
 
     const apiClients = useApiClients()
     const currentContext = useCurrentContext()
@@ -69,9 +69,12 @@ const Order = () => {
                         )
                         .filter(element => element.assignedPerson !== undefined && element.assignedPerson !== null)
                 )
+                setHasFetched(true)
             })
         }
     }, [currentContext])
+
+    const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId, hasFetched)
 
     return (
         <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
