@@ -3,6 +3,7 @@ import { useApiClients, useCurrentContext } from '@equinor/fusion'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
+import axios, { AxiosResponse } from 'axios'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, getValidPosition, getName } from './utils/helpers'
 import { exClasses, userTypes, dummyList, PositionDetails } from './api/models'
@@ -75,6 +76,12 @@ const Order = () => {
     }, [currentContext])
 
     const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId, hasFetched)
+
+    const onClickCreate = async () => {
+        axios.get(process.env.API_URL!).then(response => {
+            console.log(response.data)
+        })
+    }
 
     return (
         <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
@@ -223,7 +230,7 @@ const Order = () => {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button disabled={isCreateDisabled()} data-testid={'create_button'}>
+                    <Button disabled={isCreateDisabled()} data-testid={'create_button'} onClick={onClickCreate}>
                         Create
                     </Button>
                 </Grid>
