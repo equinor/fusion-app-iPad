@@ -9,7 +9,7 @@ COPY . .
 WORKDIR /source/src
 RUN dotnet publish -c release -o /app
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
 WORKDIR /app
 COPY --from=build /app ./
 
