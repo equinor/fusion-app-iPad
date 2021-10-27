@@ -10,7 +10,29 @@ export const createDropdownOptions = (list: string[], selectedOption: string): S
     }))
 }
 
-export const createDropdownOptionsFromPos = (list: PositionDetails[], selectedOption: string): SearchableDropdownOption[] => {
+export const createDropdownOptionsFromPos = (
+    list: PositionDetails[],
+    selectedOption: string,
+    hasFetched: boolean
+): SearchableDropdownOption[] => {
+    if (!hasFetched) {
+        return [
+            {
+                title: 'Loading...',
+                key: 'loading',
+                isDisabled: true,
+            },
+        ]
+    }
+    if (list.length === 0) {
+        return [
+            {
+                title: 'No eligible people found', //What to display here? Unrealistic case?
+                key: 'empty',
+                isDisabled: true,
+            },
+        ]
+    }
     return list.map((item, index) => ({
         title: item.assignedPersonName + ' ' + item.positionName,
         key: item.positionId,
