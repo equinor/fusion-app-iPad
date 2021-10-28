@@ -30,7 +30,7 @@
         "@types/react": "^17.0.0",
         "@types/react-router-dom": "^5.1.7",
         "@types/webpack-env": "^1.13.9",
-        "cypress": "^8.3.1",
+        "cypress": "^8.7.0",
         "faker": "^5.5.3",
         "history": "^4.9.0",
         "jest": "^27.2.0",
