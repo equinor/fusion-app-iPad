@@ -1,11 +1,16 @@
 version: "3.7"
 services:
   frontend:
-    image: frontend
-    build:
-      context: ./
-      dockerfile: frontend/Dockerfile
+    build: frontend
+    depends_on:
+      - backend
     ports:
       - '3000:3000'
-    volumes:
-      - ./src:/app/src:rw
+    environment:
+      - API_URL=http://localhost:5000
+  backend:
+    build: backend
+    ports:
+      - '5000:5000'
+    environment:
+      - BUILD_MODE=development
