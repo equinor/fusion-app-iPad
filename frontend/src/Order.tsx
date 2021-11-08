@@ -12,6 +12,7 @@ import { SimOrderRadio } from './components/SimOrderRadio'
 import { UserTypeDropdown } from './components/UserTypeDropdown'
 import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
+import { config } from './config'
 
 const Order = () => {
     const [selectedOption, setSelectedOption] = useState('')
@@ -78,7 +79,7 @@ const Order = () => {
     const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId, hasFetched)
 
     const onClickCreate = async () => {
-        axios.get(process.env.API_URL!).then(response => {
+        axios.get(config.API_URL).then(response => {
             console.log(response.data)
         })
     }
