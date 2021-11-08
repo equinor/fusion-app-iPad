@@ -31,9 +31,10 @@ namespace Api
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins, builder => {
-                        builder.WithOrigins("http://localhost:3000")
+                        builder.WithOrigins("http://localhost:3000", "https://*.equinor.com")
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
             });
             services.AddControllers();
