@@ -3,13 +3,14 @@
 
 ## Frontend
 The frontend is built using Typescript and React, and was created using the
-[fusion-cli](https://github.com/equinor/fusion-cli). Components from the the
+[fusion-cli](https://github.com/equinor/fusion-cli). Components from the
 Equinor Design System ([EDS](https://eds.equinor.com/)) and
 [Fusion components](https://github.com/equinor/fusion-components) are used. 
 
-To run the frontend locally, you need to explicitly provide a ``API_URL``
-variable. This can be done by either setting a environment variable or creating
-a ``.env`` file in ``frontend``. You can then run
+To run the frontend locally, you need to explicitly provide an ``API_URL``
+variable. This can be done by either setting an environment variable or creating
+an ``.env`` file in ``frontend``. An example file ``.env.example`` is provided.
+You can then run
 ```
 cd frontend
 npm install
@@ -29,7 +30,7 @@ The default URL is set to localhost:5000.
 
 ## Docker
 To run the project using Docker, run ``docker-compose up --build``. This will
-build and and run a docker container for both the frontend and backend.
+build and run a docker container for both the frontend and backend.
 
 ## Testing
 Cypress is used as a E2E test framework. To run Cypress tests locally, run
