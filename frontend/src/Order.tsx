@@ -3,7 +3,7 @@ import { useApiClients, useCurrentContext } from '@equinor/fusion'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, getValidPosition, getName } from './utils/helpers'
 import { exClasses, userTypes, dummyList, PositionDetails } from './api/models'
@@ -13,6 +13,7 @@ import { UserTypeDropdown } from './components/UserTypeDropdown'
 import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
 import { config } from './config'
+import { useValidPositionsAsync } from './utils/hooks'
 
 const Order = () => {
     const [selectedOption, setSelectedOption] = useState('')
@@ -34,8 +35,10 @@ const Order = () => {
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
 
-    const apiClients = useApiClients()
     const currentContext = useCurrentContext()
+
+    useValidPositionsAsync(setValidPositions, setHasFetched, currentContext)
+    const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId, hasFetched)
 
     const validateIPadCount = (numberOfIPads: string) => {
         setIpadCount(numberOfIPads)
@@ -53,30 +56,6 @@ const Order = () => {
             numberOfiPadsError
         )
     }
-
-    useEffect(() => {
-        //Filter out correct positions. map id, name and assigned person and corresponding name. Finally filter invalid elements
-        if (currentContext?.externalId) {
-            apiClients.org.getPositionsAsync(currentContext.externalId).then(response => {
-                setValidPositions(
-                    response.data
-                        .filter(position => position.name.includes('Manager'))
-                        .map(
-                            (position): PositionDetails => ({
-                                positionId: position.id,
-                                positionName: position.name,
-                                assignedPerson: getValidPosition(position.instances)?.assignedPerson,
-                                assignedPersonName: getName(getValidPosition(position.instances)),
-                            })
-                        )
-                        .filter(element => element.assignedPerson !== undefined && element.assignedPerson !== null)
-                )
-                setHasFetched(true)
-            })
-        }
-    }, [currentContext])
-
-    const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId, hasFetched)
 
     const onClickCreate = async () => {
         axios.get(config.API_URL).then(response => {
