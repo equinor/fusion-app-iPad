@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "iPad": {
+    "src": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
