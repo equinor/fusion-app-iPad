@@ -23,4 +23,4 @@ RUN adduser -S -u 1001 -G radix-non-root-group radix-non-root-user
 
 USER 1001
 
-ENTRYPOINT ["dotnet", "iPad.dll", "--urls=http://0.0.0.0:5000"]
+ENTRYPOINT ["dotnet", "src.dll", "--urls=http://0.0.0.0:5000"]
