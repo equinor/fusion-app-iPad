@@ -6,7 +6,7 @@ WORKDIR /source
 COPY . .
 
 # Set the working directory where the actual source files reside and run build/publish
-WORKDIR /source/src
+WORKDIR /source/api
 RUN dotnet publish -c release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
@@ -23,4 +23,4 @@ RUN adduser -S -u 1001 -G radix-non-root-group radix-non-root-user
 
 USER 1001
 
-ENTRYPOINT ["dotnet", "src.dll", "--urls=http://0.0.0.0:5000"]
+ENTRYPOINT ["dotnet", "api.dll", "--urls=http://0.0.0.0:5000"]

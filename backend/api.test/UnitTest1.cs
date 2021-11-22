@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace src.test
+namespace Api.test
 {
     public class UnitTest1
     {

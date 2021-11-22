@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: backend/src
+    working-directory: backend/api
 
 jobs:
   build_backend:
@@ -23,7 +23,7 @@ jobs:
           dotnet-version: '5.0.x'
       - name: Build project and dependencies
         run: dotnet build
-  unit_tests:
+  test_backend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
