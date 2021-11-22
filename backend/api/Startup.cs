@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Controllers;
+using api.Services;
+using Equinor.TI.CommonLibrary.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,7 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace Api
+namespace api
 {
     public class Startup
     {
@@ -42,6 +45,16 @@ namespace Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "iPad", Version = "v1" });
             });
+
+
+
+            string commonLibTokenConnection = $"RunAs=App;AppId={Configuration["AzureAd:ClientId"]};TenantId={Configuration["AzureAd:TenantId"]};AppKey={Configuration["AzureAd:ClientSecret"]}";
+
+            services.AddScoped(typeof(CommonLibraryController), typeof(CommonLibraryController));
+            services.AddScoped(typeof(CommonLibraryService), typeof(CommonLibraryService));
+            services.AddScoped(typeof(CommonLibraryClientOptions),
+                _ => new CommonLibraryClientOptions() {TokenProviderConnectionString = commonLibTokenConnection });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
