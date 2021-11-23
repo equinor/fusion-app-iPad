@@ -28,6 +28,17 @@ dotnet run
 ```
 The default URL is set to localhost:5000.
 
+To access the /Country endpoint you need to have the client secret of our app from azure available. 
+One way to do this for now is to add a ``appsettings.Development.json`` file, which you can make from the ``appsettings.Development.json.example`` file in which you can store the ClientSecret in the following format. 
+It is important that the file is named as suggested, to guarantee that it will be ignored by git, since it will now contain a secret.
+```
+    "AzureAd": {
+        ...
+        "ClientSecret": "XXXXXXXXXXX",
+        ...
+    },
+```
+
 ## Docker
 To run the project using Docker, run ``docker-compose up --build``. This will
 build and run a docker container for both the frontend and backend.
