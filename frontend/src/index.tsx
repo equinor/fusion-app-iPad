@@ -1,20 +1,36 @@
-import { Context, ContextTypes, registerApp, useCurrentContext, useCurrentUser } from '@equinor/fusion'
+import { useEffect, useState } from 'react'
+import { Context, ContextTypes, registerApp, useCurrentContext, useCurrentUser, useFusionContext } from '@equinor/fusion'
 import { Route, Switch } from 'react-router-dom'
+
 import Welcome from './Welcome'
 import Order from './Order'
 import Support from './Support'
 import Return from './Return'
+import { config } from './config'
 
 const App = () => {
     const currentUser = useCurrentUser()
     const currentProject = useCurrentContext()
+    const fusionContext = useFusionContext()
+    const [hasLoggedIn, setHasLoggedIn] = useState(false)
 
-    if (!currentUser) {
-        return (
-            <>
-                <p>Please log in.</p>
-            </>
-        )
+    const login = async () => {
+        const isLoggedIn = await fusionContext.auth.container.registerAppAsync(config.AD_CLIENT_ID, [])
+
+        if (!isLoggedIn) {
+            await fusionContext.auth.container.loginAsync(config.AD_CLIENT_ID)
+            return
+        }
+
+        setHasLoggedIn(true)
+    }
+
+    useEffect(() => {
+        login()
+    }, [])
+
+    if (!currentUser || !hasLoggedIn) {
+        return <p>Please log in.</p>
     }
 
     if (!currentProject) {

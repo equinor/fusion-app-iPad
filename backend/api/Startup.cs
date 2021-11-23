@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 namespace Api
 {
@@ -23,23 +26,56 @@ namespace Api
 
         public IConfiguration Configuration { get; }
 
-        readonly string MyAllowSpecificOrigins  = "_myAllowSpecificOrigins";
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins, builder => {
-                        builder.WithOrigins("http://localhost:3000", "https://*.equinor.com")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .SetIsOriginAllowedToAllowWildcardSubdomains();
+                    builder.WithOrigins("http://localhost:3000", "https://*.equinor.com")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
             });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            TokenUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/token"),
+                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize"),
+                            Scopes = { { $"api://{Configuration["AzureAd:ClientId"]}/User.Impersonation", "User Impersonation" } }
+                        }
+                    }
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme()
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "iPad", Version = "v1" });
             });
         }
@@ -51,12 +87,22 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "iPad v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "iPad v1");
+                    c.OAuthAppName("Fusion-iPad");
+                    c.OAuthClientId(Configuration["AzureAd:ClientId"]);
+                    c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>
+                        { { "resource", $"{Configuration["AzureAd:ClientId"]}" } });
+                });
             }
 
             app.UseRouting();
 
             app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

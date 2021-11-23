@@ -30,7 +30,6 @@
         "@types/react": "^17.0.0",
         "@types/react-router-dom": "^5.1.7",
         "@types/webpack-env": "^1.13.9",
-        "axios": "^0.24.0",
         "cypress": "^8.7.0",
         "dotenv-webpack": "^7.0.3",
         "faker": "^5.5.3",
