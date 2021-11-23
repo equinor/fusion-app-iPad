@@ -5,7 +5,7 @@ frontend/out/
 #Backend
 backend/*/bin
 backend/*/obj
-backend/*/appsettings.Development.json
+backend/*/appsettings.[Dd]evelopment.json
 
 # Python
 venv
