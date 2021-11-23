@@ -47,14 +47,25 @@ namespace api
             });
 
 
+            // Common Library Integration
+            #region Common Library Integration
+            string commonLibTokenConnection = CommonLibraryService.BuildTokenConnectionString(
+                Configuration["AzureAd:ClientId"],
+                Configuration["AzureAd:TenantId"],
+                Configuration["AzureAd:ClientSecret"]);
 
-            string commonLibTokenConnection = $"RunAs=App;AppId={Configuration["AzureAd:ClientId"]};TenantId={Configuration["AzureAd:TenantId"]};AppKey={Configuration["AzureAd:ClientSecret"]}";
+            // Service options is of singleton type because it should be the same for all services
+            // TODO: Verify if this should be singleton
+            services.AddSingleton(typeof(CommonLibraryClientOptions),
+                _ => new CommonLibraryClientOptions { TokenProviderConnectionString = commonLibTokenConnection });
 
+            // Service is of singleton type because it should be the same for all requests
+            // TODO: Verify if this should be singleton
+            services.AddSingleton(typeof(CommonLibraryService), typeof(CommonLibraryService));
+
+            // Controller is scoped because a new instance should be initialized for each request
             services.AddScoped(typeof(CommonLibraryController), typeof(CommonLibraryController));
-            services.AddScoped(typeof(CommonLibraryService), typeof(CommonLibraryService));
-            services.AddScoped(typeof(CommonLibraryClientOptions),
-                _ => new CommonLibraryClientOptions() {TokenProviderConnectionString = commonLibTokenConnection });
-
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
