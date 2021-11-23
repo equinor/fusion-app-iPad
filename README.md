@@ -21,23 +21,18 @@ and navigate to localhost:3000.
 ## Backend
 The backend is built using .NET 5.0.
 
-To start the backend locally, run
+To start the backend locally, you need to provide the client secret from 
+azure app registration.
+One way to do this is to add a ``appsettings.Development.json`` file, which 
+you can make from the ``appsettings.Development.json.example`` file.  
+In the ``appsettings.Development.json``, fill in the client secret value from azure.
+
+You can then run
 ```
 cd backend/src
 dotnet run
 ```
 The default URL is set to localhost:5000.
-
-To access the /Country endpoint you need to have the client secret of our app from azure available. 
-One way to do this for now is to add a ``appsettings.Development.json`` file, which you can make from the ``appsettings.Development.json.example`` file in which you can store the ClientSecret in the following format. 
-It is important that the file is named as suggested, to guarantee that it will be ignored by git, since it will now contain a secret.
-```
-    "AzureAd": {
-        ...
-        "ClientSecret": "XXXXXXXXXXX",
-        ...
-    },
-```
 
 ## Docker
 To run the project using Docker, run ``docker-compose up --build``. This will
