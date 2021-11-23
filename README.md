@@ -21,7 +21,13 @@ and navigate to localhost:3000.
 ## Backend
 The backend is built using .NET 5.0.
 
-To start the backend locally, run
+To start the backend locally, you need to provide the client secret from 
+azure app registration.
+One way to do this is to add a ``appsettings.Development.json`` file, which 
+you can make from the ``appsettings.Development.json.example`` file.  
+In the ``appsettings.Development.json``, fill in the client secret value from azure.
+
+You can then run
 ```
 cd backend/src
 dotnet run
