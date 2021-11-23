@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 using api.Services;
+using Microsoft.Extensions.Logging;
 
 namespace api.Controllers
 {
@@ -13,16 +14,28 @@ namespace api.Controllers
     public class CommonLibraryController : Controller
     {
         private readonly CommonLibraryService _commonLibraryService;
+        private readonly ILogger<CommonLibraryService> _logger;
 
-        public CommonLibraryController(CommonLibraryService service)
+        public CommonLibraryController(ILogger<CommonLibraryService> logger, CommonLibraryService service)
         {
             _commonLibraryService = service;
         }
 
         [HttpGet]
-        public List<string> GetCountryList()
+        public ActionResult<List<string>> GetCountryList()
         {
-            return _commonLibraryService.GetAllCountries().Result;
+            List<string> result;
+            try
+            {
+                result = _commonLibraryService.GetAllCountries().Result;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Getting countries");
+                return new StatusCodeResult(500);
+            }
+
+            return new OkObjectResult(result);
         }
     }
 }

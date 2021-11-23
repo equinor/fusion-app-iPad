@@ -32,7 +32,16 @@ namespace api.Services
         {
             _logger.LogInformation("Attempting to retrieve country list from common library");
 
-            List<string> countries = await _commonLibraryClient.CodeNameListAsync("Country", isValid:true);
+            List<string> countries;
+            try
+            {
+                countries = await _commonLibraryClient.CodeNameListAsync("Country", isValid: true);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get list of countries from Common Library");
+                throw;
+            }
 
             _logger.LogInformation("Successfully retrieved country list from common library");
 
