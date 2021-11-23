@@ -19,6 +19,7 @@ namespace api.Controllers
         public CommonLibraryController(ILogger<CommonLibraryService> logger, CommonLibraryService service)
         {
             _commonLibraryService = service;
+            _logger = logger;
         }
 
         [HttpGet]
