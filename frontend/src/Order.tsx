@@ -211,7 +211,7 @@ const Order = () => {
                 </Grid>
                 <Grid item>
                     <Button disabled={isCreateDisabled()} data-testid={'create_button'} onClick={onClickCreate}>
-                        Create
+                        Submit
                     </Button>
                 </Grid>
             </Grid>

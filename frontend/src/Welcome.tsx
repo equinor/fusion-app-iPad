@@ -12,9 +12,9 @@ const Welcome = ({ match }: RouteComponentProps<Params>) => {
     return (
         <Banner>
             <Banner.Actions>
-                <Button relativeUrl={`${fusionProjectId}/order`}> Order </Button>
+                <Button relativeUrl={`${fusionProjectId}/order`}> Order iPad </Button>
                 <Button relativeUrl={`${fusionProjectId}/support`}> Support </Button>
-                <Button relativeUrl={`${fusionProjectId}/return`}> Return </Button>
+                <Button relativeUrl={`${fusionProjectId}/return`}> Return iPad </Button>
             </Banner.Actions>
         </Banner>
     )
