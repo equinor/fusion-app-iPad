@@ -57,4 +57,9 @@ export class apiBackend {
         const path = ''
         return await this.GET<string>(path)
     }
+
+    async getCountries(): Promise<string[]> {
+        const path = 'Countries'
+        return await this.GET<string[]>(path)
+    }
 }

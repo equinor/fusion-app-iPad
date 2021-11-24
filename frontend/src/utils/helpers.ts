@@ -48,3 +48,11 @@ export const getValidPosition = (instances: PositionInstance[]) => {
 export const getName = (instance: PositionInstance) => {
     return instance?.assignedPerson !== null ? instance?.assignedPerson.name : 'notValid'
 }
+
+export const loadingDropdown: SearchableDropdownOption[] = [
+    {
+        title: 'Loading...',
+        key: '0',
+        isDisabled: true,
+    },
+]
