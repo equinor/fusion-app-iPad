@@ -14,21 +14,21 @@ namespace api.Controllers
     public class CommonLibraryController : Controller
     {
         private readonly CommonLibraryService _commonLibraryService;
-        private readonly ILogger<CommonLibraryService> _logger;
+        private readonly ILogger<CommonLibraryController> _logger;
 
-        public CommonLibraryController(ILogger<CommonLibraryService> logger, CommonLibraryService service)
+        public CommonLibraryController(ILogger<CommonLibraryController> logger, CommonLibraryService service)
         {
             _commonLibraryService = service;
             _logger = logger;
         }
 
         [HttpGet]
-        public ActionResult<List<string>> GetCountryList()
+        public async Task<ActionResult<List<string>>> GetCountryList()
         {
             List<string> result;
             try
             {
-                result = _commonLibraryService.GetAllCountries().Result;
+                result = await _commonLibraryService.GetAllCountries();
             }
             catch (Exception e)
             {
@@ -36,6 +36,7 @@ namespace api.Controllers
                 return new StatusCodeResult(500);
             }
 
+            _logger.LogInformation("Successful GET countries from Common Library");
             return new OkObjectResult(result);
         }
     }
