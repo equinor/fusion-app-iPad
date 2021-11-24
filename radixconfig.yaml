@@ -28,7 +28,7 @@ spec:
               memory: "3000Mi"
               cpu: "1000m"
           variables:
-            API_URL: "https://backend-fusion-app-ipad-dev.playground.radix.equinor.com/"
+            API_URL: "https://backend-fusion-app-ipad-dev.playground.radix.equinor.com"
           runAsNonRoot: true
 
     - name: backend
