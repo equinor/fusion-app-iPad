@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using api.Controllers;
 using api.Services;
@@ -81,6 +83,15 @@ namespace api
                     }
                 });
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "iPad", Version = "v1" });
+
+                // Make swagger use xml comments from functions
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+                Console.WriteLine(xmlFile);
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                Console.WriteLine(xmlPath);
+
+                c.IncludeXmlComments(xmlPath);
             });
 
 

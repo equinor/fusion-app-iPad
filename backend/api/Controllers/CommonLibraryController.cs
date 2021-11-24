@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 using System.Threading.Tasks;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace api.Controllers
@@ -24,7 +25,17 @@ namespace api.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Gets a list of the names of all countries in common library.
+        /// </summary>
+        /// <remarks>
+        /// Uses the common library api
+        /// </remarks>
+        /// <returns> List of countries </returns>
+        /// <response code="200"> The list of countries was successfully returned </response>
         [HttpGet]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<string>>> GetCountryList()
         {
             List<string> result;
