@@ -6,7 +6,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Api.Controllers
+namespace api.Controllers
 {
     [ApiController]
     [Authorize]
