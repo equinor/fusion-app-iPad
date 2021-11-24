@@ -10,12 +10,12 @@
                     "requestParam": "mock_claims_for",
                     "match": "cat",
                     "claims": {
-                        "aud": "8829d4ca-93e8-499a-8ce1-bc0ef4840176",
+                        "aud": "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6",
                         "familyName": "Cat",
                         "givenName": "Fat",
                         "name": "Fat Cat",
                         "oid": "111",
-                        "roles": [ "Reader" ],
+                        "roles": [ "Role.User" ],
                         "tid": "common",
                         "upn": "Fat Cat",
                         "ver": "1.0"
@@ -25,12 +25,12 @@
                     "requestParam": "mock_claims_for",
                     "match": "doggy",
                     "claims": {
-                        "aud": "8829d4ca-93e8-499a-8ce1-bc0ef4840176",
+                        "aud": "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6",
                         "familyName": "Cool",
                         "givenName": "Doggy",
                         "name": "Cool Doggy",
                         "oid": "222",
-                        "roles": [ "Reader" ],
+                        "roles": [ "Role.User" ],
                         "tid": "common",
                         "upn": "doggy",
                         "ver": "1.0"
@@ -40,12 +40,12 @@
                     "requestParam": "mock_claims_for",
                     "match": "giraffe",
                     "claims": {
-                        "aud": "8829d4ca-93e8-499a-8ce1-bc0ef4840176",
+                        "aud": "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6",
                         "familyName": "Scared",
                         "givenName": "Giraffe",
                         "name": "Scared Giraffe",
                         "oid": "333",
-                        "roles": [ "Reader" ],
+                        "roles": [ "Role.User" ],
                         "tid": "common",
                         "upn": "giraffe",
                         "ver": "1.0"
@@ -55,12 +55,12 @@
                     "requestParam": "mock_claims_for",
                     "match": "unicorn",
                     "claims": {
-                        "aud": "8829d4ca-93e8-499a-8ce1-bc0ef4840176",
+                        "aud": "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6",
                         "familyName": "Rainbow",
                         "givenName": "Unicorn",
                         "name": "Rainbow Unicorn",
                         "oid": "444",
-                        "roles": [ "Reader" ],
+                        "roles": [ "Role.User" ],
                         "tid": "common",
                         "upn": "unicorn",
                         "ver": "1.0"
@@ -70,12 +70,12 @@
                     "requestParam": "mock_claims_for",
                     "match": "raccoon",
                     "claims": {
-                        "aud": "8829d4ca-93e8-499a-8ce1-bc0ef4840176",
+                        "aud": "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6",
                         "familyName": "Trashy",
                         "givenName": "Raccoon",
                         "name": "Trashy Raccoon",
                         "oid": "555",
-                        "roles": [ "Reader" ],
+                        "roles": [ "Role.User" ],
                         "tid": "common",
                         "upn": "raccoon",
                         "ver": "1.0"
@@ -85,7 +85,7 @@
                     "requestParam": "mock_claims_for",
                     "match": "penguin",
                     "claims": {
-                        "aud": "8829d4ca-93e8-499a-8ce1-bc0ef4840176",
+                        "aud": "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6",
                         "familyName": "Dancing",
                         "givenName": "Penguin",
                         "name": "Dancing Penguin",

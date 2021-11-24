@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
-import { useApiClients, useCurrentContext } from '@equinor/fusion'
+import { useState } from 'react'
+import { useCurrentContext } from '@equinor/fusion'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
-import axios from 'axios'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, getValidPosition, getName } from './utils/helpers'
 import { exClasses, userTypes, dummyList, PositionDetails } from './api/models'
@@ -12,10 +11,12 @@ import { SimOrderRadio } from './components/SimOrderRadio'
 import { UserTypeDropdown } from './components/UserTypeDropdown'
 import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
-import { config } from './config'
 import { useValidPositionsAsync } from './utils/hooks'
+import { apiBackend } from './api/apiClient'
 
 const Order = () => {
+    const api = new apiBackend()
+
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedExClass, setSelectedExClass] = useState('')
     const [selectedAccessories, setSelectedAccessories] = useState<string[] | undefined>(['Charger Plug', 'Neck Strap'])
@@ -58,9 +59,8 @@ const Order = () => {
     }
 
     const onClickCreate = async () => {
-        axios.get(config.API_URL).then(response => {
-            console.log(response.data)
-        })
+        const response = await api.helloWorld()
+        console.log(response)
     }
 
     return (

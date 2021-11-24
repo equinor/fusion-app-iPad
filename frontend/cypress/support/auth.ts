@@ -2,19 +2,19 @@ import jwtDecode, { JwtPayload } from 'jwt-decode'
 import { User } from './mock/users'
 
 const SERVER_URL = Cypress.env('AUTH_URL') || 'http://localhost:8080'
+const IPAD_CLIENT_ID = 'd83c2116-0a79-4a0d-8276-d51cdb4a6fd6'
+const FUSION_CLIENT_ID = '5a842df8-3238-415d-b168-9f16a6a6031b'
 const ISSUER = 'common'
 const CACHE_ENTRY = 'FUSION_AUTH_CACHE'
 
-/* TODO: figure out if we want to retrieve token before each test,
- * or if we are able to store tokens of all users we need (or all users at all)
- */
+/* Gets the access token from local cache which was stored on login. */
 export const getToken = (): string => {
     const fusionStorageJson = localStorage.getItem(CACHE_ENTRY)
     if (fusionStorageJson === null) {
         throw new Error('Could not find auth token in local storage')
     }
     const fusionStorage = JSON.parse(fusionStorageJson)
-    const token = fusionStorage[`${CACHE_ENTRY}:8829d4ca-93e8-499a-8ce1-bc0ef4840176:TOKEN`]
+    const token = fusionStorage[`${CACHE_ENTRY}:${IPAD_CLIENT_ID}:TOKEN`]
     return token
 }
 
@@ -95,14 +95,11 @@ Cypress.Commands.add('login', (user: User) => {
                     upn: decodedToken.upn,
                 }
 
-                /*
-                 * Set data in cache just as fusion expects to find them.
-                 * 8829d4ca... is BMT Azure ID (might be configurable)
-                 * 5a842df8... is fusion-cli Azure ID
-                 */
+                /* Set data in cache just as fusion expects to find them. */
                 let fusion = {
                     USER: userData,
-                    'FUSION_AUTH_CACHE:5a842df8-3238-415d-b168-9f16a6a6031b:TOKEN': idToken,
+                    [`${CACHE_ENTRY}:${FUSION_CLIENT_ID}:TOKEN`]: idToken,
+                    [`${CACHE_ENTRY}:${IPAD_CLIENT_ID}:TOKEN`]: accessToken,
                 }
                 tokens.set(user, JSON.stringify(fusion))
                 window.localStorage.setItem(CACHE_ENTRY, tokens.get(user)!)
