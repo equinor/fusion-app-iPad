@@ -8,7 +8,7 @@ const Return = () => {
                 <Banner.Message>To return an iPad, please use the Service-Now solution by clicking the button below.</Banner.Message>
                 <Banner.Actions placement="bottom">
                     <Button url={'https://equinor.service-now.com/selfservice?id=sc_cat_item&sys_id=18f643a36f51f900a7c62dc71e3ee437'}>
-                        Return
+                        Return iPad
                     </Button>
                 </Banner.Actions>
             </Banner>
