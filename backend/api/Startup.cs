@@ -55,6 +55,7 @@ namespace api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
+                // Add implicit flow authentication to Swagger
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,

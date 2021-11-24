@@ -1,6 +1,9 @@
 import { config } from '../config'
 
 export class apiBackend {
+    /* Gets the access token from local cache which was stored on login.
+     * Login is handled by Fusion, and just acquire the token.
+     */
     private getAccessToken = () => {
         const fusionStorageJson = localStorage.getItem(`FUSION_AUTH_CACHE`)
         if (fusionStorageJson === null) {
