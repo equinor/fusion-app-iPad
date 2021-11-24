@@ -5,11 +5,13 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 using api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("/Countries")]
     public class CommonLibraryController : Controller
     {

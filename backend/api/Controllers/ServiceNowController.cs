@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("/OrderForm")]
     public class ServiceNowController : Controller
     {

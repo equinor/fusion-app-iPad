@@ -103,6 +103,17 @@ namespace api
             // Controller is scoped because a new instance should be initialized for each request
             services.AddScoped(typeof(CommonLibraryController), typeof(CommonLibraryController));
             #endregion
+
+            // Service Now Integration
+            #region Service Now Integration
+
+            // Service is of singleton type because it should be the same for all requests
+            // TODO: Verify if this should be singleton
+            services.AddSingleton(typeof(ServiceNowService), typeof(ServiceNowService));
+
+            // Controller is scoped because a new instance should be initialized for each request
+            services.AddScoped(typeof(ServiceNowController), typeof(ServiceNowController));
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
