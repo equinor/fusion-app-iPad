@@ -36,6 +36,11 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+
+            // Security Setup
+            #region Security Setup
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
@@ -45,6 +50,7 @@ namespace api
                     .RequireAuthenticatedUser()
                     .Build();
             });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins, builder => {
@@ -54,7 +60,11 @@ namespace api
                     .SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
             });
-            services.AddControllers();
+
+            #endregion
+
+            // Swagger integration
+            #region Integrate Swagger
             services.AddSwaggerGen(c =>
             {
                 // Add implicit flow authentication to Swagger
@@ -92,8 +102,8 @@ namespace api
                 Console.WriteLine(xmlPath);
 
                 c.IncludeXmlComments(xmlPath);
-            });
-
+            }); 
+            #endregion
 
             // Common Library Integration
             #region Common Library Integration
