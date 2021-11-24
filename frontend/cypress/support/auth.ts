@@ -14,7 +14,7 @@ export const getToken = (): string => {
         throw new Error('Could not find auth token in local storage')
     }
     const fusionStorage = JSON.parse(fusionStorageJson)
-    const token = fusionStorage[`${CACHE_ENTRY}:8829d4ca-93e8-499a-8ce1-bc0ef4840176:TOKEN`]
+    const token = fusionStorage[`${CACHE_ENTRY}:d83c2116-0a79-4a0d-8276-d51cdb4a6fd6:TOKEN`]
     return token
 }
 
@@ -97,12 +97,13 @@ Cypress.Commands.add('login', (user: User) => {
 
                 /*
                  * Set data in cache just as fusion expects to find them.
-                 * 8829d4ca... is BMT Azure ID (might be configurable)
+                 * d83c2116... is iPad Azure ID (might be configurable)
                  * 5a842df8... is fusion-cli Azure ID
                  */
                 let fusion = {
                     USER: userData,
                     'FUSION_AUTH_CACHE:5a842df8-3238-415d-b168-9f16a6a6031b:TOKEN': idToken,
+                    'FUSION_AUTH_CACHE:d83c2116-0a79-4a0d-8276-d51cdb4a6fd6:TOKEN': accessToken,
                 }
                 tokens.set(user, JSON.stringify(fusion))
                 window.localStorage.setItem(CACHE_ENTRY, tokens.get(user)!)
