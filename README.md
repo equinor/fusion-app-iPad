@@ -29,7 +29,7 @@ In the ``appsettings.Development.json``, fill in the client secret value from az
 
 You can then run
 ```
-cd backend/src
+cd backend/api
 dotnet run
 ```
 The default URL is set to localhost:5000.
@@ -47,6 +47,12 @@ Additionally, Jest is used to test the frontend code. To run all Jest tests, run
 cd frontend
 npm run test
 ```
+
+xUnit is used for unit testing the backend code. To run all xUnit tests, run
+```
+cd backend
+dotnet test
+```  
 
 ## Deployment
 For now, the application is only deployed to the Radix _playground_ cluster.
