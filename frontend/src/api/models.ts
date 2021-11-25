@@ -30,5 +30,5 @@ export type OrderForm = {
     userType: string
     userShortnames: string
     externalUserSimType: string
-    nbIpads: number
+    nIpads: number
 }

@@ -69,7 +69,7 @@ const Order = () => {
         userType: selectedUserType,
         userShortnames: shortname,
         externalUserSimType: radioCheckedSIM,
-        nbIpads: Number(ipadCount),
+        nIpads: Number(ipadCount),
     }
 
     const onClickCreate = async () => {
