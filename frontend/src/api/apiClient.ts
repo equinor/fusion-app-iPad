@@ -57,4 +57,9 @@ export class apiBackend {
         const path = ''
         return await this.GET<string>(path)
     }
+
+    async submitForm(form : string) : Promise<string> {
+        const path = '/OrderForm'
+        return await this.POST<string>(path, form)
+    }
 }
