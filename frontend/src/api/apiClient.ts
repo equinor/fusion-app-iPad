@@ -59,7 +59,7 @@ export class apiBackend {
     }
 
     async submitForm(form : string) : Promise<string> {
-        const path = '/OrderForm'
+        const path = 'OrderForm'
         return await this.POST<string>(path, form)
     }
 }

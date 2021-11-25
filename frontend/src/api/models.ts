@@ -19,3 +19,16 @@ export type PositionDetails = {
     assignedPerson: PersonDetails | null
     assignedPersonName: string
 }
+
+export type OrderForm = {
+    country : string | null
+    orderResponsible : string
+    wbs : string
+    deliveryAddress : string
+    exClass : string
+    deviceType : string
+    userType : string
+    userShortnames : string
+    externalUserSimType : string
+    nbIpads : number
+}

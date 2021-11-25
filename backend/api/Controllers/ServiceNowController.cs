@@ -47,7 +47,7 @@ namespace api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult<string>> PostIpadOrderForm(string orderFormJson)
+        public async Task<ActionResult<string>> PostIpadOrderForm([FromBody] string orderFormJson)
         {
             string ritm;
             try

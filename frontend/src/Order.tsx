@@ -5,7 +5,7 @@ import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, getValidPosition, getName } from './utils/helpers'
-import { exClasses, userTypes, dummyList, PositionDetails } from './api/models'
+import { exClasses, userTypes, dummyList, PositionDetails, OrderForm } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { UserTypeDropdown } from './components/UserTypeDropdown'
@@ -16,7 +16,8 @@ import { apiBackend } from './api/apiClient'
 
 const Order = () => {
     const api = new apiBackend()
-
+    
+    const [resultRitm, setResultRitm] = useState('')
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedExClass, setSelectedExClass] = useState('')
     const [selectedAccessories, setSelectedAccessories] = useState<string[] | undefined>(['Charger Plug', 'Neck Strap'])
@@ -25,7 +26,7 @@ const Order = () => {
     const [address, setAddress] = useState('')
     const [ipadCount, setIpadCount] = useState('')
     const [numberOfiPadsError, setNumberOfiPadsError] = useState(false)
-    const [radioChecked, setRadioChecked] = useState('personal')
+    const [deviceType, setDeviceType] = useState('personal')
     const [radioCheckedSIM, setRadioCheckedSIM] = useState('wifi')
     const [shortname, setShortname] = useState('')
     const [validPositions, setValidPositions] = useState<PositionDetails[]>([])
@@ -58,8 +59,28 @@ const Order = () => {
         )
     }
 
+    const buildOrderForm : OrderForm = {
+        country : selectedOption, // TODO: Update when country dropdown merged
+        orderResponsible : selectedPositionId,
+        wbs : wbs,
+        deliveryAddress : address,
+        exClass : selectedExClass,
+        deviceType : deviceType,
+        userType : selectedUserType,
+        userShortnames : shortname,
+        externalUserSimType : radioCheckedSIM,
+        nbIpads : Number(ipadCount)
+    }
+
     const onClickCreate = async () => {
-        const response = await api.helloWorld()
+        const orderFormString = buildOrderForm;
+        const form = JSON.stringify(orderFormString)
+        console.log("Submitting form: " + form)
+        const response = await api.submitForm(form)
+
+        // Set resultRitm variable for later use in message to user
+        setResultRitm(response)
+        
         console.log(response)
     }
 
@@ -135,28 +156,28 @@ const Order = () => {
                     )}
                 </Grid>
                 <Grid container>
-                    <Grid item xs={10} sm={3} data-testid={'personal_radio'}>
+                    <Grid item xs={10} sm={3} data-testid={'personal_device'}>
                         <Radio
                             label="Personal device"
                             value="personal"
-                            checked={radioChecked === 'personal'}
+                            checked={deviceType === 'personal'}
                             onChange={() => {
-                                setRadioChecked('personal')
+                                setDeviceType('personal')
                             }}
                         />
                     </Grid>
-                    <Grid item xs={10} sm={3} data-testid={'multi_user_radio'}>
+                    <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
                         <Radio
                             label="Multi-user device"
                             value="multi"
-                            checked={radioChecked === 'multi'}
+                            checked={deviceType === 'multi'}
                             onChange={() => {
-                                setRadioChecked('multi')
+                                setDeviceType('multi')
                             }}
                         />
                     </Grid>
                 </Grid>
-                {radioChecked === 'personal' ? (
+                {deviceType === 'personal' ? (
                     selectedUserType === 'Equinor personnel' ? (
                         //Personal equinor employee device
                         <>
