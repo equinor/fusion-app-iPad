@@ -16,7 +16,7 @@ import { apiBackend } from './api/apiClient'
 
 const Order = () => {
     const api = new apiBackend()
-    
+
     const [resultRitm, setResultRitm] = useState('')
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedExClass, setSelectedExClass] = useState('')
@@ -59,28 +59,28 @@ const Order = () => {
         )
     }
 
-    const buildOrderForm : OrderForm = {
-        country : selectedOption, // TODO: Update when country dropdown merged
-        orderResponsible : selectedPositionId,
-        wbs : wbs,
-        deliveryAddress : address,
-        exClass : selectedExClass,
-        deviceType : deviceType,
-        userType : selectedUserType,
-        userShortnames : shortname,
-        externalUserSimType : radioCheckedSIM,
-        nbIpads : Number(ipadCount)
+    const buildOrderForm: OrderForm = {
+        country: selectedOption, // TODO: Update when country dropdown merged
+        orderResponsible: selectedPositionId,
+        wbs: wbs,
+        deliveryAddress: address,
+        exClass: selectedExClass,
+        deviceType: deviceType,
+        userType: selectedUserType,
+        userShortnames: shortname,
+        externalUserSimType: radioCheckedSIM,
+        nbIpads: Number(ipadCount),
     }
 
     const onClickCreate = async () => {
-        const orderFormString = buildOrderForm;
+        const orderFormString = buildOrderForm
         const form = JSON.stringify(orderFormString)
-        console.log("Submitting form: " + form)
+        console.log('Submitting form: ' + form)
         const response = await api.submitForm(form)
 
         // Set resultRitm variable for later use in message to user
         setResultRitm(response)
-        
+
         console.log(response)
     }
 

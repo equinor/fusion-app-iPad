@@ -21,14 +21,14 @@ export type PositionDetails = {
 }
 
 export type OrderForm = {
-    country : string | null
-    orderResponsible : string
-    wbs : string
-    deliveryAddress : string
-    exClass : string
-    deviceType : string
-    userType : string
-    userShortnames : string
-    externalUserSimType : string
-    nbIpads : number
+    country: string | null
+    orderResponsible: string
+    wbs: string
+    deliveryAddress: string
+    exClass: string
+    deviceType: string
+    userType: string
+    userShortnames: string
+    externalUserSimType: string
+    nbIpads: number
 }
