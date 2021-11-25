@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using api.Controllers;
 using api.Services;
@@ -34,6 +36,11 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+
+            // Security Setup
+            #region Security Setup
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
@@ -43,6 +50,7 @@ namespace api
                     .RequireAuthenticatedUser()
                     .Build();
             });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins, builder => {
@@ -52,7 +60,11 @@ namespace api
                     .SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
             });
-            services.AddControllers();
+
+            #endregion
+
+            // Swagger integration
+            #region Integrate Swagger
             services.AddSwaggerGen(c =>
             {
                 // Add implicit flow authentication to Swagger
@@ -81,8 +93,17 @@ namespace api
                     }
                 });
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "iPad", Version = "v1" });
-            });
 
+                // Make swagger use xml comments from functions
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+                Console.WriteLine(xmlFile);
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                Console.WriteLine(xmlPath);
+
+                c.IncludeXmlComments(xmlPath);
+            }); 
+            #endregion
 
             // Common Library Integration
             #region Common Library Integration
@@ -102,6 +123,17 @@ namespace api
 
             // Controller is scoped because a new instance should be initialized for each request
             services.AddScoped(typeof(CommonLibraryController), typeof(CommonLibraryController));
+            #endregion
+
+            // Service Now Integration
+            #region Service Now Integration
+
+            // Service is of singleton type because it should be the same for all requests
+            // TODO: Verify if this should be singleton
+            services.AddSingleton(typeof(ServiceNowService), typeof(ServiceNowService));
+
+            // Controller is scoped because a new instance should be initialized for each request
+            services.AddScoped(typeof(ServiceNowController), typeof(ServiceNowController));
             #endregion
         }
 
