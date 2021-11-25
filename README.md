@@ -18,6 +18,19 @@ npm start
 ```
 and navigate to localhost:3000.
 
+### Formatting
+We use Prettier to format our frontend code in js, ts, tsx and css.
+To check the format of the files run
+```
+cd frontend
+npm run prettier_check
+```
+and to fix the formatting of said files run
+```
+cd frontend
+npm run prettier_write
+```
+
 ## Backend
 The backend is built using .NET 5.0.
 
