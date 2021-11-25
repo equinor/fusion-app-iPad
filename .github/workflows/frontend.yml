@@ -56,3 +56,6 @@ jobs:
 
       - name: Run tests
         run: npm test
+        
+      - name: Run Prettier
+        run: npx prettier -c "**/*.{js,ts,tsx,css}"
