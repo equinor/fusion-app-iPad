@@ -39,7 +39,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-  test_formatting_frontend:
+  check_formatting:
     runs-on: ubuntu-latest
     defaults:
       run:
