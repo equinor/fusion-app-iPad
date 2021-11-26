@@ -12,7 +12,7 @@ ENV XDG_CONFIG_HOME /app
 WORKDIR /app/frontend
 
 ENTRYPOINT npm run cyrun -- \
---env FRONTEND_URL=http://frontend:3000,API_URL=http://cydbackend:5000,AUTH_URL=http://mock-auth:8080 \
+--env FRONTEND_URL=http://frontend:3000,API_URL=http://backend:5000,AUTH_URL=http://mock-auth:8080 \
 --config-file ./cypress.json \
 # To run locally the following line should be commented out
 --record --key ${CYPRESS_RECORD_KEY}
