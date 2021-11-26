@@ -61,7 +61,8 @@ export class apiBackend {
     async getCountries(): Promise<string[]> {
         const path = 'Countries'
         return await this.GET<string[]>(path)
-      
+    }
+
     async submitForm(form: string): Promise<string> {
         const path = 'OrderForm'
         return await this.POST<string>(path, form)

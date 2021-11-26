@@ -5,7 +5,7 @@ import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
-import { exClasses, userTypes, PositionDetails, OrderForm} from './api/models'
+import { exClasses, userTypes, PositionDetails, OrderForm } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { UserTypeDropdown } from './components/UserTypeDropdown'
@@ -67,7 +67,7 @@ const Order = () => {
     }
 
     const buildOrderForm: OrderForm = {
-        country: selectedOption, // TODO: Update when country dropdown merged
+        country: selectedCountry, // TODO: Update when country dropdown merged
         orderResponsible: selectedPositionId,
         wbs: wbs,
         deliveryAddress: address,
