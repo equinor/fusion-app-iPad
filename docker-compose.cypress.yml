@@ -33,4 +33,4 @@ services:
         depends_on:
             - frontend
         environment:
-            - CYPRESS_RECORD_KEY
+            - CYPRESS_RECORD_KEY=f9173fdc-77ef-4fa8-a83f-073f96c6a6d8
