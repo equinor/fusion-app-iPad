@@ -8,7 +8,7 @@ services:
         ports:
             - "3000:3000"
         environment:
-            - API_URL=http://backend:5000
+            - API_URL=http://dccbackend:5000
     backend:
         build: backend
         depends_on:
