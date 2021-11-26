@@ -67,8 +67,10 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           record: true
+          tag: ${{ github.event_name }}
           working-directory: ./frontend
           config-file: cypress.json
           env: FRONTEND_URL=http://localhost:3000,API_URL=http://localhost:5000,AUTH_URL=http://localhost:8080
         env:
           CYPRESS_RECORD_KEY: f9173fdc-77ef-4fa8-a83f-073f96c6a6d8
+          COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
