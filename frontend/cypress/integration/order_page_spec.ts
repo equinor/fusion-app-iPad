@@ -15,7 +15,7 @@ describe('Test Order page', () => {
     })
     it('Layout changes depending on device type', () => {
         cy.get('[data-testid=user_type_dropdown]').should('be.visible')
-        cy.get('[data-testid=multi_user_radio]').click()
+        cy.get('[data-testid=multi_user_device]').click()
         cy.get('[data-testid=user_type_dropdown]').should('not.exist')
     })
     it('Create button becomes not disabled', () => {

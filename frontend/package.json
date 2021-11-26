@@ -7,6 +7,8 @@
         "start": "fusion start-app",
         "build": "fusion build-app",
         "test": "jest",
+        "prettier_check": "npx prettier --check \"**/*.{js,ts,tsx,css}\"",
+        "prettier_write": "npx prettier --write \"**/*.{js,ts,tsx,css}\"",
         "cyopen": "./node_modules/.bin/cypress open",
         "cyrun": "./node_modules/.bin/cypress run"
     },
