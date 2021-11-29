@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCurrentContext } from '@equinor/fusion'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
-import { Radio, Button, Typography } from '@equinor/eds-core-react'
+import { Radio, Button, Typography, Dialog, Scrim } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
@@ -13,11 +13,14 @@ import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
 import { useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
+import { SubmitFormDialog } from './components/SubmitFormDialog'
 
 const Order = () => {
     const api = new apiBackend()
 
+    const [isSubmitEnabled, setIsSubmitEnabled] = useState(false)
     const [resultRitm, setResultRitm] = useState('')
+    const [submitPopupOpen, setSubmitPopupOpen] = useState(false)
     const [selectedExClass, setSelectedExClass] = useState('')
     const [selectedCountry, setSelectedCountry] = useState('Norway')
     const [countryList, setCountryList] = useState<string[]>([])
@@ -37,6 +40,8 @@ const Order = () => {
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
 
+    const mandatoryFields = [selectedCountry, selectedPositionId, wbs, address, selectedExClass, selectedUserType, ipadCount]
+
     useEffect(() => {
         api.getCountries().then(response => {
             setCountryList(response.sort())
@@ -54,17 +59,13 @@ const Order = () => {
         Number(numberOfIPads) > 0 ? setNumberOfiPadsError(false) : setNumberOfiPadsError(true)
     }
 
-    const isCreateDisabled = () => {
-        return (
-            selectedCountry === '' ||
-            selectedPositionId === '' ||
-            selectedExClass === '' ||
-            wbs === '' ||
-            address === '' ||
-            ipadCount === '' ||
-            numberOfiPadsError
-        )
-    }
+    useEffect(() => {
+        if (mandatoryFields.includes('') || numberOfiPadsError) {
+            setIsSubmitEnabled(false)
+        } else {
+            setIsSubmitEnabled(true)
+        }
+    }, mandatoryFields)
 
     const buildOrderForm: OrderForm = {
         country: selectedCountry,
@@ -80,170 +81,192 @@ const Order = () => {
     }
 
     const onClickCreate = async () => {
+        setIsSubmitEnabled(false)
         const orderFormString = buildOrderForm
         const form = JSON.stringify(orderFormString)
         console.log('Submitting form: ' + form)
+
         const response = await api.submitForm(form)
 
-        // Set resultRitm variable for later use in message to user
         setResultRitm(response)
+
+        setSubmitPopupOpen(true)
 
         console.log(response)
     }
 
+    const handleClose = () => {
+        setSubmitPopupOpen(false)
+    }
+
+    // This callback is called when the order is submitted and the user confirms the RITM returned
+    const onConfirmedSubmit = () => {
+        handleClose()
+    }
+
     return (
-        <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
-            <Grid container spacing={4} direction="column">
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5} data-testid={'country_dropdown'}>
-                        <SearchableDropdown
-                            label="Country"
-                            options={countryDropdown.length == 0 ? loadingDropdown : countryDropdown}
-                            onSelect={item => setSelectedCountry(item.title)}
-                        />
-                    </Grid>
-                    <HelpIcon helpText={'info text'} />
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5} data-testid={'person_dropdown'}>
-                        <Typography variant="body_short" style={{ fontSize: '13px' }}>
-                            Ordering on behalf of
-                        </Typography>
-                        <OrderBehalfofPicker
-                            positionOptions={positionOptions}
-                            positions={validPositions}
-                            setSelectedPositionID={setSelectedPositionId}
-                        />
-                    </Grid>
-                    <HelpIcon helpText={'info text'} />
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5}>
-                        <TextInput
-                            label="Project wbs"
-                            value={wbs}
-                            onChange={value => {
-                                setWbs(value)
-                            }}
-                            data-testid={'wbs_input'}
-                        />
-                    </Grid>
-                    <HelpIcon helpText={'info text'} />
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5}>
-                        <TextInput
-                            label="Delivery address"
-                            value={address}
-                            onChange={value => {
-                                setAddress(value)
-                            }}
-                            data-testid={'address_input'}
-                        />
-                    </Grid>
-                    <HelpIcon helpText={'info text'} />
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5} data-testid={'ex_dropdown'}>
-                        <SearchableDropdown
-                            label="EX classification"
-                            options={exClassOptions}
-                            onSelect={item => setSelectedExClass(item.title)}
-                        />
-                    </Grid>
-                    <HelpIcon helpText={'info text'} />
-                </Grid>
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    {selectedExClass != '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
-                        <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
-                            <AccessorySelector selectedAccessories={selectedAccessories} setSelectedAccessories={setSelectedAccessories} />
+        <>
+            <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
+                <Grid container spacing={4} direction="column">
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5} data-testid={'country_dropdown'}>
+                            <SearchableDropdown
+                                label="Country"
+                                options={countryDropdown.length == 0 ? loadingDropdown : countryDropdown}
+                                onSelect={item => setSelectedCountry(item.title)}
+                            />
                         </Grid>
+                        <HelpIcon helpText={'info text'} />
+                    </Grid>
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5} data-testid={'person_dropdown'}>
+                            <Typography variant="body_short" style={{ fontSize: '13px' }}>
+                                Ordering on behalf of
+                            </Typography>
+                            <OrderBehalfofPicker
+                                positionOptions={positionOptions}
+                                positions={validPositions}
+                                setSelectedPositionID={setSelectedPositionId}
+                            />
+                        </Grid>
+                        <HelpIcon helpText={'info text'} />
+                    </Grid>
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5}>
+                            <TextInput
+                                label="Project wbs"
+                                value={wbs}
+                                onChange={value => {
+                                    setWbs(value)
+                                }}
+                                data-testid={'wbs_input'}
+                            />
+                        </Grid>
+                        <HelpIcon helpText={'info text'} />
+                    </Grid>
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5}>
+                            <TextInput
+                                label="Delivery address"
+                                value={address}
+                                onChange={value => {
+                                    setAddress(value)
+                                }}
+                                data-testid={'address_input'}
+                            />
+                        </Grid>
+                        <HelpIcon helpText={'info text'} />
+                    </Grid>
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5} data-testid={'ex_dropdown'}>
+                            <SearchableDropdown
+                                label="EX classification"
+                                options={exClassOptions}
+                                onSelect={item => setSelectedExClass(item.title)}
+                            />
+                        </Grid>
+                        <HelpIcon helpText={'info text'} />
+                    </Grid>
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        {selectedExClass != '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
+                            <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
+                                <AccessorySelector
+                                    selectedAccessories={selectedAccessories}
+                                    setSelectedAccessories={setSelectedAccessories}
+                                />
+                            </Grid>
+                        ) : (
+                            <></>
+                        )}
+                    </Grid>
+                    <Grid container>
+                        <Grid item xs={10} sm={3} data-testid={'personal_device'}>
+                            <Radio
+                                label="Personal device"
+                                value="personal"
+                                checked={deviceType === 'personal'}
+                                onChange={() => {
+                                    setDeviceType('personal')
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
+                            <Radio
+                                label="Multi-user device"
+                                value="multi"
+                                checked={deviceType === 'multi'}
+                                onChange={() => {
+                                    setDeviceType('multi')
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+                    {deviceType === 'personal' ? (
+                        selectedUserType === 'Equinor personnel' ? (
+                            //Personal equinor employee device
+                            <>
+                                <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                                <Grid item container xs={12} spacing={3} alignItems="center">
+                                    <Grid item xs={10} sm={5}>
+                                        <TextInput
+                                            label="Shortname users"
+                                            value={shortname}
+                                            isOptional={true}
+                                            onChange={value => {
+                                                setShortname(value)
+                                            }}
+                                            data-testid={'shortname_input'}
+                                        />
+                                    </Grid>
+                                    <HelpIcon helpText={'info text'} />
+                                </Grid>
+                            </>
+                        ) : (
+                            //Personal external employee device
+                            <>
+                                <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                                <SimOrderRadio radioCheckedSIM={radioCheckedSIM} setRadioCheckedSIM={setRadioCheckedSIM} />
+                            </>
+                        )
                     ) : (
+                        // Multi-device order
                         <></>
                     )}
-                </Grid>
-                <Grid container>
-                    <Grid item xs={10} sm={3} data-testid={'personal_device'}>
-                        <Radio
-                            label="Personal device"
-                            value="personal"
-                            checked={deviceType === 'personal'}
-                            onChange={() => {
-                                setDeviceType('personal')
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
-                        <Radio
-                            label="Multi-user device"
-                            value="multi"
-                            checked={deviceType === 'multi'}
-                            onChange={() => {
-                                setDeviceType('multi')
-                            }}
-                        />
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5}>
+                            <TextInput
+                                label="Number of iPads"
+                                value={ipadCount}
+                                onChange={value => {
+                                    validateIPadCount(value)
+                                }}
+                                error={numberOfiPadsError}
+                                errorMessage="The number of iPads must be a number greater than 0"
+                                data-testid={'numberipads_input'}
+                            />
+                        </Grid>
+                        <HelpIcon helpText={'info text'} />
                     </Grid>
                 </Grid>
-                {deviceType === 'personal' ? (
-                    selectedUserType === 'Equinor personnel' ? (
-                        //Personal equinor employee device
-                        <>
-                            <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
-                            <Grid item container xs={12} spacing={3} alignItems="center">
-                                <Grid item xs={10} sm={5}>
-                                    <TextInput
-                                        label="Shortname users"
-                                        value={shortname}
-                                        isOptional={true}
-                                        onChange={value => {
-                                            setShortname(value)
-                                        }}
-                                        data-testid={'shortname_input'}
-                                    />
-                                </Grid>
-                                <HelpIcon helpText={'info text'} />
-                            </Grid>
-                        </>
-                    ) : (
-                        //Personal external employee device
-                        <>
-                            <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
-                            <SimOrderRadio radioCheckedSIM={radioCheckedSIM} setRadioCheckedSIM={setRadioCheckedSIM} />
-                        </>
-                    )
-                ) : (
-                    // Multi-device order
-                    <></>
-                )}
-                <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5}>
-                        <TextInput
-                            label="Number of iPads"
-                            value={ipadCount}
-                            onChange={value => {
-                                validateIPadCount(value)
-                            }}
-                            error={numberOfiPadsError}
-                            errorMessage="The number of iPads must be a number greater than 0"
-                            data-testid={'numberipads_input'}
-                        />
+                <Grid container spacing={4}>
+                    <Grid item>
+                        <Button variant="outlined" href="/" data-testid={'cancel_button'}>
+                            Cancel
+                        </Button>
                     </Grid>
-                    <HelpIcon helpText={'info text'} />
+                    <Grid item>
+                        <Button disabled={!isSubmitEnabled} data-testid={'submit_button'} onClick={onClickCreate}>
+                            Submit
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container spacing={4}>
-                <Grid item>
-                    <Button variant="outlined" href="/" data-testid={'cancel_button'}>
-                        Cancel
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button disabled={isCreateDisabled()} data-testid={'create_button'} onClick={onClickCreate}>
-                        Submit
-                    </Button>
-                </Grid>
-            </Grid>
-        </div>
+            </div>
+            {submitPopupOpen && (
+                <Scrim onClose={handleClose}>
+                    <SubmitFormDialog onConfirmClick={onConfirmedSubmit} ritm={resultRitm} data-testid={'submit_dialog'}></SubmitFormDialog>
+                </Scrim>
+            )}
+        </>
     )
 }
 
