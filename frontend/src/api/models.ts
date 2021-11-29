@@ -11,7 +11,6 @@ export const accessories = [
     'Fall Protection Folder',
     '8-port charging station incl 0,3m charge cable',
 ]
-export const dummyList: string[] = ['First option', 'Second option', 'Last option']
 
 export type PositionDetails = {
     positionId: string

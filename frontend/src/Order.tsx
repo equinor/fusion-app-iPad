@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCurrentContext } from '@equinor/fusion'
 import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
-import { createDropdownOptions, createDropdownOptionsFromPos, getValidPosition, getName } from './utils/helpers'
-import { exClasses, userTypes, dummyList, PositionDetails, OrderForm } from './api/models'
+import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
+import { exClasses, userTypes, PositionDetails, OrderForm } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { UserTypeDropdown } from './components/UserTypeDropdown'
@@ -18,8 +18,9 @@ const Order = () => {
     const api = new apiBackend()
 
     const [resultRitm, setResultRitm] = useState('')
-    const [selectedOption, setSelectedOption] = useState('')
     const [selectedExClass, setSelectedExClass] = useState('')
+    const [selectedCountry, setSelectedCountry] = useState('Norway')
+    const [countryList, setCountryList] = useState<string[]>([])
     const [selectedAccessories, setSelectedAccessories] = useState<string[] | undefined>(['Charger Plug', 'Neck Strap'])
     const [selectedUserType, setSelectedUserType] = useState('Equinor personnel')
     const [wbs, setWbs] = useState('')
@@ -33,9 +34,15 @@ const Order = () => {
     const [selectedPositionId, setSelectedPositionId] = useState('')
     const [hasFetched, setHasFetched] = useState(false)
 
-    const dropdownOptions = createDropdownOptions(dummyList, selectedOption)
     const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
     const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
+
+    useEffect(() => {
+        api.getCountries().then(response => {
+            setCountryList(response.sort())
+        })
+    }, [])
+    const countryDropdown = createDropdownOptions(countryList, selectedCountry)
 
     const currentContext = useCurrentContext()
 
@@ -49,7 +56,7 @@ const Order = () => {
 
     const isCreateDisabled = () => {
         return (
-            selectedOption === '' ||
+            selectedCountry === '' ||
             selectedPositionId === '' ||
             selectedExClass === '' ||
             wbs === '' ||
@@ -60,7 +67,7 @@ const Order = () => {
     }
 
     const buildOrderForm: OrderForm = {
-        country: selectedOption, // TODO: Update when country dropdown merged
+        country: selectedCountry,
         orderResponsible: selectedPositionId,
         wbs: wbs,
         deliveryAddress: address,
@@ -88,12 +95,12 @@ const Order = () => {
         <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
             <Grid container spacing={4} direction="column">
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    <Grid item xs={10} sm={5} data-testid={'project_dropdown'}>
-                        <SearchableDropdown label="Project" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
-                    </Grid>
-                    <HelpIcon helpText={'info text'} />
                     <Grid item xs={10} sm={5} data-testid={'country_dropdown'}>
-                        <SearchableDropdown label="Country" options={dropdownOptions} onSelect={item => setSelectedOption(item.title)} />
+                        <SearchableDropdown
+                            label="Country"
+                            options={countryDropdown.length == 0 ? loadingDropdown : countryDropdown}
+                            onSelect={item => setSelectedCountry(item.title)}
+                        />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
                 </Grid>

@@ -1,6 +1,7 @@
 import { getUserData, findUserByID } from './users'
 import { fusionProjects, getFusionProjectData, findFusionProjectByID } from './projects'
 import { getFusionPositionData, findFusionPositionByID } from './positions'
+import { getCountries } from './countries'
 
 const settingsURL = /https:\/\/pro-s-portal-ci\.azurewebsites\.net\/api\/persons\/me\/settings\/apps\/iPad/
 const featuresURL = /https:\/\/pro-s-portal-ci\.azurewebsites\.net\/log\/features/
@@ -8,6 +9,7 @@ const projectURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts\/(.
 const positionURL = /https:\/\/pro-s-org-ci\.azurewebsites\.net\/projects\/(.+)\/positions/
 const projectsURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts$/
 const personURL = /https:\/\/pro-s-people-ci\.azurewebsites\.net\/persons\/(.+?)(?:(\?\$.*)|$)/
+const countryURL = `${Cypress.env('API_URL')}/Countries`
 
 const interceptedURLs = [settingsURL, featuresURL, projectURL, positionURL, projectsURL, personURL]
 
@@ -44,6 +46,11 @@ Cypress.Commands.add('interceptExternal', () => {
         const user = findUserByID(id)
         req.reply({
             body: getUserData(user),
+        })
+    })
+    cy.intercept(countryURL, req => {
+        req.reply({
+            body: getCountries(),
         })
     })
 })

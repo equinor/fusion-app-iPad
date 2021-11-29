@@ -20,7 +20,8 @@ describe('Test Order page', () => {
     })
     it('Create button becomes not disabled', () => {
         cy.get('[data-testid=create_button]').should('be.disabled')
-        cy.get('[data-testid=project_dropdown]').click().type('{enter}')
+        cy.get('[data-testid=country_dropdown]').click()
+        cy.contains('Norway').should('exist')
         cy.get('[data-testid=person_dropdown]').click().type('{enter}')
         cy.get('[data-testid=wbs_input]').type('123')
         cy.get('[data-testid=address_input]').type('Bergen')

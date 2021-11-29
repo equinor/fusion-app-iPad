@@ -2,7 +2,7 @@ import { config } from '../config'
 
 export class apiBackend {
     /* Gets the access token from local cache which was stored on login.
-     * Login is handled by Fusion, and just acquire the token.
+     * Login is handled by Fusion, we just acquire the token.
      */
     private getAccessToken = () => {
         const fusionStorageJson = localStorage.getItem(`FUSION_AUTH_CACHE`)
@@ -56,6 +56,11 @@ export class apiBackend {
     async helloWorld(): Promise<string> {
         const path = ''
         return await this.GET<string>(path)
+    }
+
+    async getCountries(): Promise<string[]> {
+        const path = 'Countries'
+        return await this.GET<string[]>(path)
     }
 
     async submitForm(form: string): Promise<string> {
