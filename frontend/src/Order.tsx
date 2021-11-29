@@ -13,6 +13,7 @@ import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
 import { useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
+import { FieldHeader } from './components/FieldHeader'
 
 const Order = () => {
     const api = new apiBackend()
@@ -96,8 +97,8 @@ const Order = () => {
             <Grid container spacing={4} direction="column">
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5} data-testid={'country_dropdown'}>
+                        <FieldHeader headerText={'Country'} />
                         <SearchableDropdown
-                            label="Country"
                             options={countryDropdown.length == 0 ? loadingDropdown : countryDropdown}
                             onSelect={item => setSelectedCountry(item.title)}
                         />
@@ -106,9 +107,7 @@ const Order = () => {
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5} data-testid={'person_dropdown'}>
-                        <Typography variant="body_short" style={{ fontSize: '13px' }}>
-                            Ordering on behalf of
-                        </Typography>
+                        <FieldHeader headerText={'Ordering on behalf of'} />
                         <OrderBehalfofPicker
                             positionOptions={positionOptions}
                             positions={validPositions}
@@ -119,8 +118,8 @@ const Order = () => {
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5}>
+                        <FieldHeader headerText={'WBS'} />
                         <TextInput
-                            label="Project wbs"
                             value={wbs}
                             onChange={value => {
                                 setWbs(value)
@@ -132,8 +131,8 @@ const Order = () => {
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5}>
+                        <FieldHeader headerText={'Delivery address'} />
                         <TextInput
-                            label="Delivery address"
                             value={address}
                             onChange={value => {
                                 setAddress(value)
@@ -145,56 +144,69 @@ const Order = () => {
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5} data-testid={'ex_dropdown'}>
-                        <SearchableDropdown
-                            label="EX classification"
-                            options={exClassOptions}
-                            onSelect={item => setSelectedExClass(item.title)}
-                        />
+                        <FieldHeader headerText={'EX classification'} />
+                        <SearchableDropdown options={exClassOptions} onSelect={item => setSelectedExClass(item.title)} />
                     </Grid>
                     <HelpIcon helpText={'info text'} />
                 </Grid>
                 <Grid item container xs={12} spacing={3} alignItems="center">
-                    {selectedExClass != '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
+                    {selectedExClass !== '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
                         <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
+                            <FieldHeader headerText={'Accessories'} />
                             <AccessorySelector selectedAccessories={selectedAccessories} setSelectedAccessories={setSelectedAccessories} />
                         </Grid>
                     ) : (
                         <></>
                     )}
                 </Grid>
-                <Grid container>
-                    <Grid item xs={10} sm={3} data-testid={'personal_device'}>
-                        <Radio
-                            label="Personal device"
-                            value="personal"
-                            checked={deviceType === 'personal'}
-                            onChange={() => {
-                                setDeviceType('personal')
-                            }}
-                        />
+                <>
+                    <Grid item xs={10} sm={5}>
+                        <FieldHeader headerText={'Device type'} />
                     </Grid>
-                    <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
-                        <Radio
-                            label="Multi-user device"
-                            value="multi"
-                            checked={deviceType === 'multi'}
-                            onChange={() => {
-                                setDeviceType('multi')
-                            }}
-                        />
+                    <Grid container item xs={12} spacing={3} data-testid={'personal_device'}>
+                        <Grid item xs={10} sm={3} direction="column">
+                            <Radio
+                                label="Personal device"
+                                value="personal"
+                                checked={deviceType === 'personal'}
+                                onChange={() => {
+                                    setDeviceType('personal')
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
+                            <Radio
+                                label="Multi-user device"
+                                value="multi"
+                                checked={deviceType === 'multi'}
+                                onChange={() => {
+                                    setDeviceType('multi')
+                                }}
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
+                </>
                 {deviceType === 'personal' ? (
                     selectedUserType === 'Equinor personnel' ? (
                         //Personal equinor employee device
                         <>
-                            <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
+                                    <FieldHeader headerText={'User type'} />
+                                    <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                                </Grid>
+                                <HelpIcon helpText={'info text'} />
+                            </Grid>
                             <Grid item container xs={12} spacing={3} alignItems="center">
                                 <Grid item xs={10} sm={5}>
+                                    <Grid container direction="row">
+                                        <FieldHeader headerText={'Shortname users'} />
+                                        <Typography variant="body_short" style={{ fontSize: '13px', marginLeft: '4px' }}>
+                                            (Optional)
+                                        </Typography>
+                                    </Grid>
                                     <TextInput
-                                        label="Shortname users"
                                         value={shortname}
-                                        isOptional={true}
                                         onChange={value => {
                                             setShortname(value)
                                         }}
@@ -207,7 +219,13 @@ const Order = () => {
                     ) : (
                         //Personal external employee device
                         <>
-                            <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
+                                    <FieldHeader headerText={'User type'} />
+                                    <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                                </Grid>
+                                <HelpIcon helpText={'info text'} />
+                            </Grid>
                             <SimOrderRadio radioCheckedSIM={radioCheckedSIM} setRadioCheckedSIM={setRadioCheckedSIM} />
                         </>
                     )
@@ -217,8 +235,8 @@ const Order = () => {
                 )}
                 <Grid item container xs={12} spacing={3} alignItems="center">
                     <Grid item xs={10} sm={5}>
+                        <FieldHeader headerText={'Number of iPads'} />
                         <TextInput
-                            label="Number of iPads"
                             value={ipadCount}
                             onChange={value => {
                                 validateIPadCount(value)
