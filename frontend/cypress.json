@@ -1,5 +1,6 @@
 {
     "chromeWebSecurity": false,
     "fixturesFolder": false,
-    "projectId": "5svyyo"
+    "projectId": "5svyyo",
+    "videoUploadOnPasses": false
 }
