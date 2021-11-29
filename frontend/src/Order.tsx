@@ -67,7 +67,7 @@ const Order = () => {
     }
 
     const buildOrderForm: OrderForm = {
-        country: selectedCountry, // TODO: Update when country dropdown merged
+        country: selectedCountry,
         orderResponsible: selectedPositionId,
         wbs: wbs,
         deliveryAddress: address,
