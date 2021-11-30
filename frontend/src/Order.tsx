@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useCurrentContext } from '@equinor/fusion'
-import { SearchableDropdown, TextInput } from '@equinor/fusion-components'
+import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-components'
 import { Radio, Button, Typography } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
 
@@ -8,7 +8,6 @@ import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } 
 import { exClasses, userTypes, PositionDetails, OrderForm } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
-import { UserTypeDropdown } from './components/UserTypeDropdown'
 import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
 import { useValidPositionsAsync } from './utils/hooks'
@@ -193,7 +192,7 @@ const Order = () => {
                             <Grid item container xs={12} spacing={3} alignItems="center">
                                 <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
                                     <FieldHeader headerText={'User type'} />
-                                    <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                                    <Select options={userTypeOptions} onSelect={item => setSelectedUserType(item.title)} />
                                 </Grid>
                                 <HelpIcon helpText={'info text'} />
                             </Grid>
@@ -222,7 +221,7 @@ const Order = () => {
                             <Grid item container xs={12} spacing={3} alignItems="center">
                                 <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
                                     <FieldHeader headerText={'User type'} />
-                                    <UserTypeDropdown userTypeOptions={userTypeOptions} setSelectedUserType={setSelectedUserType} />
+                                    <Select options={userTypeOptions} onSelect={item => setSelectedUserType(item.title)} />
                                 </Grid>
                                 <HelpIcon helpText={'info text'} />
                             </Grid>
