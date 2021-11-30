@@ -4,7 +4,6 @@ describe('Test Order page', () => {
     beforeEach(() => {
         const user = users[0]
         cy.visitProject(user)
-        cy.contains('Order').click()
     })
     it('Create button is disabled', () => {
         cy.get('[data-testid=create_button]').should('be.disabled')
@@ -14,7 +13,7 @@ describe('Test Order page', () => {
         cy.get('[data-testid=accessories_dropdown]').should('be.visible')
     })
     it('Layout changes depending on device type', () => {
-        cy.get('[data-testid=user_type_dropdown]').should('be.visible')
+        cy.get('[data-testid=user_type_dropdown]').should('exist')
         cy.get('[data-testid=multi_user_device]').click()
         cy.get('[data-testid=user_type_dropdown]').should('not.exist')
     })

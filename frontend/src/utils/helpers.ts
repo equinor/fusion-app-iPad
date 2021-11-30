@@ -1,8 +1,8 @@
 import { PositionInstance } from '@equinor/fusion'
-import { SearchableDropdownOption } from '@equinor/fusion-components'
+import { SearchableDropdownOption, SelectOption } from '@equinor/fusion-components'
 import { PositionDetails } from '../api/models'
 
-export const createDropdownOptions = (list: string[], selectedOption: string): SearchableDropdownOption[] => {
+export const createDropdownOptions = (list: string[], selectedOption: string): SearchableDropdownOption[] | SelectOption[] => {
     return list.map((item, index) => ({
         title: item,
         key: index.toString(),

@@ -1,22 +1,43 @@
-import { Banner } from '@equinor/eds-core-react'
-import { Button } from '@equinor/fusion-components'
-import { RouteComponentProps } from 'react-router-dom'
+import { Tabs } from '@equinor/eds-core-react'
+import styled from 'styled-components'
+import { useState } from 'react'
+import Order from './Order'
+import Support from './Support'
+import Return from './Return'
+
+const { List, Tab, Panel, Panels } = Tabs
+
+const StyledTabPanel = styled(Panel)`
+    padding-top: 0px;
+    border-top: 1px solid LightGray;
+`
 
 interface Params {
     fusionProjectId: string
 }
 
-const Welcome = ({ match }: RouteComponentProps<Params>) => {
-    const fusionProjectId = match.params.fusionProjectId
+const Welcome = () => {
+    const [activeTab, setActiveTab] = useState(0)
 
     return (
-        <Banner>
-            <Banner.Actions>
-                <Button relativeUrl={`${fusionProjectId}/order`}> Order iPad </Button>
-                <Button relativeUrl={`${fusionProjectId}/support`}> Support </Button>
-                <Button relativeUrl={`${fusionProjectId}/return`}> Return iPad </Button>
-            </Banner.Actions>
-        </Banner>
+        <Tabs activeTab={activeTab} onChange={setActiveTab}>
+            <List>
+                <Tab>Order iPad</Tab>
+                <Tab>Return iPad</Tab>
+                <Tab>Support</Tab>
+            </List>
+            <Panels>
+                <StyledTabPanel>
+                    <Order />
+                </StyledTabPanel>
+                <StyledTabPanel>
+                    <Return />
+                </StyledTabPanel>
+                <StyledTabPanel>
+                    <Support />
+                </StyledTabPanel>
+            </Panels>
+        </Tabs>
     )
 }
 

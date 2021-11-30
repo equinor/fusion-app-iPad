@@ -13,7 +13,7 @@ export const AccessorySelector = ({ selectedAccessories, setSelectedAccessories 
     }
     return (
         <MultiSelect
-            label="Accessories"
+            label=""
             items={accessories}
             selectedOptions={selectedAccessories}
             handleSelectedItemsChange={handleSelectedItemsChange}
