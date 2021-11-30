@@ -16,7 +16,6 @@ Cypress.Commands.add('visitProject', (user: User, fusionProjectId: string = '123
     const frontendUrl = Cypress.env('FRONTEND_URL')
 
     cy.visit(`${frontendUrl}/${fusionProjectId}`)
-    cy.contains('Order').should('be.visible')
 })
 
 declare global {

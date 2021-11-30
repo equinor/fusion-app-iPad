@@ -16,8 +16,8 @@ interface SubmitFormDialogProps {
 
 export const SubmitFormDialog = ({ ritm, onConfirmClick }: SubmitFormDialogProps) => {
     return (
-        <Dialog>
-            <Dialog.Title>Order Successful!</Dialog.Title>
+        <Dialog data-testid={'submit_dialog'}>
+            <Dialog.Title>Order successful!</Dialog.Title>
             <Dialog.CustomContent>
                 <Typography variant="body_short">
                     The order was submitted successfully to Service Now. The RITM for your order is

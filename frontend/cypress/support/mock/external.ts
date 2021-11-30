@@ -58,7 +58,7 @@ Cypress.Commands.add('interceptExternal', () => {
     // Mock Submit Button return
     cy.intercept(submitURL, req => {
         req.reply({
-            body: 'RITM1234567_MOCKED',
+            body: '"RITM1234567_MOCKED"',
         })
     }).as('submitForm')
 })

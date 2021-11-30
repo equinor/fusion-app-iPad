@@ -15,7 +15,7 @@ export const SimOrderRadio = ({ radioCheckedSIM, setRadioCheckedSIM }: Props) =>
                 <br />
                 <br /> Do you want the contractor to order SIM?
             </Grid>
-            <Grid container>
+            <Grid container item xs={12} spacing={3}>
                 <Grid item xs={10} sm={3}>
                     <Radio
                         label="No, WIFI only"
