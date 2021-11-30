@@ -158,33 +158,30 @@ const Order = () => {
                         <></>
                     )}
                 </Grid>
-                <>
-                    <Grid item xs={10} sm={5}>
+                <Grid item container xs={12} spacing={3} data-testid={'personal_device'}>
+                    <Grid item xs={10} sm={3}>
                         <FieldHeader headerText={'Device type'} />
+                        <Radio
+                            label="Personal device"
+                            value="personal"
+                            checked={deviceType === 'personal'}
+                            onChange={() => {
+                                setDeviceType('personal')
+                            }}
+                        />
                     </Grid>
-                    <Grid container item xs={12} spacing={3} data-testid={'personal_device'}>
-                        <Grid item xs={10} sm={3} direction="column">
-                            <Radio
-                                label="Personal device"
-                                value="personal"
-                                checked={deviceType === 'personal'}
-                                onChange={() => {
-                                    setDeviceType('personal')
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
-                            <Radio
-                                label="Multi-user device"
-                                value="multi"
-                                checked={deviceType === 'multi'}
-                                onChange={() => {
-                                    setDeviceType('multi')
-                                }}
-                            />
-                        </Grid>
+                    <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
+                        <FieldHeader headerText={'\u00a0'} /> {/*Unicode for non-breaking space in order to align headers*/}
+                        <Radio
+                            label="Multi-user device"
+                            value="multi"
+                            checked={deviceType === 'multi'}
+                            onChange={() => {
+                                setDeviceType('multi')
+                            }}
+                        />
                     </Grid>
-                </>
+                </Grid>
                 {deviceType === 'personal' ? (
                     selectedUserType === 'Equinor personnel' ? (
                         //Personal equinor employee device
