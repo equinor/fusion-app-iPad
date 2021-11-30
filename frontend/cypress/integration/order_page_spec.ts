@@ -41,6 +41,7 @@ describe('Test Order page', () => {
         cy.get('[data-testid=numberipads_input]').type('1')
         cy.get('[data-testid=submit_button]').should('not.be.disabled')
         cy.get('[data-testid=submit_button]').click()
+        cy.wait('@submitForm')
         cy.get('[data-testid=submit_dialog]').should('exist')
     })
 })

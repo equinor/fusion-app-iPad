@@ -10,6 +10,7 @@ const positionURL = /https:\/\/pro-s-org-ci\.azurewebsites\.net\/projects\/(.+)\
 const projectsURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts$/
 const personURL = /https:\/\/pro-s-people-ci\.azurewebsites\.net\/persons\/(.+?)(?:(\?\$.*)|$)/
 const countryURL = `${Cypress.env('API_URL')}/Countries`
+const submitURL = `${Cypress.env('API_URL')}/OrderForm`
 
 const interceptedURLs = [settingsURL, featuresURL, projectURL, positionURL, projectsURL, personURL]
 
@@ -53,6 +54,13 @@ Cypress.Commands.add('interceptExternal', () => {
             body: getCountries(),
         })
     })
+
+    // Mock Submit Button return
+    cy.intercept(submitURL, req => {
+        req.reply({
+            body: 'RITM1234567_MOCKED',
+        })
+    }).as('submitForm')
 })
 
 declare global {
