@@ -32,7 +32,9 @@ npm run prettier_write
 ```
 
 ## Backend
-The backend is built using .NET 5.0.
+The backend is built using .NET 5.0.  
+
+Swagger documentation for the backend can be found [here](https://backend-fusion-app-ipad-dev.playground.radix.equinor.com/swagger).  
 
 To start the backend locally, you need to provide the client secret from 
 azure app registration.
@@ -70,4 +72,4 @@ dotnet test
 ## Deployment
 For now, the application is only deployed to the Radix _playground_ cluster.
 Link to the application can be found
-[here](https://frontend-fusion-app-ipad-dev.playground.radix.equinor.com/).
+[here](https://frontend-fusion-app-ipad-dev.playground.radix.equinor.com/).  
