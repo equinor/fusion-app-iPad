@@ -3,16 +3,17 @@ import { fusionProjects, getFusionProjectData, findFusionProjectByID } from './p
 import { getFusionPositionData, findFusionPositionByID } from './positions'
 import { getCountries } from './countries'
 
+const API_URL = Cypress.env('API_URL') || 'http://localhost:5000'
 const settingsURL = /https:\/\/pro-s-portal-ci\.azurewebsites\.net\/api\/persons\/me\/settings\/apps\/iPad/
 const featuresURL = /https:\/\/pro-s-portal-ci\.azurewebsites\.net\/log\/features/
 const projectURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts\/(.+)/
 const positionURL = /https:\/\/pro-s-org-ci\.azurewebsites\.net\/projects\/(.+)\/positions/
 const projectsURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts$/
 const personURL = /https:\/\/pro-s-people-ci\.azurewebsites\.net\/persons\/(.+?)(?:(\?\$.*)|$)/
-const countryURL = `${Cypress.env('API_URL')}/Countries`
-const submitURL = `${Cypress.env('API_URL')}/OrderForm`
+const countryURL = `${API_URL}/Countries`
+const submitURL = `${API_URL}/OrderForm`
 
-const interceptedURLs = [settingsURL, featuresURL, projectURL, positionURL, projectsURL, personURL]
+const interceptedURLs = [settingsURL, featuresURL, projectURL, positionURL, projectsURL, personURL, countryURL, submitURL]
 
 Cypress.Commands.add('interceptExternal', () => {
     cy.intercept(settingsURL, {})

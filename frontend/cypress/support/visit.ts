@@ -13,7 +13,7 @@ Cypress.Commands.add('visitProject', (user: User, fusionProjectId: string = '123
     setProjectCache(fusionProjectId)
 
     cy.login(user)
-    const frontendUrl = Cypress.env('FRONTEND_URL')
+    const frontendUrl = Cypress.env('FRONTEND_URL') || 'http://localhost:3000'
 
     cy.visit(`${frontendUrl}/${fusionProjectId}`)
 })
