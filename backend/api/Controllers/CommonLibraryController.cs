@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 namespace api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("/Countries")]
     public class CommonLibraryController : Controller
     {

@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 namespace api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("/OrderForm")]
     public class ServiceNowController : Controller
     {

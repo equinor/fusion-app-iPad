@@ -54,7 +54,9 @@ namespace api
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins, builder => {
-                    builder.WithOrigins("http://localhost:3000", "https://*.equinor.com")
+                    builder.WithOrigins(
+                            "http://localhost:3000",
+                            "https://*.equinor.com")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .SetIsOriginAllowedToAllowWildcardSubdomains();
@@ -95,12 +97,8 @@ namespace api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "iPad", Version = "v1" });
 
                 // Make swagger use xml comments from functions
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
-                Console.WriteLine(xmlFile);
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                Console.WriteLine(xmlPath);
-
                 c.IncludeXmlComments(xmlPath);
             }); 
             #endregion
@@ -143,16 +141,17 @@ namespace api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "iPad v1");
-                    c.OAuthAppName("Fusion-iPad");
-                    c.OAuthClientId(Configuration["AzureAd:ClientId"]);
-                    c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>
-                        { { "resource", $"{Configuration["AzureAd:ClientId"]}" } });
-                });
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "iPad v1");
+                c.OAuthAppName("Fusion-iPad");
+                c.OAuthClientId(Configuration["AzureAd:ClientId"]);
+                c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>
+                    { { "resource", $"{Configuration["AzureAd:ClientId"]}" } });
+            });
 
             app.UseRouting();
 

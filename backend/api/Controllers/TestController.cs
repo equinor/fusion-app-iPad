@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("/")]
     public class TestController : ControllerBase
     {
