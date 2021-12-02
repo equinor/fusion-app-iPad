@@ -1,12 +1,13 @@
 import { Radio } from '@equinor/eds-core-react'
 import { Grid } from '@material-ui/core'
+import { OrderForm } from '../api/models'
 
 interface Props {
     radioCheckedSIM: string
-    setRadioCheckedSIM: (newRadioValue: string) => void
+    setSingleField: (name: string, value: any) => void
 }
 
-export const SimOrderRadio = ({ radioCheckedSIM, setRadioCheckedSIM }: Props) => {
+export const SimOrderRadio = ({ radioCheckedSIM, setSingleField }: Props) => {
     return (
         <>
             <Grid item xs={10} sm={5}>
@@ -22,7 +23,7 @@ export const SimOrderRadio = ({ radioCheckedSIM, setRadioCheckedSIM }: Props) =>
                         value="wifi"
                         checked={radioCheckedSIM === 'wifi'}
                         onChange={() => {
-                            setRadioCheckedSIM('wifi')
+                            setSingleField('simType', 'wifi')
                         }}
                         data-testid={'wifi_radio'}
                     />
@@ -33,7 +34,7 @@ export const SimOrderRadio = ({ radioCheckedSIM, setRadioCheckedSIM }: Props) =>
                         value="sim"
                         checked={radioCheckedSIM === 'sim'}
                         onChange={() => {
-                            setRadioCheckedSIM('sim')
+                            setSingleField('simType', 'sim')
                         }}
                         data-testid={'4g_radio'}
                     />

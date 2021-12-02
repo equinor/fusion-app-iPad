@@ -4,7 +4,7 @@ export const exClasses: string[] = ['Non EX', 'EX Zone 1', 'EX Zone 2']
 
 export const userTypes: string[] = ['Equinor personnel', 'External hire or Contractor']
 
-export const accessories = [
+export const accessoryOptions = [
     'Charger Plug',
     'Neck Strap',
     'Stylus Pen',
@@ -28,6 +28,21 @@ export type OrderForm = {
     deviceType: string
     userType: string
     userShortnames: string
-    externalUserSimType: string
-    nIpads: number
+    simType: string
+    nIpads: string
+    accessories: string[]
+}
+
+export const initialFormState: OrderForm = {
+    exClass: '',
+    country: 'Norway',
+    accessories: ['Charger Plug', 'Neck Strap'],
+    userType: 'Equinor personnel',
+    wbs: '',
+    deliveryAddress: '',
+    nIpads: '',
+    deviceType: 'personal',
+    simType: 'wifi',
+    userShortnames: '',
+    orderResponsible: '',
 }

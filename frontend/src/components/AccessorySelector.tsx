@@ -1,20 +1,20 @@
 import { MultiSelect } from '@equinor/eds-core-react'
 import { UseMultipleSelectionStateChange } from 'downshift'
-import { accessories } from '../api/models'
+import { accessoryOptions } from '../api/models'
 
 interface Props {
     selectedAccessories: string[] | undefined
-    setSelectedAccessories: (newAccessoryValue: string[] | undefined) => void
+    setSingleField: (name: string, value: any) => void
 }
 
-export const AccessorySelector = ({ selectedAccessories, setSelectedAccessories }: Props) => {
+export const AccessorySelector = ({ selectedAccessories, setSingleField }: Props) => {
     function handleSelectedItemsChange(changes: UseMultipleSelectionStateChange<string>) {
-        setSelectedAccessories(changes.selectedItems)
+        setSingleField('accessories', changes.selectedItems)
     }
     return (
         <MultiSelect
             label=""
-            items={accessories}
+            items={accessoryOptions}
             selectedOptions={selectedAccessories}
             handleSelectedItemsChange={handleSelectedItemsChange}
         />
