@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useCurrentContext } from '@equinor/fusion'
-import { Radio, Button, Typography, Dialog, Scrim } from '@equinor/eds-core-react'
+import { Radio, Button, Typography, Scrim } from '@equinor/eds-core-react'
 import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-components'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
-import { exClasses, userTypes, PositionDetails, OrderForm } from './api/models'
+import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { AccessorySelector } from './components/AccessorySelector'
@@ -18,44 +18,45 @@ import { FieldHeader } from './components/FieldHeader'
 const Order = () => {
     const api = new apiBackend()
 
+    const [
+        { exClass, country, accessories, userType, wbs, deliveryAddress, nIpads, deviceType, simType, userShortnames, orderResponsible },
+        setFormState,
+    ] = useState<OrderForm>(initialFormState)
+
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false)
     const [resultRitm, setResultRitm] = useState('')
     const [isSubmitPopupOpen, setIsSubmitPopupOpen] = useState(false)
-    const [selectedExClass, setSelectedExClass] = useState('')
-    const [selectedCountry, setSelectedCountry] = useState('Norway')
+
     const [countryList, setCountryList] = useState<string[]>([])
-    const [selectedAccessories, setSelectedAccessories] = useState<string[] | undefined>(['Charger Plug', 'Neck Strap'])
-    const [selectedUserType, setSelectedUserType] = useState('Equinor personnel')
-    const [wbs, setWbs] = useState('')
-    const [address, setAddress] = useState('')
-    const [ipadCount, setIpadCount] = useState('')
+
     const [numberOfiPadsError, setNumberOfiPadsError] = useState(false)
-    const [deviceType, setDeviceType] = useState('personal')
-    const [radioCheckedSIM, setRadioCheckedSIM] = useState('wifi')
-    const [shortname, setShortname] = useState('')
+
     const [validPositions, setValidPositions] = useState<PositionDetails[]>([])
-    const [selectedPositionId, setSelectedPositionId] = useState('')
-    const [hasFetched, setHasFetched] = useState(false)
+    const [hasFetchedPositions, setHasFetchedPositions] = useState(false)
 
-    const exClassOptions = createDropdownOptions(exClasses, selectedExClass)
-    const userTypeOptions = createDropdownOptions(userTypes, selectedUserType)
+    const exClassOptions = createDropdownOptions(exClasses, exClass)
+    const userTypeOptions = createDropdownOptions(userTypes, userType)
 
-    const mandatoryFields = [selectedCountry, selectedPositionId, wbs, address, selectedExClass, selectedUserType, ipadCount]
+    const mandatoryFields = [country, orderResponsible, wbs, deliveryAddress, exClass, userType, nIpads]
+
+    const setSingleField = (name: string, value: any) => {
+        setFormState(prevState => ({ ...prevState, [name]: value }))
+    }
 
     useEffect(() => {
         api.getCountries().then(response => {
             setCountryList(response.sort())
         })
     }, [])
-    const countryDropdown = createDropdownOptions(countryList, selectedCountry)
+    const countryDropdown = createDropdownOptions(countryList, country!)
 
     const currentContext = useCurrentContext()
 
-    useValidPositionsAsync(setValidPositions, setHasFetched, currentContext)
-    const positionOptions = createDropdownOptionsFromPos(validPositions, selectedPositionId, hasFetched)
+    useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext)
+    const positionOptions = createDropdownOptionsFromPos(validPositions, orderResponsible, hasFetchedPositions)
 
     const validateIPadCount = (numberOfIPads: string) => {
-        setIpadCount(numberOfIPads)
+        setSingleField('nIpads', numberOfIPads)
         Number(numberOfIPads) > 0 ? setNumberOfiPadsError(false) : setNumberOfiPadsError(true)
     }
 
@@ -67,22 +68,25 @@ const Order = () => {
         }
     }, mandatoryFields)
 
-    const buildOrderForm: OrderForm = {
-        country: selectedCountry,
-        orderResponsible: selectedPositionId,
-        wbs: wbs,
-        deliveryAddress: address,
-        exClass: selectedExClass,
-        deviceType: deviceType,
-        userType: selectedUserType,
-        userShortnames: shortname,
-        externalUserSimType: radioCheckedSIM,
-        nIpads: Number(ipadCount),
+    const buildOrderForm = (): OrderForm => {
+        return {
+            country: country,
+            orderResponsible: orderResponsible,
+            wbs: wbs,
+            deliveryAddress: deliveryAddress,
+            exClass: exClass,
+            deviceType: deviceType,
+            userType: userType,
+            userShortnames: userShortnames,
+            simType: simType,
+            nIpads: nIpads,
+            accessories: accessories,
+        }
     }
 
     const onClickCreate = async () => {
         setIsSubmitEnabled(false)
-        const orderFormString = buildOrderForm
+        const orderFormString = buildOrderForm()
         const form = JSON.stringify(orderFormString)
         console.log('Submitting form: ' + form)
 
@@ -101,6 +105,7 @@ const Order = () => {
 
     // This callback is called when the order is submitted and the user confirms the RITM returned
     const onRitmConfirmed = () => {
+        setFormState(initialFormState)
         handleClose()
     }
 
@@ -113,7 +118,7 @@ const Order = () => {
                             <FieldHeader headerText={'Country'} />
                             <SearchableDropdown
                                 options={countryDropdown.length == 0 ? loadingDropdown : countryDropdown}
-                                onSelect={item => setSelectedCountry(item.title)}
+                                onSelect={item => setSingleField('country', item.title)}
                             />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
@@ -124,7 +129,7 @@ const Order = () => {
                             <OrderBehalfofPicker
                                 positionOptions={positionOptions}
                                 positions={validPositions}
-                                setSelectedPositionID={setSelectedPositionId}
+                                setSingleField={setSingleField}
                             />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
@@ -135,7 +140,7 @@ const Order = () => {
                             <TextInput
                                 value={wbs}
                                 onChange={value => {
-                                    setWbs(value)
+                                    setSingleField('wbs', value)
                                 }}
                                 data-testid={'wbs_input'}
                             />
@@ -146,9 +151,9 @@ const Order = () => {
                         <Grid item xs={10} sm={5}>
                             <FieldHeader headerText={'Delivery address'} />
                             <TextInput
-                                value={address}
+                                value={deliveryAddress}
                                 onChange={value => {
-                                    setAddress(value)
+                                    setSingleField('deliveryAddress', value)
                                 }}
                                 data-testid={'address_input'}
                             />
@@ -158,18 +163,15 @@ const Order = () => {
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'ex_dropdown'}>
                             <FieldHeader headerText={'EX classification'} />
-                            <SearchableDropdown options={exClassOptions} onSelect={item => setSelectedExClass(item.title)} />
+                            <SearchableDropdown options={exClassOptions} onSelect={item => setSingleField('exClass', item.title)} />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        {selectedExClass !== '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
+                        {exClass !== '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
                             <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
                                 <FieldHeader headerText={'Accessories'} />
-                                <AccessorySelector
-                                    selectedAccessories={selectedAccessories}
-                                    setSelectedAccessories={setSelectedAccessories}
-                                />
+                                <AccessorySelector selectedAccessories={accessories} setSingleField={setSingleField} />
                             </Grid>
                         ) : (
                             <></>
@@ -183,7 +185,7 @@ const Order = () => {
                                 value="personal"
                                 checked={deviceType === 'personal'}
                                 onChange={() => {
-                                    setDeviceType('personal')
+                                    setSingleField('deviceType', 'personal')
                                 }}
                             />
                         </Grid>
@@ -194,19 +196,19 @@ const Order = () => {
                                 value="multi"
                                 checked={deviceType === 'multi'}
                                 onChange={() => {
-                                    setDeviceType('multi')
+                                    setSingleField('deviceType', 'multi')
                                 }}
                             />
                         </Grid>
                     </Grid>
                     {deviceType === 'personal' ? (
-                        selectedUserType === 'Equinor personnel' ? (
+                        userType === 'Equinor personnel' ? (
                             //Personal equinor employee device
                             <>
                                 <Grid item container xs={12} spacing={3} alignItems="center">
                                     <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
                                         <FieldHeader headerText={'User type'} />
-                                        <Select options={userTypeOptions} onSelect={item => setSelectedUserType(item.title)} />
+                                        <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
                                     </Grid>
                                     <HelpIcon helpText={'info text'} />
                                 </Grid>
@@ -219,9 +221,9 @@ const Order = () => {
                                             </Typography>
                                         </Grid>
                                         <TextInput
-                                            value={shortname}
+                                            value={userShortnames}
                                             onChange={value => {
-                                                setShortname(value)
+                                                setSingleField('userShortnames', value)
                                             }}
                                             data-testid={'shortname_input'}
                                         />
@@ -235,11 +237,11 @@ const Order = () => {
                                 <Grid item container xs={12} spacing={3} alignItems="center">
                                     <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
                                         <FieldHeader headerText={'User type'} />
-                                        <Select options={userTypeOptions} onSelect={item => setSelectedUserType(item.title)} />
+                                        <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
                                     </Grid>
                                     <HelpIcon helpText={'info text'} />
                                 </Grid>
-                                <SimOrderRadio radioCheckedSIM={radioCheckedSIM} setRadioCheckedSIM={setRadioCheckedSIM} />
+                                <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} />
                             </>
                         )
                     ) : (
@@ -250,7 +252,7 @@ const Order = () => {
                         <Grid item xs={10} sm={5}>
                             <FieldHeader headerText={'Number of iPads'} />
                             <TextInput
-                                value={ipadCount}
+                                value={nIpads}
                                 onChange={value => {
                                     validateIPadCount(value)
                                 }}
