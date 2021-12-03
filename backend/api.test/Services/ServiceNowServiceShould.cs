@@ -21,7 +21,7 @@ namespace Api.Test.Services
         {
             //TODO: Create actual form to mock service - Waiting for service now integration
             const string Form = "{jsonForm}";
-            var ritm = _service.SubmitIpadOrderForm(Form).Result;
+            string ritm = _service.SubmitIpadOrderForm(Form).Result;
 
             Assert.NotNull(ritm);
             Assert.NotEmpty(ritm);
@@ -32,7 +32,7 @@ namespace Api.Test.Services
         public void ThrowArgumentExceptionFromWrongFormFormat()
         {
             const string Form = "ErrorForm";
-            var e = Assert.Throws<AggregateException>(() =>
+            AggregateException e = Assert.Throws<AggregateException>(() =>
             {
                 _service.SubmitIpadOrderForm(Form).Wait();
             });

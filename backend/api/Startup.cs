@@ -93,15 +93,15 @@ namespace Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "iPad", Version = "v1" });
 
                 // Make swagger use xml comments from functions
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
             #endregion
 
             // Common Library Integration
             #region Common Library Integration
-            var commonLibTokenConnection = CommonLibraryService.BuildTokenConnectionString(
+            string commonLibTokenConnection = CommonLibraryService.BuildTokenConnectionString(
                 Configuration["AzureAd:ClientId"],
                 Configuration["AzureAd:TenantId"],
                 Configuration["AzureAd:ClientSecret"]);
