@@ -1,7 +1,6 @@
-using System;
-using Xunit;
+﻿using Xunit;
 
-namespace api.test
+namespace Api.Test
 {
     public class UnitTest1
     {

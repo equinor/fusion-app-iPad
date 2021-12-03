@@ -1,13 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Equinor.TI.CommonLibrary.Client;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 
-namespace api.Services
+namespace Api.Services
 {
     public class CommonLibraryService
     {

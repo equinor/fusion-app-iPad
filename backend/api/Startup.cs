@@ -1,26 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using api.Controllers;
-using api.Services;
+using Api.Controllers;
+using Api.Services;
 using Equinor.TI.CommonLibrary.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Microsoft.OpenApi.Models;
 
-namespace api
+namespace Api
 {
     public class Startup
     {
@@ -31,11 +26,7 @@ namespace api
 
         public IConfiguration Configuration { get; }
 
-        string WRONTFORMS = "string";
-
-        public const string wormWoord = "ss";
-
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -57,7 +48,8 @@ namespace api
 
             services.AddCors(options =>
             {
-                options.AddPolicy(name: MyAllowSpecificOrigins, builder => {
+                options.AddPolicy(name: MyAllowSpecificOrigins, builder =>
+                {
                     builder.WithOrigins(
                             "http://localhost:3000",
                             "https://*.equinor.com")
@@ -104,12 +96,12 @@ namespace api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
-            }); 
+            });
             #endregion
 
             // Common Library Integration
             #region Common Library Integration
-            string commonLibTokenConnection = CommonLibraryService.BuildTokenConnectionString(
+            var commonLibTokenConnection = CommonLibraryService.BuildTokenConnectionString(
                 Configuration["AzureAd:ClientId"],
                 Configuration["AzureAd:TenantId"],
                 Configuration["AzureAd:ClientSecret"]);
