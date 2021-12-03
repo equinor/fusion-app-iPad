@@ -31,6 +31,10 @@ namespace api
 
         public IConfiguration Configuration { get; }
 
+        string WRONTFORMS = "string";
+
+        public const string wormWoord = "ss";
+
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
