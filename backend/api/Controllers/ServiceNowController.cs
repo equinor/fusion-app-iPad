@@ -52,7 +52,7 @@ namespace Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Posting form");
-                
+
                 // 400 - Bad request if argument exception
                 if (e is ArgumentException)
                     return new StatusCodeResult(StatusCodes.Status400BadRequest);
