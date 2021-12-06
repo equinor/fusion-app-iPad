@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using api.Services;
+﻿using System;
+using Api.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
-namespace api.test.Services
+namespace Api.Test.Services
 {
     public class ServiceNowServiceShould
     {
@@ -24,8 +20,8 @@ namespace api.test.Services
         public void ReturnRitmFromFormJson()
         {
             //TODO: Create actual form to mock service - Waiting for service now integration
-            const string form = "{jsonForm}";
-            string ritm = _service.SubmitIpadOrderForm(form).Result;
+            const string Form = "{jsonForm}";
+            string ritm = _service.SubmitIpadOrderForm(Form).Result;
 
             Assert.NotNull(ritm);
             Assert.NotEmpty(ritm);
@@ -35,10 +31,10 @@ namespace api.test.Services
         [Fact]
         public void ThrowArgumentExceptionFromWrongFormFormat()
         {
-            const string form = "ErrorForm";
+            const string Form = "ErrorForm";
             AggregateException e = Assert.Throws<AggregateException>(() =>
             {
-                _service.SubmitIpadOrderForm(form).Wait();
+                _service.SubmitIpadOrderForm(Form).Wait();
             });
             Assert.NotNull(e.InnerException);
             Assert.IsType<ArgumentException>(e.InnerException);

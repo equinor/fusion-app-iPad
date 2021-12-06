@@ -1,16 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using api.Services;
-using Microsoft.AspNetCore.Authorization;
+using Api.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace api.Controllers
+namespace Api.Controllers
 {
     [ApiController]
     [Route("/OrderForm")]

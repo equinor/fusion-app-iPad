@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
+﻿using System;
 using System.Threading.Tasks;
-using Equinor.TI.CommonLibrary.Client;
 using Microsoft.Extensions.Logging;
 
-namespace api.Services
+namespace Api.Services
 {
     public class ServiceNowService
     {
@@ -31,7 +27,7 @@ namespace api.Services
         /// The RITM generated for the request by service now
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<string> SubmitIpadOrderForm(string iPadFormJson)
+        public Task<string> SubmitIpadOrderForm(string iPadFormJson)
         {
             if (!FormIsValid(iPadFormJson))
             {
@@ -40,10 +36,10 @@ namespace api.Services
             }
 
             // TODO: Add actual service now logic - Waiting for service now integration
-            return "RITM1234567_test";
+            return Task.FromResult("RITM1234567_test");
         }
 
-        private bool FormIsValid(string iPadFormJson)
+        private static bool FormIsValid(string iPadFormJson)
         {
             //TODO: Add form validation - Waiting for service now integration
             if (iPadFormJson.Equals("ErrorForm", StringComparison.OrdinalIgnoreCase))
