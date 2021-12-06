@@ -50,6 +50,28 @@ dotnet run
 ```
 The default URL is set to localhost:5000.
 
+### Formatting
+We use [dotnet format](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-format)
+to format and verify code style in backend based on the 
+[C# coding conventions](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions).  
+
+For first time installation of the tool run
+```
+cd backend
+dotnet tool restore
+```
+
+To check the formating, run 
+```
+cd backend
+dotnet format -w -s info -a info --check --verbosity diagnostic
+```
+and to fix the formatting run
+```
+cd backend
+dotnet format -w -s info -a info
+```
+
 ## Docker
 To run the project using Docker, run ``docker-compose up --build``. This will
 build and run a docker container for both the frontend and backend.
