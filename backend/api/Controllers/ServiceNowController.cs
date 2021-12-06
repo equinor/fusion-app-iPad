@@ -51,16 +51,13 @@ namespace Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Submitting form");
+                _logger.LogError(e, "Posting form");
 
-                // Select appropriate status code (400 - Bad request if argument exception, 500 if something else)
-                int statusCode = e switch
-                {
-                    ArgumentException => StatusCodes.Status400BadRequest,
-                    _ => StatusCodes.Status500InternalServerError
-                };
+                // 400 - Bad request if argument exception
+                if (e is ArgumentException)
+                    return new StatusCodeResult(StatusCodes.Status400BadRequest);
 
-                return new StatusCodeResult(statusCode);
+                throw;
             }
 
             _logger.LogInformation("Successful POST iPad order form to Service Now");

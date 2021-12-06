@@ -29,14 +29,20 @@ namespace Api.Services
         /// <exception cref="ArgumentException"></exception>
         public Task<string> SubmitIpadOrderForm(string iPadFormJson)
         {
+            _logger.LogInformation("Attempting to post order form to Service Now");
+
             if (!FormIsValid(iPadFormJson))
             {
-                _logger.LogError("Invalid iPad order form");
-                throw new ArgumentException("invalid iPad ordering form");
+                _logger.LogError("Invalid form");
+                throw new ArgumentException("Invalid form");
             }
 
             // TODO: Add actual service now logic - Waiting for service now integration
-            return Task.FromResult("RITM1234567_test");
+            string ritm = "RITM1234567_test";
+
+            _logger.LogInformation("Succesfully posted form to Service Now with RITM " + ritm);
+
+            return Task.FromResult(ritm);
         }
 
         private static bool FormIsValid(string iPadFormJson)
