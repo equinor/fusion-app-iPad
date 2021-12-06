@@ -18,8 +18,8 @@ namespace Api.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<WbsService> _logger;
         private readonly ITokenAcquisition _tokenAcquisition;
-        public string _scope;
-        public const string clientName = "WbsApiClient";
+        private readonly string _scope;
+        public const string ClientName = "WbsApiClient";
 
         /// <summary>
         /// Logger is provided by the Dependency Injection manager <see cref="Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
@@ -40,7 +40,7 @@ namespace Api.Services
 
         public async Task<List<WbsModel>> GetWbsListAsync(string? wbsCode)
         {
-            HttpClient? httpClient = _httpClientFactory.CreateClient(clientName);
+            HttpClient? httpClient = _httpClientFactory.CreateClient(ClientName);
 
             HttpResponseMessage responseMessage;
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(

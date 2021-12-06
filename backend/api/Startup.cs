@@ -103,7 +103,7 @@ namespace Api
             #endregion
 
             //HttpClient for WBS API
-            services.AddHttpClient(WbsService.clientName, httpClient =>
+            services.AddHttpClient(WbsService.ClientName, httpClient =>
             {
                 httpClient.BaseAddress = new Uri(Configuration["WbsApi:BaseUrl"]);
                 httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", Configuration["WbsApi:SubscriptionKey"]);
