@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +45,7 @@ namespace api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Getting countries");
-                return new StatusCodeResult(500);
+                throw;
             }
 
             _logger.LogInformation("Successful GET countries from Common Library");
