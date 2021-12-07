@@ -15,12 +15,6 @@ namespace Api.Models
 
         public IList<string> ActiveStatusIds { get; init; } = new List<string>();
 
-        public bool IsOpenForTimeWriting
-        {
-            get
-            {
-                return !ActiveStatusIds.Contains(ClosedForTimeWritingStatusCode);
-            }
-        }
+        public bool IsOpenForTimeWriting => !ActiveStatusIds.Contains(ClosedForTimeWritingStatusCode);
     }
 }

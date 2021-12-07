@@ -76,7 +76,14 @@ namespace Api.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Received response from WBS API, but failed to parse it");
+                if (e is JsonException)
+                {
+                    _logger.LogError(e, "Received response from WBS API, but JSON did not match the WbsModel properly");
+                }
+                else
+                {
+                    _logger.LogError(e, "Received response from WBS API, but failed to parse it");
+                }
                 throw;
             };
         }

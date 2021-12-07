@@ -143,8 +143,6 @@ namespace Api
             //WBS API Integration
             #region WBS API Integration
 
-            // Service is of singleton type because it should be the same for all requests
-            // TODO: Verify if this should be singleton
             services.AddScoped(typeof(WbsService), typeof(WbsService));
 
             // Controller is scoped because a new instance should be initialized for each request

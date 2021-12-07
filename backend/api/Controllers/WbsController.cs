@@ -44,7 +44,7 @@ namespace Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Getting WBS");
-                return new StatusCodeResult(500);
+                throw;
             }
 
             return new OkObjectResult(result);
