@@ -12,11 +12,6 @@ describe('Test Order page', () => {
         cy.get('[data-testid=ex_dropdown]').click().type('{enter}')
         cy.get('[data-testid=accessories_dropdown]').should('be.visible')
     })
-    it('Layout changes depending on device type', () => {
-        cy.get('[data-testid=user_type_dropdown]').should('exist')
-        cy.get('[data-testid=multi_user_device]').click()
-        cy.get('[data-testid=user_type_dropdown]').should('not.exist')
-    })
     it('Submit button becomes not disabled', () => {
         cy.get('[data-testid=submit_button]').should('be.disabled')
         cy.get('[data-testid=country_dropdown]').click()
