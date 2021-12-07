@@ -12,7 +12,7 @@ import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
 import { useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
-import { SubmitFormDialog } from './components/SubmitFormDialog'
+import { SubmitFormDialog, CountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
 
 const Order = () => {
@@ -30,7 +30,10 @@ const Order = () => {
 
     const [countryList, setCountryList] = useState<string[]>([])
 
-    const [numberOfiPadsError, setNumberOfiPadsError] = useState(false)
+    const [isNumberOfiPadsError, setIsNumberOfiPadsError] = useState(false)
+    const [isNumberOfiPadsWarning, setIsNumberOfiPadsWarning] = useState(false)
+    const [isWarningPopupOpen, setIsWarningPopupOpen] = useState(false)
+    const iPadCountWarningLimit = 10
 
     const [validPositions, setValidPositions] = useState<PositionDetails[]>([])
     const [hasFetchedPositions, setHasFetchedPositions] = useState(false)
@@ -58,11 +61,12 @@ const Order = () => {
 
     const validateIPadCount = (numberOfIPads: string) => {
         setSingleField('nIpads', numberOfIPads)
-        Number(numberOfIPads) > 0 ? setNumberOfiPadsError(false) : setNumberOfiPadsError(true)
+        Number(numberOfIPads) > 0 ? setIsNumberOfiPadsError(false) : setIsNumberOfiPadsError(true)
+        Number(numberOfIPads) > iPadCountWarningLimit ? setIsNumberOfiPadsWarning(true) : setIsNumberOfiPadsWarning(false)
     }
 
     useEffect(() => {
-        if (mandatoryFields.includes('') || numberOfiPadsError) {
+        if (mandatoryFields.includes('') || isNumberOfiPadsError) {
             setIsSubmitEnabled(false)
         } else {
             setIsSubmitEnabled(true)
@@ -85,7 +89,7 @@ const Order = () => {
         }
     }
 
-    const onClickCreate = async () => {
+    const submitForm = async () => {
         setIsSubmitEnabled(false)
         const orderFormString = buildOrderForm()
         const form = JSON.stringify(orderFormString)
@@ -101,8 +105,15 @@ const Order = () => {
         console.log(response)
     }
 
+    const onClickSubmit = async () => {
+        if (isNumberOfiPadsWarning) setIsWarningPopupOpen(true)
+        else submitForm()
+    }
+
     const handleClose = () => {
         setIsSubmitPopupOpen(false)
+        setIsWarningPopupOpen(false)
+        setIsSubmitEnabled(true)
     }
 
     // This callback is called when the order is submitted and the user confirms the RITM returned
@@ -231,7 +242,7 @@ const Order = () => {
                                 onChange={value => {
                                     validateIPadCount(value)
                                 }}
-                                error={numberOfiPadsError}
+                                error={isNumberOfiPadsError}
                                 errorMessage="The number of iPads must be a number greater than 0"
                                 data-testid={'numberipads_input'}
                             />
@@ -246,7 +257,7 @@ const Order = () => {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button disabled={!isSubmitEnabled} data-testid={'submit_button'} onClick={onClickCreate}>
+                        <Button disabled={!isSubmitEnabled} data-testid={'submit_button'} onClick={onClickSubmit}>
                             Submit
                         </Button>
                     </Grid>
@@ -255,6 +266,18 @@ const Order = () => {
             {isSubmitPopupOpen && (
                 <Scrim onClose={handleClose}>
                     <SubmitFormDialog onConfirmClick={onRitmConfirmed} ritm={resultRitm} isLoading={!isRitmReceived}></SubmitFormDialog>
+                </Scrim>
+            )}
+            {isWarningPopupOpen && (
+                <Scrim onClose={handleClose}>
+                    <CountWarningDialog
+                        onCancelClick={handleClose}
+                        onConfirmClick={() => {
+                            handleClose()
+                            submitForm()
+                        }}
+                        count={nIpads}
+                    ></CountWarningDialog>
                 </Scrim>
             )}
         </>
