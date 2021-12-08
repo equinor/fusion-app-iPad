@@ -23,6 +23,7 @@ const Order = () => {
         setFormState,
     ] = useState<OrderForm>(initialFormState)
 
+    const [isRitmReceived, setIsRitmReceived] = useState(false)
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false)
     const [resultRitm, setResultRitm] = useState('')
     const [isSubmitPopupOpen, setIsSubmitPopupOpen] = useState(false)
@@ -90,11 +91,12 @@ const Order = () => {
         const form = JSON.stringify(orderFormString)
         console.log('Submitting form: ' + form)
 
+        setIsSubmitPopupOpen(true)
+
         const response = await api.submitForm(form)
 
+        setIsRitmReceived(true)
         setResultRitm(response)
-
-        setIsSubmitPopupOpen(true)
 
         console.log(response)
     }
@@ -106,6 +108,8 @@ const Order = () => {
     // This callback is called when the order is submitted and the user confirms the RITM returned
     const onRitmConfirmed = () => {
         setFormState(initialFormState)
+        // Clear ritm received flag
+        setIsRitmReceived(false)
         handleClose()
     }
 
@@ -250,7 +254,7 @@ const Order = () => {
             </div>
             {isSubmitPopupOpen && (
                 <Scrim onClose={handleClose}>
-                    <SubmitFormDialog onConfirmClick={onRitmConfirmed} ritm={resultRitm}></SubmitFormDialog>
+                    <SubmitFormDialog onConfirmClick={onRitmConfirmed} ritm={resultRitm} isLoading={!isRitmReceived}></SubmitFormDialog>
                 </Scrim>
             )}
         </>
