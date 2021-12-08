@@ -1,15 +1,13 @@
 import { IFusionContext } from '@equinor/fusion'
 import { config } from '../config'
 
-const FUSION_APP_KEY: string = '74b1613f-f22a-451b-a5c3-1c9391e91e68' //Used for FusionContext
-
 export class apiBackend {
     /* Gets the access token. Checks first if cached token exist and is valid.
      * If not, get a new one and cache it.
      */
     private async fetchAccessToken() {
         const contextStore: { [key: string]: any } = window
-        const context: IFusionContext = contextStore[FUSION_APP_KEY]
+        const context: IFusionContext = contextStore[config.FUSION_CONTEXT_KEY]
         return await context.auth.container.acquireTokenAsync(config.AD_CLIENT_ID)
     }
 
