@@ -37,7 +37,10 @@ namespace Api
             #region Security Setup
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+            .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"))
+            .EnableTokenAcquisitionToCallDownstreamApi()
+                .AddDownstreamWebApi("WbsService", Configuration.GetSection("WbsApi"))
+            .AddDistributedTokenCaches();
 
             services.AddAuthorization(options =>
             {
@@ -99,6 +102,13 @@ namespace Api
             });
             #endregion
 
+            //HttpClient for WBS API
+            services.AddHttpClient(WbsService.ClientName, httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(Configuration["WbsApi:BaseUrl"]);
+                httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", Configuration["WbsApi:SubscriptionKey"]);
+            });
+
             // Common Library Integration
             #region Common Library Integration
             string commonLibTokenConnection = CommonLibraryService.BuildTokenConnectionString(
@@ -128,6 +138,15 @@ namespace Api
 
             // Controller is scoped because a new instance should be initialized for each request
             services.AddScoped(typeof(ServiceNowController), typeof(ServiceNowController));
+            #endregion
+
+            //WBS API Integration
+            #region WBS API Integration
+
+            services.AddScoped(typeof(WbsService), typeof(WbsService));
+
+            // Controller is scoped because a new instance should be initialized for each request
+            services.AddScoped(typeof(WbsController), typeof(WbsController));
             #endregion
         }
 
