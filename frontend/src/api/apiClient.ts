@@ -1,20 +1,18 @@
+import { IFusionContext } from '@equinor/fusion'
 import { config } from '../config'
 
 export class apiBackend {
-    /* Gets the access token from local cache which was stored on login.
-     * Login is handled by Fusion, we just acquire the token.
+    /* Gets the access token. Checks first if cached token exist and is valid.
+     * If not, get a new one and cache it.
      */
-    private getAccessToken = () => {
-        const fusionStorageJson = localStorage.getItem(`FUSION_AUTH_CACHE`)
-        if (fusionStorageJson === null) {
-            throw new Error('Could not find auth token in local storage')
-        }
-        const fusionStorage = JSON.parse(fusionStorageJson)
-        return fusionStorage[`FUSION_AUTH_CACHE:${config.AD_CLIENT_ID}:TOKEN`]
+    private async fetchAccessToken() {
+        const contextStore: { [key: string]: any } = window
+        const context: IFusionContext = contextStore[config.FUSION_CONTEXT_KEY]
+        return await context.auth.container.acquireTokenAsync(config.AD_CLIENT_ID)
     }
 
     private async query<T>(method: 'GET' | 'POST' | 'DELETE', path: string, body?: T): Promise<T> {
-        const token = this.getAccessToken()
+        const token = await this.fetchAccessToken()
 
         const headers = {
             'content-type': 'application/json',
