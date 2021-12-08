@@ -65,4 +65,9 @@ export class apiBackend {
         const path = 'OrderForm'
         return await this.POST<string>(path, form)
     }
+
+    async getWbs(wbsCode: string): Promise<string[]> {
+        const path = `Wbs?wbsCode=${wbsCode}`
+        return await this.GET<string[]>(path)
+    }
 }
