@@ -22,7 +22,7 @@ export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitForm
             {isLoading ? (
                 <Dialog data-testid={'submit_dialog'}>
                     <Dialog.CustomContent>
-                        <Spinner centered={true} />
+                        <Spinner primary centered />
                     </Dialog.CustomContent>
                 </Dialog>
             ) : (
