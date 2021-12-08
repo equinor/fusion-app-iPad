@@ -177,76 +177,47 @@ const Order = () => {
                             <></>
                         )}
                     </Grid>
-                    <Grid item container xs={12} spacing={3} data-testid={'personal_device'}>
-                        <Grid item xs={10} sm={3}>
-                            <FieldHeader headerText={'Device type'} />
-                            <Radio
-                                label="Personal device"
-                                value="personal"
-                                checked={deviceType === 'personal'}
-                                onChange={() => {
-                                    setSingleField('deviceType', 'personal')
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={10} sm={3} data-testid={'multi_user_device'}>
-                            <FieldHeader headerText={'\u00a0'} /> {/*Unicode for non-breaking space in order to align headers*/}
-                            <Radio
-                                label="Multi-user device"
-                                value="multi"
-                                checked={deviceType === 'multi'}
-                                onChange={() => {
-                                    setSingleField('deviceType', 'multi')
-                                }}
-                            />
-                        </Grid>
-                    </Grid>
-                    {deviceType === 'personal' ? (
-                        userType === 'Equinor personnel' ? (
-                            //Personal equinor employee device
-                            <>
-                                <Grid item container xs={12} spacing={3} alignItems="center">
-                                    <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
-                                        <FieldHeader headerText={'User type'} />
-                                        <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
-                                    </Grid>
-                                    <HelpIcon helpText={'info text'} />
+                    {userType === 'Equinor personnel' ? (
+                        //Equinor employee device
+                        <>
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
+                                    <FieldHeader headerText={'User type'} />
+                                    <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
                                 </Grid>
-                                <Grid item container xs={12} spacing={3} alignItems="center">
-                                    <Grid item xs={10} sm={5}>
-                                        <Grid container direction="row">
-                                            <FieldHeader headerText={'Shortname users'} />
-                                            <Typography variant="body_short" style={{ fontSize: '13px', marginLeft: '4px' }}>
-                                                (Optional)
-                                            </Typography>
-                                        </Grid>
-                                        <TextInput
-                                            value={userShortnames}
-                                            onChange={value => {
-                                                setSingleField('userShortnames', value)
-                                            }}
-                                            data-testid={'shortname_input'}
-                                        />
+                                <HelpIcon helpText={'info text'} />
+                            </Grid>
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={10} sm={5}>
+                                    <Grid container direction="row">
+                                        <FieldHeader headerText={'Shortname users'} />
+                                        <Typography variant="body_short" style={{ fontSize: '13px', marginLeft: '4px' }}>
+                                            (Optional)
+                                        </Typography>
                                     </Grid>
-                                    <HelpIcon helpText={'info text'} />
+                                    <TextInput
+                                        value={userShortnames}
+                                        onChange={value => {
+                                            setSingleField('userShortnames', value)
+                                        }}
+                                        data-testid={'shortname_input'}
+                                    />
                                 </Grid>
-                            </>
-                        ) : (
-                            //Personal external employee device
-                            <>
-                                <Grid item container xs={12} spacing={3} alignItems="center">
-                                    <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
-                                        <FieldHeader headerText={'User type'} />
-                                        <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
-                                    </Grid>
-                                    <HelpIcon helpText={'info text'} />
-                                </Grid>
-                                <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} />
-                            </>
-                        )
+                                <HelpIcon helpText={'info text'} />
+                            </Grid>
+                        </>
                     ) : (
-                        // Multi-device order
-                        <></>
+                        //External employee device
+                        <>
+                            <Grid item container xs={12} spacing={3} alignItems="center">
+                                <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
+                                    <FieldHeader headerText={'User type'} />
+                                    <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
+                                </Grid>
+                                <HelpIcon helpText={'info text'} />
+                            </Grid>
+                            <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} />
+                        </>
                     )}
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5}>
