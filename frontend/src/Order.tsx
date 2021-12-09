@@ -12,7 +12,7 @@ import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
 import { useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
-import { SubmitFormDialog, CountWarningDialog } from './components/CustomDialogs'
+import { SubmitFormDialog, AmountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
 
 interface Props {
@@ -23,7 +23,19 @@ const Order = ({ topRef }: Props) => {
     const api = new apiBackend()
 
     const [
-        { exClass, country, accessories, userType, wbs, deliveryAddress, nIpads, deviceType, simType, userShortnames, orderResponsible },
+        {
+            exClass,
+            country,
+            accessories,
+            userType,
+            wbs,
+            deliveryAddress,
+            iPadAmount,
+            deviceType,
+            simType,
+            userShortnames,
+            orderResponsible,
+        },
         setFormState,
     ] = useState<OrderForm>(initialFormState)
 
@@ -34,10 +46,10 @@ const Order = ({ topRef }: Props) => {
 
     const [countryList, setCountryList] = useState<string[]>([])
 
-    const [isNumberOfiPadsError, setIsNumberOfiPadsError] = useState(false)
-    const [isNumberOfiPadsWarning, setIsNumberOfiPadsWarning] = useState(false)
+    const [isiPadAmountError, setIsiPadAmountError] = useState(false)
+    const [isiPadAmountWarning, setIsiPadAmountWarning] = useState(false)
     const [isWarningPopupOpen, setIsWarningPopupOpen] = useState(false)
-    const iPadCountWarningLimit = 10
+    const iPadAmountWarningLimit = 10
 
     const [validPositions, setValidPositions] = useState<PositionDetails[]>([])
     const [hasFetchedPositions, setHasFetchedPositions] = useState(false)
@@ -45,7 +57,7 @@ const Order = ({ topRef }: Props) => {
     const exClassOptions = createDropdownOptions(exClasses, exClass)
     const userTypeOptions = createDropdownOptions(userTypes, userType)
 
-    const mandatoryFields = [country, orderResponsible, wbs, deliveryAddress, exClass, userType, nIpads]
+    const mandatoryFields = [country, orderResponsible, wbs, deliveryAddress, exClass, userType, iPadAmount]
 
     const setSingleField = (name: string, value: any) => {
         setFormState(prevState => ({ ...prevState, [name]: value }))
@@ -63,14 +75,14 @@ const Order = ({ topRef }: Props) => {
     useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext)
     const positionOptions = createDropdownOptionsFromPos(validPositions, orderResponsible, hasFetchedPositions)
 
-    const validateIPadCount = (numberOfIPads: string) => {
-        setSingleField('nIpads', numberOfIPads)
-        Number(numberOfIPads) > 0 ? setIsNumberOfiPadsError(false) : setIsNumberOfiPadsError(true)
-        Number(numberOfIPads) > iPadCountWarningLimit ? setIsNumberOfiPadsWarning(true) : setIsNumberOfiPadsWarning(false)
+    const validateIPadAmount = (iPadAmount: string) => {
+        setSingleField('iPadAmount', iPadAmount)
+        Number(iPadAmount) > 0 ? setIsiPadAmountError(false) : setIsiPadAmountError(true)
+        Number(iPadAmount) > iPadAmountWarningLimit ? setIsiPadAmountWarning(true) : setIsiPadAmountWarning(false)
     }
 
     useEffect(() => {
-        if (mandatoryFields.includes('') || isNumberOfiPadsError) {
+        if (mandatoryFields.includes('') || isiPadAmountError) {
             setIsSubmitEnabled(false)
         } else {
             setIsSubmitEnabled(true)
@@ -88,7 +100,7 @@ const Order = ({ topRef }: Props) => {
             userType: userType,
             userShortnames: userShortnames,
             simType: simType,
-            nIpads: nIpads,
+            iPadAmount: iPadAmount,
             accessories: accessories,
         }
     }
@@ -110,7 +122,7 @@ const Order = ({ topRef }: Props) => {
     }
 
     const onClickSubmit = async () => {
-        if (isNumberOfiPadsWarning) setIsWarningPopupOpen(true)
+        if (isiPadAmountWarning) setIsWarningPopupOpen(true)
         else submitForm()
     }
 
@@ -208,43 +220,39 @@ const Order = ({ topRef }: Props) => {
                     </Grid>
                     {userType === 'Equinor personnel' ? (
                         //Equinor employee device
-                        <>
-                            <Grid item container xs={12} spacing={3} alignItems="center">
-                                <Grid item xs={10} sm={5}>
-                                    <Grid container direction="row">
-                                        <FieldHeader headerText={'Shortname users'} />
-                                        <Typography variant="body_short" style={{ fontSize: '13px', marginLeft: '4px' }}>
-                                            (Optional)
-                                        </Typography>
-                                    </Grid>
-                                    <TextInput
-                                        value={userShortnames}
-                                        onChange={value => {
-                                            setSingleField('userShortnames', value)
-                                        }}
-                                        data-testid={'shortname_input'}
-                                    />
+                        <Grid item container xs={12} spacing={3} alignItems="center">
+                            <Grid item xs={10} sm={5}>
+                                <Grid container direction="row">
+                                    <FieldHeader headerText={'Shortname users'} />
+                                    <Typography variant="body_short" style={{ fontSize: '13px', marginLeft: '4px' }}>
+                                        (Optional)
+                                    </Typography>
                                 </Grid>
-                                <HelpIcon helpText={'info text'} />
+                                <TextInput
+                                    value={userShortnames}
+                                    onChange={value => {
+                                        setSingleField('userShortnames', value)
+                                    }}
+                                    data-testid={'shortname_input'}
+                                />
                             </Grid>
-                        </>
+                            <HelpIcon helpText={'info text'} />
+                        </Grid>
                     ) : (
                         //External employee device
-                        <>
-                            <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} />
-                        </>
+                        <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} />
                     )}
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5}>
                             <FieldHeader headerText={'Number of iPads'} />
                             <TextInput
-                                value={nIpads}
+                                value={iPadAmount}
                                 onChange={value => {
-                                    validateIPadCount(value)
+                                    validateIPadAmount(value)
                                 }}
-                                error={isNumberOfiPadsError}
+                                error={isiPadAmountError}
                                 errorMessage="The number of iPads must be a number greater than 0"
-                                data-testid={'numberipads_input'}
+                                data-testid={'ipad_amount_input'}
                             />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
@@ -270,14 +278,14 @@ const Order = ({ topRef }: Props) => {
             )}
             {isWarningPopupOpen && (
                 <Scrim onClose={handleClose}>
-                    <CountWarningDialog
+                    <AmountWarningDialog
                         onCancelClick={handleClose}
                         onConfirmClick={() => {
                             handleClose()
                             submitForm()
                         }}
-                        count={nIpads}
-                    ></CountWarningDialog>
+                        amount={iPadAmount}
+                    ></AmountWarningDialog>
                 </Scrim>
             )}
         </>

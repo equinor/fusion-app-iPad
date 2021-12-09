@@ -22,9 +22,9 @@ module.exports = (on, config) => {
 
     // Task to log to node console
     on('task', {
-        log (message) {
-          console.log(message)
-          return null
-        }
-      })
+        log(message) {
+            console.log(message)
+            return null
+        },
+    })
 }

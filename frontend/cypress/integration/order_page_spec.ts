@@ -8,31 +8,35 @@ describe('Test Order page', () => {
         const user = users[0]
         cy.visitProject(user)
     })
+
     it('Submit button is disabled', () => {
-        orderPage.submitButton().should('be.disabled')
+        orderPage.getSubmitButton().should('be.disabled')
     })
+
     it('Submit button becomes not disabled', () => {
-        orderPage.submitButton().should('be.disabled')
+        orderPage.getSubmitButton().should('be.disabled')
         orderPage.fillOrderForm()
-        orderPage.submitButton().should('not.be.disabled')
+        orderPage.getSubmitButton().should('not.be.disabled')
     })
+
     it('Submit action creates popup dialog', () => {
         orderPage.fillOrderForm()
-        orderPage.submitButton().should('not.be.disabled')
-        orderPage.submitButton().click()
+        orderPage.getSubmitButton().should('not.be.disabled')
+        orderPage.getSubmitButton().click()
         cy.wait('@submitForm')
-        orderPage.submitDialog().should('be.visible')
+        orderPage.getSubmitDialog().should('be.visible')
     })
-    it('Submit action creates warning dialog if iPad Count too large', () => {
-        orderPage.fillOrderForm()
-        orderPage.iPadCountInputField().type('12')
-        orderPage.submitButton().should('not.be.disabled')
-        orderPage.submitButton().click()
 
-        orderPage.countWarningDialog().should('be.visible')
-        orderPage.confirmButton().click()
-        
+    it('Submit action creates warning dialog if iPad amount too large', () => {
+        orderPage.fillOrderForm()
+        orderPage.getiPadAmountInputField().type('12')
+        orderPage.getSubmitButton().should('not.be.disabled')
+        orderPage.getSubmitButton().click()
+
+        orderPage.getAmountWarningDialog().should('be.visible')
+        orderPage.getConfirmButton().click()
+
         cy.wait('@submitForm')
-        orderPage.submitDialog().should('be.visible')
+        orderPage.getSubmitDialog().should('be.visible')
     })
 })

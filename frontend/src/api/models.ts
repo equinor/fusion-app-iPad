@@ -29,7 +29,7 @@ export type OrderForm = {
     userType: string
     userShortnames: string
     simType: string
-    nIpads: string
+    iPadAmount: string
     accessories: string[]
 }
 
@@ -40,7 +40,7 @@ export const initialFormState: OrderForm = {
     userType: userTypes[0],
     wbs: '',
     deliveryAddress: '',
-    nIpads: '',
+    iPadAmount: '',
     deviceType: 'personal',
     simType: 'wifi',
     userShortnames: '',

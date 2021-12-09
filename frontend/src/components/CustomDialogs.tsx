@@ -38,7 +38,9 @@ export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitForm
                     </Dialog.CustomContent>
                     <Dialog.Actions>
                         <Wrapper>
-                            <Button onClick={onConfirmClick} data-testid={'ok_button'}>OK</Button>
+                            <Button onClick={onConfirmClick} data-testid={'ok_button'}>
+                                OK
+                            </Button>
                         </Wrapper>
                     </Dialog.Actions>
                 </Dialog>
@@ -53,15 +55,15 @@ const Wrapper2 = styled.div`
     align-items: center
     justify-self: end;
 `
-interface CountWarningDialogProps {
-    count: string
+interface AmountWarningDialogProps {
+    amount: string
     onConfirmClick: () => void
     onCancelClick: () => void
 }
 
-export const CountWarningDialog = ({ count, onConfirmClick, onCancelClick }: CountWarningDialogProps) => {
+export const AmountWarningDialog = ({ amount, onConfirmClick, onCancelClick }: AmountWarningDialogProps) => {
     return (
-        <Dialog data-testid={'count_warning_dialog'}>
+        <Dialog data-testid={'amount_warning_dialog'}>
             <Dialog.Title>
                 <Wrapper2>
                     <Icon data={warning_filled} size={32} color={tokens.colors.interactive.warning__resting.rgba}></Icon>
@@ -73,14 +75,16 @@ export const CountWarningDialog = ({ count, onConfirmClick, onCancelClick }: Cou
             <Dialog.CustomContent>
                 <Typography variant="body_short">
                     <span>
-                        Are you sure you want to order <strong>{count}</strong> iPads?
+                        Are you sure you want to order <strong>{amount}</strong> iPads?
                     </span>
                 </Typography>
             </Dialog.CustomContent>
             <Dialog.Actions>
                 <Wrapper>
-                    <Button onClick={onConfirmClick} data-testid={'confirm_button'} >Confirm</Button>
-                    <Button onClick={onCancelClick}  data-testid={'cancel_button'} variant="ghost">
+                    <Button onClick={onConfirmClick} data-testid={'confirm_button'}>
+                        Confirm
+                    </Button>
+                    <Button onClick={onCancelClick} data-testid={'cancel_button'} variant="ghost">
                         Cancel
                     </Button>
                 </Wrapper>
