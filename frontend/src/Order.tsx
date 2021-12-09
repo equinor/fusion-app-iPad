@@ -199,16 +199,16 @@ const Order = ({ topRef }: Props) => {
                             <AccessorySelector selectedAccessories={accessories} setSingleField={setSingleField} />
                         </Grid>
                     </Grid>
+                    <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
+                            <FieldHeader headerText={'User type'} />
+                            <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
+                        </Grid>
+                        <HelpIcon helpText={'info text'} />
+                    </Grid>
                     {userType === 'Equinor personnel' ? (
                         //Equinor employee device
                         <>
-                            <Grid item container xs={12} spacing={3} alignItems="center">
-                                <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
-                                    <FieldHeader headerText={'User type'} />
-                                    <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
-                                </Grid>
-                                <HelpIcon helpText={'info text'} />
-                            </Grid>
                             <Grid item container xs={12} spacing={3} alignItems="center">
                                 <Grid item xs={10} sm={5}>
                                     <Grid container direction="row">
@@ -231,13 +231,6 @@ const Order = ({ topRef }: Props) => {
                     ) : (
                         //External employee device
                         <>
-                            <Grid item container xs={12} spacing={3} alignItems="center">
-                                <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
-                                    <FieldHeader headerText={'User type'} />
-                                    <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
-                                </Grid>
-                                <HelpIcon helpText={'info text'} />
-                            </Grid>
                             <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} />
                         </>
                     )}
