@@ -61,7 +61,7 @@ interface CountWarningDialogProps {
 
 export const CountWarningDialog = ({ count, onConfirmClick, onCancelClick }: CountWarningDialogProps) => {
     return (
-        <Dialog data-testid={'submit_dialog'}>
+        <Dialog data-testid={'count_warning_dialog'}>
             <Dialog.Title>
                 <Wrapper2>
                     <Icon data={warning_filled} size={32} color={tokens.colors.interactive.warning__resting.rgba}></Icon>
