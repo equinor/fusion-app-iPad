@@ -11,10 +11,6 @@ describe('Test Order page', () => {
     it('Submit button is disabled', () => {
         orderPage.submitButton().should('be.disabled')
     })
-    it('Accessories becomes visible when EX is chosen', () => {
-        orderPage.explosiveCategoryDropdown().click().type('{enter}')
-        orderPage.accessoriesDropdown().should('be.visible')
-    })
     it('Submit button becomes not disabled', () => {
         orderPage.submitButton().should('be.disabled')
         orderPage.fillOrderForm()

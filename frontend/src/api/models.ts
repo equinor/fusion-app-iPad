@@ -34,10 +34,10 @@ export type OrderForm = {
 }
 
 export const initialFormState: OrderForm = {
-    exClass: '',
+    exClass: exClasses[0],
     country: 'Norway',
     accessories: ['Charger Plug', 'Neck Strap'],
-    userType: 'Equinor personnel',
+    userType: userTypes[0],
     wbs: '',
     deliveryAddress: '',
     nIpads: '',

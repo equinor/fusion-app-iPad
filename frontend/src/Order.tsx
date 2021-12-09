@@ -189,19 +189,15 @@ const Order = ({ topRef }: Props) => {
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'ex_dropdown'}>
                             <FieldHeader headerText={'EX classification'} />
-                            <SearchableDropdown options={exClassOptions} onSelect={item => setSingleField('exClass', item.title)} />
+                            <Select options={exClassOptions} onSelect={item => setSingleField('exClass', item.title)} />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        {exClass !== '' ? ( //Show accessories when EX-class is chosen. TODO: different preselected depending on EXClass
-                            <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
-                                <FieldHeader headerText={'Accessories'} />
-                                <AccessorySelector selectedAccessories={accessories} setSingleField={setSingleField} />
-                            </Grid>
-                        ) : (
-                            <></>
-                        )}
+                        <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
+                            <FieldHeader headerText={'Accessories'} />
+                            <AccessorySelector selectedAccessories={accessories} setSingleField={setSingleField} />
+                        </Grid>
                     </Grid>
                     {userType === 'Equinor personnel' ? (
                         //Equinor employee device
