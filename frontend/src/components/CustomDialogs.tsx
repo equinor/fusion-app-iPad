@@ -38,7 +38,7 @@ export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitForm
                     </Dialog.CustomContent>
                     <Dialog.Actions>
                         <Wrapper>
-                            <Button onClick={onConfirmClick}>OK</Button>
+                            <Button onClick={onConfirmClick} data-testid={'ok_button'}>OK</Button>
                         </Wrapper>
                     </Dialog.Actions>
                 </Dialog>
@@ -79,8 +79,8 @@ export const CountWarningDialog = ({ count, onConfirmClick, onCancelClick }: Cou
             </Dialog.CustomContent>
             <Dialog.Actions>
                 <Wrapper>
-                    <Button onClick={onConfirmClick}>Confirm</Button>
-                    <Button onClick={onCancelClick} variant="ghost">
+                    <Button onClick={onConfirmClick} data-testid={'confirm_button'} >Confirm</Button>
+                    <Button onClick={onCancelClick}  data-testid={'cancel_button'} variant="ghost">
                         Cancel
                     </Button>
                 </Wrapper>

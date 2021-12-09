@@ -23,4 +23,16 @@ describe('Test Order page', () => {
         cy.wait('@submitForm')
         orderPage.submitDialog().should('be.visible')
     })
+    it('Submit action creates warning dialog if iPad Count too large', () => {
+        orderPage.fillOrderForm()
+        orderPage.iPadCountInputField().type('12')
+        orderPage.submitButton().should('not.be.disabled')
+        orderPage.submitButton().click()
+
+        orderPage.countWarningDialog().should('be.visible')
+        orderPage.confirmButton().click()
+        
+        cy.wait('@submitForm')
+        orderPage.submitDialog().should('be.visible')
+    })
 })

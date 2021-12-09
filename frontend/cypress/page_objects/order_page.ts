@@ -39,6 +39,14 @@ export class OrderPage{
         return cy.get('[data-testid=numberipads_input]')
     }
 
+    okButton = () => {
+        return cy.get('[data-testid=ok_button]')
+    }
+
+    confirmButton = () => {
+        return cy.get('[data-testid=confirm_button]')
+    }
+
     cancelButton = () => {
         return cy.get('[data-testid=cancel_button]')
     }
