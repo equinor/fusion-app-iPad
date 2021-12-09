@@ -19,10 +19,17 @@ export type PositionDetails = {
     assignedPersonName: string
 }
 
+export type Wbs = {
+    code: string
+    description: string
+    activeStatusIds: string[]
+    isOpenForTimeWriting: boolean
+}
+
 export type OrderForm = {
     country: string | null
     orderResponsible: string
-    wbs: string
+    wbsCode: string
     deliveryAddress: string
     exClass: string
     deviceType: string
@@ -38,7 +45,7 @@ export const initialFormState: OrderForm = {
     country: 'Norway',
     accessories: ['Charger Plug', 'Neck Strap'],
     userType: userTypes[0],
-    wbs: '',
+    wbsCode: '',
     deliveryAddress: '',
     iPadAmount: '',
     deviceType: 'personal',

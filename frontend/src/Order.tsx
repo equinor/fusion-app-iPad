@@ -5,7 +5,7 @@ import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-component
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
-import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState } from './api/models'
+import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState, Wbs } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { AccessorySelector } from './components/AccessorySelector'
@@ -14,6 +14,7 @@ import { useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
 import { SubmitFormDialog, AmountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
+import { WbsPicker } from './components/WbsPicker'
 
 interface Props {
     topRef: React.RefObject<HTMLElement>
@@ -28,7 +29,7 @@ const Order = ({ topRef }: Props) => {
             country,
             accessories,
             userType,
-            wbs,
+            wbsCode,
             deliveryAddress,
             iPadAmount,
             deviceType,
@@ -57,7 +58,7 @@ const Order = ({ topRef }: Props) => {
     const exClassOptions = createDropdownOptions(exClasses, exClass)
     const userTypeOptions = createDropdownOptions(userTypes, userType)
 
-    const mandatoryFields = [country, orderResponsible, wbs, deliveryAddress, exClass, userType, iPadAmount]
+    const mandatoryFields = [country, orderResponsible, wbsCode, deliveryAddress, exClass, userType, iPadAmount]
 
     const setSingleField = (name: string, value: any) => {
         setFormState(prevState => ({ ...prevState, [name]: value }))
@@ -93,7 +94,7 @@ const Order = ({ topRef }: Props) => {
         return {
             country: country,
             orderResponsible: orderResponsible,
-            wbs: wbs,
+            wbsCode: wbsCode,
             deliveryAddress: deliveryAddress,
             exClass: exClass,
             deviceType: deviceType,
@@ -175,13 +176,7 @@ const Order = ({ topRef }: Props) => {
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5}>
                             <FieldHeader headerText={'WBS'} />
-                            <TextInput
-                                value={wbs}
-                                onChange={value => {
-                                    setSingleField('wbs', value)
-                                }}
-                                data-testid={'wbs_input'}
-                            />
+                            <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
                     </Grid>
