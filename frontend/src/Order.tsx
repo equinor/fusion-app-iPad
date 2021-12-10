@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useCurrentContext } from '@equinor/fusion'
-import { Radio, Button, Typography, Scrim } from '@equinor/eds-core-react'
+import { Button, Typography, Scrim } from '@equinor/eds-core-react'
 import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-components'
 import { Grid } from '@material-ui/core'
 
@@ -15,7 +15,11 @@ import { apiBackend } from './api/apiClient'
 import { SubmitFormDialog, CountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
 
-const Order = () => {
+interface Props {
+    topRef: React.RefObject<HTMLElement>
+}
+
+const Order = ({ topRef }: Props) => {
     const api = new apiBackend()
 
     const [
@@ -116,12 +120,19 @@ const Order = () => {
         setIsSubmitEnabled(true)
     }
 
+    const scrollToTop = () => {
+        if (topRef.current) {
+            topRef.current.scrollIntoView()
+        }
+    }
+
     // This callback is called when the order is submitted and the user confirms the RITM returned
     const onRitmConfirmed = () => {
         setFormState(initialFormState)
         // Clear ritm received flag
         setIsRitmReceived(false)
         handleClose()
+        scrollToTop()
     }
 
     return (
