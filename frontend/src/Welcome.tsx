@@ -1,6 +1,7 @@
+import { useState, useRef } from 'react'
 import { Tabs } from '@equinor/eds-core-react'
 import styled from 'styled-components'
-import { useState } from 'react'
+
 import Order from './Order'
 import Support from './Support'
 import Return from './Return'
@@ -12,23 +13,20 @@ const StyledTabPanel = styled(Panel)`
     border-top: 1px solid LightGray;
 `
 
-interface Params {
-    fusionProjectId: string
-}
-
 const Welcome = () => {
     const [activeTab, setActiveTab] = useState(0)
+    const topRef = useRef<HTMLButtonElement>(null)
 
     return (
         <Tabs activeTab={activeTab} onChange={setActiveTab}>
             <List>
-                <Tab>Order iPad</Tab>
+                <Tab ref={topRef}>Order iPad</Tab>
                 <Tab>Return iPad</Tab>
                 <Tab>Support</Tab>
             </List>
             <Panels>
                 <StyledTabPanel>
-                    <Order />
+                    <Order topRef={topRef} />
                 </StyledTabPanel>
                 <StyledTabPanel>
                     <Return />
