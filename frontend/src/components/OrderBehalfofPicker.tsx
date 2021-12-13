@@ -16,6 +16,22 @@ export const OrderBehalfofPicker = ({ positionOptions, positions, setSingleField
             const posDetails = positions.find(p => p.positionId === item.item.key)
             return (
                 <div>
+                    <strong> {posDetails?.assignedPersonName} </strong> <br />
+                    {posDetails?.positionName}
+                </div>
+            )
+        }
+        return null
+    }
+
+    const SelectedComponent = (item: any) => {
+        if (item.item) {
+            if (item.item.key === 'empty' || item.item.key === 'loading') {
+                return <div>{item.item.title}</div>
+            }
+            const posDetails = positions.find(p => p.positionId === item.item.key)
+            return (
+                <div>
                     {posDetails?.assignedPersonName} <br />
                     {posDetails?.positionName}
                 </div>
@@ -34,7 +50,7 @@ export const OrderBehalfofPicker = ({ positionOptions, positions, setSingleField
             options={positionOptions}
             onSelect={person => setSingleField('orderResponsible', person.key)}
             itemComponent={ItemComponent}
-            selectedComponent={ItemComponent}
+            selectedComponent={SelectedComponent}
             asideComponent={AsideComponent}
         />
     )
