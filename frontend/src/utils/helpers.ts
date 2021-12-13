@@ -43,7 +43,8 @@ export const createDropdownOptionsFromWbs = (
     list: Wbs[],
     selectedOption: string,
     isQuerying: boolean,
-    searchQuery: string
+    searchQuery: string,
+    validLength: (query: string) => boolean
 ): SearchableDropdownOption[] => {
     if (isQuerying) {
         return [
@@ -55,10 +56,10 @@ export const createDropdownOptionsFromWbs = (
         ]
     }
     if (list.length === 0) {
-        if (searchQuery.length > 4) {
+        if (validLength(searchQuery)) {
             return [
                 {
-                    title: "No WBS's found",
+                    title: "No WBS found",
                     key: 'empty',
                     isDisabled: true,
                 },
