@@ -2,6 +2,7 @@ import { getUserData, findUserByID } from './users'
 import { fusionProjects, getFusionProjectData, findFusionProjectByID } from './projects'
 import { getFusionPositionData, findFusionPositionByID } from './positions'
 import { getCountries } from './countries'
+import { getWbs } from './wbs'
 
 const API_URL = Cypress.env('API_URL') || 'http://localhost:5000'
 const settingsURL = /https:\/\/pro-s-portal-ci\.azurewebsites\.net\/api\/persons\/me\/settings\/apps\/iPad/
@@ -12,8 +13,9 @@ const projectsURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts$/
 const personURL = /https:\/\/pro-s-people-ci\.azurewebsites\.net\/persons\/(.+?)(?:(\?\$.*)|$)/
 const countryURL = `${API_URL}/Countries`
 const submitURL = `${API_URL}/OrderForm`
+const wbsURL = new RegExp(`${API_URL}/Wbs(.*)`)
 
-const interceptedURLs = [settingsURL, featuresURL, projectURL, positionURL, projectsURL, personURL, countryURL, submitURL]
+const interceptedURLs = [settingsURL, featuresURL, projectURL, positionURL, projectsURL, personURL, countryURL, submitURL, wbsURL]
 
 Cypress.Commands.add('interceptExternal', () => {
     cy.intercept(settingsURL, {})
@@ -62,6 +64,12 @@ Cypress.Commands.add('interceptExternal', () => {
             body: '"RITM1234567_MOCKED"',
         })
     }).as('submitForm')
+
+    cy.intercept(wbsURL, req => {
+        req.reply({
+            body: getWbs(),
+        })
+    }).as('getWbs')
 })
 
 declare global {

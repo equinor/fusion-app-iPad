@@ -1,4 +1,6 @@
-import { getDropdownByDataTestId, getRadioButtonByDataTestId } from '../support/helpers'
+import { DropdownSelect, getDropdownByDataTestId, getRadioButtonByDataTestId } from '../support/helpers'
+
+const dropdownSelect = new DropdownSelect()
 
 export class OrderPage {
     //#region  Dropdowns
@@ -8,6 +10,10 @@ export class OrderPage {
 
     getPersonDropdown = () => {
         return getDropdownByDataTestId('person_dropdown')
+    }
+
+    getWbsDropdown = () => {
+        return getDropdownByDataTestId('wbs_dropdown')
     }
 
     getExplosiveCategoryDropdown = () => {
@@ -26,10 +32,6 @@ export class OrderPage {
     //#region Input Fields
     getDeliveryAddressInputField = () => {
         return cy.get('[data-testid=address_input]')
-    }
-
-    getWbsInputField = () => {
-        return cy.get('[data-testid=wbs_input]')
     }
 
     getShortnamesInputField = () => {
@@ -84,7 +86,9 @@ export class OrderPage {
     //#region Helper Functions
     fillOrderForm = () => {
         this.getPersonDropdown().click().type('{enter}')
-        this.getWbsInputField().type('123')
+        this.getWbsDropdown().click().type('WBSCODE1')
+        cy.wait('@getWbs')
+        dropdownSelect.select(this.getWbsDropdown(), 'WBSCODE1')
         this.getDeliveryAddressInputField().type('Bergen')
         this.getExplosiveCategoryDropdown().click().type('{enter}')
         this.getShortnamesInputField().type('abc')

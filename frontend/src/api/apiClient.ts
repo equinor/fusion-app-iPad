@@ -1,4 +1,5 @@
 import { IFusionContext } from '@equinor/fusion'
+import { Wbs } from './models'
 import { config } from '../config'
 
 export class apiBackend {
@@ -64,5 +65,10 @@ export class apiBackend {
     async submitForm(form: string): Promise<string> {
         const path = 'OrderForm'
         return await this.POST<string>(path, form)
+    }
+
+    async getWbs(wbsCode: string): Promise<Wbs[]> {
+        const path = `Wbs?wbsCode=${wbsCode}`
+        return await this.GET<Wbs[]>(path)
     }
 }
