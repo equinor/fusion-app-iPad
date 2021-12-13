@@ -17,7 +17,7 @@ export const SimOrderRadio = ({ radioCheckedSIM, setSingleField }: Props) => {
                 <br /> Do you want the contractor to order SIM?
             </Grid>
             <Grid container item xs={12} spacing={3}>
-                <Grid item xs={10} sm={3}>
+                <Grid item xs={10} sm={3} data-testid={'wifi_radio_button'}>
                     <Radio
                         label="No, WIFI only"
                         value="wifi"
@@ -25,10 +25,9 @@ export const SimOrderRadio = ({ radioCheckedSIM, setSingleField }: Props) => {
                         onChange={() => {
                             setSingleField('simType', 'wifi')
                         }}
-                        data-testid={'wifi_radio'}
                     />
                 </Grid>
-                <Grid item xs={10} sm={3}>
+                <Grid item xs={10} sm={3} data-testid={'4g_radio_button'}>
                     <Radio
                         label="Yes, SIM with 4G"
                         value="sim"
@@ -36,7 +35,6 @@ export const SimOrderRadio = ({ radioCheckedSIM, setSingleField }: Props) => {
                         onChange={() => {
                             setSingleField('simType', 'sim')
                         }}
-                        data-testid={'4g_radio'}
                     />
                 </Grid>
             </Grid>

@@ -19,16 +19,17 @@ interface SubmitFormDialogProps {
 }
 
 export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitFormDialogProps) => {
+    const testIdName = 'submit_dialog'
     return (
         <>
             {isLoading ? (
-                <Dialog data-testid={'submit_dialog'}>
+                <Dialog data-testid={testIdName}>
                     <Dialog.CustomContent>
                         <Spinner primary centered />
                     </Dialog.CustomContent>
                 </Dialog>
             ) : (
-                <Dialog data-testid={'submit_dialog'}>
+                <Dialog data-testid={testIdName}>
                     <Dialog.Title>Order successful!</Dialog.Title>
                     <Dialog.CustomContent>
                         <Typography variant="body_short">
@@ -38,7 +39,9 @@ export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitForm
                     </Dialog.CustomContent>
                     <Dialog.Actions>
                         <Wrapper>
-                            <Button onClick={onConfirmClick}>OK</Button>
+                            <Button onClick={onConfirmClick} data-testid={testIdName + '_ok_button'}>
+                                OK
+                            </Button>
                         </Wrapper>
                     </Dialog.Actions>
                 </Dialog>
@@ -53,15 +56,16 @@ const Wrapper2 = styled.div`
     align-items: center
     justify-self: end;
 `
-interface CountWarningDialogProps {
-    count: string
+interface AmountWarningDialogProps {
+    amount: string
     onConfirmClick: () => void
     onCancelClick: () => void
 }
 
-export const CountWarningDialog = ({ count, onConfirmClick, onCancelClick }: CountWarningDialogProps) => {
+export const AmountWarningDialog = ({ amount, onConfirmClick, onCancelClick }: AmountWarningDialogProps) => {
+    const testIdName = 'amount_warning_dialog'
     return (
-        <Dialog data-testid={'submit_dialog'}>
+        <Dialog data-testid={testIdName}>
             <Dialog.Title>
                 <Wrapper2>
                     <Icon data={warning_filled} size={32} color={tokens.colors.interactive.warning__resting.rgba}></Icon>
@@ -73,14 +77,16 @@ export const CountWarningDialog = ({ count, onConfirmClick, onCancelClick }: Cou
             <Dialog.CustomContent>
                 <Typography variant="body_short">
                     <span>
-                        Are you sure you want to order <strong>{count}</strong> iPads?
+                        Are you sure you want to order <strong>{amount}</strong> iPads?
                     </span>
                 </Typography>
             </Dialog.CustomContent>
             <Dialog.Actions>
                 <Wrapper>
-                    <Button onClick={onConfirmClick}>Confirm</Button>
-                    <Button onClick={onCancelClick} variant="ghost">
+                    <Button onClick={onConfirmClick} data-testid={testIdName + '_confirm_button'}>
+                        Confirm
+                    </Button>
+                    <Button onClick={onCancelClick} data-testid={testIdName + '_cancel_button'} variant="ghost">
                         Cancel
                     </Button>
                 </Wrapper>

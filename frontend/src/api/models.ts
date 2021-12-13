@@ -29,18 +29,18 @@ export type OrderForm = {
     userType: string
     userShortnames: string
     simType: string
-    nIpads: string
+    iPadAmount: string
     accessories: string[]
 }
 
 export const initialFormState: OrderForm = {
-    exClass: '',
+    exClass: exClasses[0],
     country: 'Norway',
     accessories: ['Charger Plug', 'Neck Strap'],
-    userType: 'Equinor personnel',
+    userType: userTypes[0],
     wbs: '',
     deliveryAddress: '',
-    nIpads: '',
+    iPadAmount: '',
     deviceType: 'personal',
     simType: 'wifi',
     userShortnames: '',
