@@ -15,7 +15,9 @@ export const WbsPicker = ({ wbsCode, setSingleField }: Props) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [isQuerying, setIsQuerying] = useState(false)
     const [wbsList, setWbsList] = useState<Wbs[]>([])
-    const validLength = (searchQuery: string) => {return searchQuery.length > 4}
+    const validLength = (searchQuery: string) => {
+        return searchQuery.length > 4
+    }
     const list = createDropdownOptionsFromWbs(wbsList, wbsCode, isQuerying, searchQuery, validLength)
 
     const fetchWbs = useCallback(async (query: string) => {

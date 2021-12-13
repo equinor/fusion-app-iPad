@@ -59,7 +59,7 @@ export const createDropdownOptionsFromWbs = (
         if (validLength(searchQuery)) {
             return [
                 {
-                    title: "No WBS found",
+                    title: 'No WBS found',
                     key: 'empty',
                     isDisabled: true,
                 },
