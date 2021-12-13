@@ -19,16 +19,17 @@ interface SubmitFormDialogProps {
 }
 
 export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitFormDialogProps) => {
+    const testIdName = 'submit_dialog'
     return (
         <>
             {isLoading ? (
-                <Dialog data-testid={'submit_dialog'}>
+                <Dialog data-testid={testIdName}>
                     <Dialog.CustomContent>
                         <Spinner primary centered />
                     </Dialog.CustomContent>
                 </Dialog>
             ) : (
-                <Dialog data-testid={'submit_dialog'}>
+                <Dialog data-testid={testIdName}>
                     <Dialog.Title>Order successful!</Dialog.Title>
                     <Dialog.CustomContent>
                         <Typography variant="body_short">
@@ -38,7 +39,7 @@ export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitForm
                     </Dialog.CustomContent>
                     <Dialog.Actions>
                         <Wrapper>
-                            <Button onClick={onConfirmClick} data-testid={'ok_button'}>
+                            <Button onClick={onConfirmClick} data-testid={testIdName + '_ok_button'}>
                                 OK
                             </Button>
                         </Wrapper>
@@ -62,8 +63,9 @@ interface AmountWarningDialogProps {
 }
 
 export const AmountWarningDialog = ({ amount, onConfirmClick, onCancelClick }: AmountWarningDialogProps) => {
+    const testIdName = 'amount_warning_dialog'
     return (
-        <Dialog data-testid={'amount_warning_dialog'}>
+        <Dialog data-testid={testIdName}>
             <Dialog.Title>
                 <Wrapper2>
                     <Icon data={warning_filled} size={32} color={tokens.colors.interactive.warning__resting.rgba}></Icon>
@@ -81,10 +83,10 @@ export const AmountWarningDialog = ({ amount, onConfirmClick, onCancelClick }: A
             </Dialog.CustomContent>
             <Dialog.Actions>
                 <Wrapper>
-                    <Button onClick={onConfirmClick} data-testid={'confirm_button'}>
+                    <Button onClick={onConfirmClick} data-testid={testIdName + '_confirm_button'}>
                         Confirm
                     </Button>
-                    <Button onClick={onCancelClick} data-testid={'cancel_button'} variant="ghost">
+                    <Button onClick={onCancelClick} data-testid={testIdName + '_cancel_button'} variant="ghost">
                         Cancel
                     </Button>
                 </Wrapper>

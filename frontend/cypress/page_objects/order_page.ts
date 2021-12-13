@@ -1,5 +1,6 @@
 import { getDropdownByDataTestId } from '../support/helpers'
 
+
 export class OrderPage {
     getCountryDropdown = () => {
         return getDropdownByDataTestId('country_dropdown')
@@ -37,14 +38,6 @@ export class OrderPage {
         return cy.get('[data-testid=ipad_amount_input]')
     }
 
-    getOkButton = () => {
-        return cy.get('[data-testid=ok_button]')
-    }
-
-    getConfirmButton = () => {
-        return cy.get('[data-testid=confirm_button]')
-    }
-
     getCancelButton = () => {
         return cy.get('[data-testid=cancel_button]')
     }
@@ -57,8 +50,20 @@ export class OrderPage {
         return cy.get('[data-testid=submit_dialog]')
     }
 
+    getSubmitDialogOkButton = () => {
+        return cy.get('[data-testid=submit_dialog_ok_button]')
+    }
+
     getAmountWarningDialog = () => {
         return cy.get('[data-testid=amount_warning_dialog]')
+    }
+
+    getAmountWarningDialogConfirmButton = () => {
+        return cy.get('[data-testid=amount_warning_dialog_confirm_button]')
+    }
+
+    getAmountWarningDialogCancelButton = () => {
+        return cy.get('[data-testid=amount_warning_dialog_cancel_button]')
     }
 
     // Helper functions

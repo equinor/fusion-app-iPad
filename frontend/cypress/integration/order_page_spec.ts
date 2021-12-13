@@ -25,6 +25,7 @@ describe('Test Order page', () => {
         orderPage.getSubmitButton().click()
         cy.wait('@submitForm')
         orderPage.getSubmitDialog().should('be.visible')
+        orderPage.getSubmitDialogOkButton().click()
     })
 
     it('Submit action creates warning dialog if iPad amount too large', () => {
@@ -32,9 +33,26 @@ describe('Test Order page', () => {
         orderPage.getiPadAmountInputField().type('12')
         orderPage.getSubmitButton().should('not.be.disabled')
         orderPage.getSubmitButton().click()
-
         orderPage.getAmountWarningDialog().should('be.visible')
-        orderPage.getConfirmButton().click()
+    })
+
+    it('Warning dialog buttons work as expected', () => {
+        orderPage.fillOrderForm()
+        orderPage.getiPadAmountInputField().type('12')
+        orderPage.getSubmitButton().should('not.be.disabled')
+        orderPage.getSubmitButton().click()
+
+        // Cancel from amount warning
+        orderPage.getAmountWarningDialog().should('be.visible')
+        orderPage.getAmountWarningDialogCancelButton().click()
+
+        // Submit again
+        orderPage.getSubmitButton().should('not.be.disabled')
+        orderPage.getSubmitButton().click()
+
+        // Confirm amount in warning
+        orderPage.getAmountWarningDialog().should('be.visible')
+        orderPage.getAmountWarningDialogConfirmButton().click()
 
         cy.wait('@submitForm')
         orderPage.getSubmitDialog().should('be.visible')
