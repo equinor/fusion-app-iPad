@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("/Wbs")]
+    [Route("/wbs")]
     public class WbsController : Controller
     {
         private readonly WbsService _wbsService;

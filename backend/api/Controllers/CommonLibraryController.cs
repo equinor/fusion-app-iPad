@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("/Countries")]
+    [Route("/countries")]
     public class CommonLibraryController : Controller
     {
         private readonly CommonLibraryService _commonLibraryService;
