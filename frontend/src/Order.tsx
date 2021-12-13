@@ -174,7 +174,7 @@ const Order = ({ topRef }: Props) => {
                         <HelpIcon helpText={'info text'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={10} sm={5}>
+                        <Grid item xs={10} sm={5} data-testid={'wbs_dropdown'}>
                             <FieldHeader headerText={'WBS'} />
                             <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} />
                         </Grid>
