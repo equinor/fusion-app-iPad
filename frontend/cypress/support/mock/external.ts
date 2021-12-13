@@ -69,7 +69,7 @@ Cypress.Commands.add('interceptExternal', () => {
         req.reply({
             body: getWbs(),
         })
-    })
+    }).as('getWbs')
 })
 
 declare global {
