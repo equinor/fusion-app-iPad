@@ -11,9 +11,9 @@ const projectURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts\/(.
 const positionURL = /https:\/\/pro-s-org-ci\.azurewebsites\.net\/projects\/(.+)\/positions/
 const projectsURL = /https:\/\/pro-s-context-ci\.azurewebsites\.net\/contexts$/
 const personURL = /https:\/\/pro-s-people-ci\.azurewebsites\.net\/persons\/(.+?)(?:(\?\$.*)|$)/
-const countryURL = `${API_URL}/Countries`
-const submitURL = `${API_URL}/OrderForm`
-const wbsURL = new RegExp(`${API_URL}/Wbs(.*)`)
+const countryURL = `${API_URL}/countries`
+const submitURL = `${API_URL}/order-form`
+const wbsURL = new RegExp(`${API_URL}/wbs(.*)`)
 
 const interceptedURLs = [settingsURL, featuresURL, projectURL, positionURL, projectsURL, personURL, countryURL, submitURL, wbsURL]
 

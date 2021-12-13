@@ -58,17 +58,17 @@ export class apiBackend {
     }
 
     async getCountries(): Promise<string[]> {
-        const path = 'Countries'
+        const path = 'countries'
         return await this.GET<string[]>(path)
     }
 
     async submitForm(form: string): Promise<string> {
-        const path = 'OrderForm'
+        const path = 'order-form'
         return await this.POST<string>(path, form)
     }
 
     async getWbs(wbsCode: string): Promise<Wbs[]> {
-        const path = `Wbs?wbsCode=${wbsCode}`
+        const path = `wbs?wbsCode=${wbsCode}`
         return await this.GET<Wbs[]>(path)
     }
 }
