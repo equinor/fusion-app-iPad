@@ -1,7 +1,9 @@
-import { getDropdownByDataTestId } from '../support/helpers'
+import { getDropdownByDataTestId, getRadioButtonByDataTestId } from '../support/helpers'
 
 
 export class OrderPage {
+
+//#region  Dropdowns
     getCountryDropdown = () => {
         return getDropdownByDataTestId('country_dropdown')
     }
@@ -21,7 +23,9 @@ export class OrderPage {
     getUserTypeDropdown = () => {
         return getDropdownByDataTestId('user_type_dropdown')
     }
+//#endregion Dropdowns
 
+//#region Input Fields
     getDeliveryAddressInputField = () => {
         return cy.get('[data-testid=address_input]')
     }
@@ -37,7 +41,19 @@ export class OrderPage {
     getiPadAmountInputField = () => {
         return cy.get('[data-testid=ipad_amount_input]')
     }
+//#endregion Input Fields
 
+//#region Dialogs
+    getSubmitDialog = () => {
+        return cy.get('[data-testid=submit_dialog]')
+    }
+
+    getAmountWarningDialog = () => {
+        return cy.get('[data-testid=amount_warning_dialog]')
+    }
+//#endregion Dialogs
+
+//#region Buttons
     getCancelButton = () => {
         return cy.get('[data-testid=cancel_button]')
     }
@@ -46,16 +62,8 @@ export class OrderPage {
         return cy.get('[data-testid=submit_button]')
     }
 
-    getSubmitDialog = () => {
-        return cy.get('[data-testid=submit_dialog]')
-    }
-
     getSubmitDialogOkButton = () => {
         return cy.get('[data-testid=submit_dialog_ok_button]')
-    }
-
-    getAmountWarningDialog = () => {
-        return cy.get('[data-testid=amount_warning_dialog]')
     }
 
     getAmountWarningDialogConfirmButton = () => {
@@ -66,7 +74,9 @@ export class OrderPage {
         return cy.get('[data-testid=amount_warning_dialog_cancel_button]')
     }
 
-    // Helper functions
+//#endregion Buttons
+
+//#region Helper Functions
     fillOrderForm = () => {
         this.getPersonDropdown().click().type('{enter}')
         this.getWbsInputField().type('123')
@@ -75,4 +85,6 @@ export class OrderPage {
         this.getShortnamesInputField().type('abc')
         this.getiPadAmountInputField().type('1')
     }
+//#endregion Helper Functions
+
 }
