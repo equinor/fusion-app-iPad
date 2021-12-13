@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("/OrderForm")]
+    [Route("/order-form")]
     public class ServiceNowController : Controller
     {
         private readonly ServiceNowService _sNowService;
