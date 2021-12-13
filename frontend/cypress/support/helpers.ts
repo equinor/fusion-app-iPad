@@ -8,13 +8,13 @@ export const getRadioButtonByDataTestId = (id: string) => {
 
 /**
  * COPIED FROM https://github.com/equinor/fusion-bmt/
- * 
+ *
  * Expected to work on fusion selects (elements as buttons) which appear
  * in different place in the DOM, but which all contain "section".
  * Such selects appears in different place in the dom.
  * They seem impossible to identify by any other means
  */
- export class DropdownSelect {
+export class DropdownSelect {
     /**
      * Selection list should already be open (one and only one)
      *

@@ -1,7 +1,9 @@
 import { OrderPage } from '../page_objects/order_page'
 import { users } from '../support/mock/users'
+import { DropdownSelect } from '../support/helpers'
 
 const orderPage = new OrderPage()
+const dropdownSelect = new DropdownSelect()
 
 describe('Test Order page', () => {
     beforeEach(() => {
@@ -17,6 +19,37 @@ describe('Test Order page', () => {
         orderPage.getSubmitButton().should('be.disabled')
         orderPage.fillOrderForm()
         orderPage.getSubmitButton().should('not.be.disabled')
+    })
+
+    it('Sim Type radio buttons become available when choosing "External hire or Contractor"', () => {
+        orderPage.fillOrderForm()
+
+        // Select external hire from dropdown
+        orderPage.getUserTypeDropdown().click()
+        dropdownSelect.select(orderPage.getUserTypeDropdown(), 'External hire or Contractor')
+
+        // Look for buttons
+        orderPage.getSimType4gRadioButton().should('be.visible')
+        orderPage.getSimTypeWifiRadioButton().should('be.visible')
+    })
+
+    it('Sim Type radio buttons function as expected"', () => {
+        orderPage.fillOrderForm()
+
+        // Select external hire from dropdown
+        orderPage.getUserTypeDropdown().click()
+        dropdownSelect.select(orderPage.getUserTypeDropdown(), 'External hire or Contractor')
+
+        // Look for buttons
+        orderPage.getSimType4gRadioButton().should('be.visible')
+        orderPage.getSimTypeWifiRadioButton().should('be.visible')
+
+        // Click 4G button
+        orderPage.getSimType4gRadioButton().click()
+
+        // Form should still submit
+        orderPage.getSubmitButton().should('not.be.disabled')
+        orderPage.getSubmitButton().click()
     })
 
     it('Submit action creates popup dialog', () => {
