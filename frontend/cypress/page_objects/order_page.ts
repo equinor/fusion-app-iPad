@@ -74,6 +74,13 @@ export class OrderPage {
         return cy.get('[data-testid=amount_warning_dialog_cancel_button]')
     }
 
+    getSimTypeWifiRadioButton = () => {
+        return getRadioButtonByDataTestId('wifi_radio_button')
+    }
+
+    getSimType4gRadioButton = () => {
+        return getRadioButtonByDataTestId('4g_radio_button')
+    }
 //#endregion Buttons
 
 //#region Helper Functions
