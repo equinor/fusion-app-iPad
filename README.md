@@ -37,11 +37,12 @@ The backend is built using .NET 5.0.
 Swagger documentation for the backend can be found 
 [here](https://backend-fusion-app-ipad-dev.playground.radix.equinor.com/swagger).  
 
-To start the backend locally, you need to provide the client secret from 
-azure app registration.
+To start the backend locally, you need to provide the **client secret** from 
+azure app registration, and the **Ocp-Apim-Subscription-Key** from
+[APIM](https://api.equinor.com/products/corporate).
 One way to do this is to add a ``appsettings.Development.json`` file, which 
 you can make from the ``appsettings.Development.json.example`` file.  
-In the ``appsettings.Development.json``, fill in the client secret value from azure.
+In the ``appsettings.Development.json``, fill in the missing values.
 
 You can then run
 ```
