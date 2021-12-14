@@ -49,3 +49,4 @@ spec:
           runAsNonRoot: true
       secrets:
         - AzureAd__ClientSecret
+        - WbsApi__SubscriptionKey
