@@ -60,7 +60,7 @@ namespace Api.Services
             if (!responseMessage.IsSuccessStatusCode)
             {
                 _logger.LogError("Non-success status code '{StatusCode}' retrieved when querying WBS API with code '{wbsCode}'", responseMessage.StatusCode, wbsCode);
-                throw new AggregateException("Non-success status code when querying WBS API");
+                throw new AggregateException($"Non-success status code: {responseMessage.StatusCode} when querying WBS API");
             }
             string wbsJson = await responseMessage.Content.ReadAsStringAsync();
             _logger.LogInformation("Successfully retrieved WBS list from APIM");
