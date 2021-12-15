@@ -9,7 +9,7 @@ interface Props {
 
 export const HelpIcon = ({ helpText }: Props) => {
     return (
-        <Grid item xs={1} style={{marginTop:'20px'}}>
+        <Grid item xs={1} style={{ marginTop: '20px' }}>
             <Tooltip placement="right" title={helpText}>
                 <Icon data={help} color={tokens.colors.interactive.primary__resting.rgba}></Icon>
             </Tooltip>
