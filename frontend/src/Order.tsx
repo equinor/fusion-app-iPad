@@ -185,6 +185,7 @@ const Order = ({ topRef }: Props) => {
                             <FieldHeader headerText={'Delivery address'} />
                             <TextInput
                                 value={deliveryAddress}
+                                placeholder='e.g. BE-SV NF4'
                                 onChange={value => {
                                     setSingleField('deliveryAddress', value)
                                 }}
