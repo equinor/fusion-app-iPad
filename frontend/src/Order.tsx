@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCurrentContext } from '@equinor/fusion'
 import { Button, Typography, Scrim } from '@equinor/eds-core-react'
-import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-components'
+import { SearchableDropdown, TextInput, Select, ErrorBoundary } from '@equinor/fusion-components'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
@@ -15,6 +15,7 @@ import { apiBackend } from './api/apiClient'
 import { SubmitFormDialog, AmountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
 import { WbsPicker } from './components/WbsPicker'
+import { ErrorHandler } from './components/ErrorHandler'
 
 interface Props {
     topRef: React.RefObject<HTMLElement>
@@ -44,6 +45,8 @@ const Order = ({ topRef }: Props) => {
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false)
     const [resultRitm, setResultRitm] = useState('')
     const [isSubmitPopupOpen, setIsSubmitPopupOpen] = useState(false)
+    const [isError, setIsError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     const [countryList, setCountryList] = useState<string[]>([])
 
@@ -65,15 +68,21 @@ const Order = ({ topRef }: Props) => {
     }
 
     useEffect(() => {
-        api.getCountries().then(response => {
-            setCountryList(response.sort())
-        })
+        api.getCountries().then(
+            response => {
+                setCountryList(response.sort())
+            },
+            reason => {
+                setErrorMessage(reason)
+                setIsError(true)
+            }
+        )
     }, [])
     const countryDropdown = createDropdownOptions(countryList, country!)
 
     const currentContext = useCurrentContext()
 
-    useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext)
+    useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext, setIsError, setErrorMessage)
     const positionOptions = createDropdownOptionsFromPos(validPositions, orderResponsible, hasFetchedPositions)
 
     const validateIPadAmount = (iPadAmount: string) => {
@@ -151,6 +160,7 @@ const Order = ({ topRef }: Props) => {
     return (
         <>
             <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
+                <ErrorHandler isError={isError} errorMessage={errorMessage}></ErrorHandler>
                 <Grid container spacing={4} direction="column">
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'country_dropdown'}>
@@ -176,7 +186,12 @@ const Order = ({ topRef }: Props) => {
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'wbs_dropdown'}>
                             <FieldHeader headerText={'WBS'} />
-                            <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} />
+                            <WbsPicker
+                                wbsCode={wbsCode}
+                                setSingleField={setSingleField}
+                                setErrorMessage={setErrorMessage}
+                                setIsError={setIsError}
+                            />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
                     </Grid>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Context, ContextTypes, registerApp, useCurrentContext, useCurrentUser, useFusionContext } from '@equinor/fusion'
+import { ErrorBoundary } from '@equinor/fusion-components'
 import { Route, Switch } from 'react-router-dom'
 
 import Welcome from './Welcome'
@@ -42,12 +43,14 @@ const App = () => {
     }
 
     return (
-        <Switch>
-            <Route path="/:fusionProjectId/order" exact component={Order} />
-            <Route path="/:fusionProjectId/support" exact component={Support} />
-            <Route path="/:fusionProjectId/return" exact component={Return} />
-            <Route path="/:fusionProjectId" exact component={Welcome} />
-        </Switch>
+        <ErrorBoundary>
+            <Switch>
+                <Route path="/:fusionProjectId/order" exact component={Order} />
+                <Route path="/:fusionProjectId/support" exact component={Support} />
+                <Route path="/:fusionProjectId/return" exact component={Return} />
+                <Route path="/:fusionProjectId" exact component={Welcome} />
+            </Switch>
+        </ErrorBoundary>
     )
 }
 

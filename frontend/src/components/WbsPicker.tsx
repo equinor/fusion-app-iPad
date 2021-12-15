@@ -8,9 +8,11 @@ import { createDropdownOptionsFromWbs } from '../utils/helpers'
 interface Props {
     wbsCode: string
     setSingleField: (name: string, value: any) => void
+    setIsError: (newState: boolean) => void
+    setErrorMessage: (newState: string) => void
 }
 
-export const WbsPicker = ({ wbsCode, setSingleField }: Props) => {
+export const WbsPicker = ({ wbsCode, setSingleField, setIsError, setErrorMessage }: Props) => {
     const api = new apiBackend()
     const [searchQuery, setSearchQuery] = useState('')
     const [isQuerying, setIsQuerying] = useState(false)
@@ -28,6 +30,10 @@ export const WbsPicker = ({ wbsCode, setSingleField }: Props) => {
                 setIsQuerying(false)
             } catch (e) {
                 console.log('Error fetching WBS list')
+                if (e instanceof Error) {
+                    setErrorMessage(e.message)
+                    setIsError(true)
+                }
                 setIsQuerying(false)
                 setWbsList([])
             }
