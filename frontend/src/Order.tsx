@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useCurrentContext } from '@equinor/fusion'
 import { Button, Typography, Scrim } from '@equinor/eds-core-react'
-import { SearchableDropdown, TextInput, Select, ErrorBoundary } from '@equinor/fusion-components'
+import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-components'
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
-import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState, Wbs } from './api/models'
+import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState, ErrorProps } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
-import { useValidPositionsAsync } from './utils/hooks'
+import { getCountriesAsync, useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
 import { SubmitFormDialog, AmountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
@@ -63,26 +63,17 @@ const Order = ({ topRef }: Props) => {
 
     const mandatoryFields = [country, orderResponsible, wbsCode, deliveryAddress, exClass, userType, iPadAmount]
 
+    const errorProps: ErrorProps = { setIsError, setErrorMessage }
     const setSingleField = (name: string, value: any) => {
         setFormState(prevState => ({ ...prevState, [name]: value }))
     }
 
-    useEffect(() => {
-        api.getCountries().then(
-            response => {
-                setCountryList(response.sort())
-            },
-            reason => {
-                setErrorMessage(reason)
-                setIsError(true)
-            }
-        )
-    }, [])
+    getCountriesAsync(setCountryList, errorProps)
     const countryDropdown = createDropdownOptions(countryList, country!)
 
     const currentContext = useCurrentContext()
 
-    useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext, setIsError, setErrorMessage)
+    useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext, errorProps)
     const positionOptions = createDropdownOptionsFromPos(validPositions, orderResponsible, hasFetchedPositions)
 
     const validateIPadAmount = (iPadAmount: string) => {
@@ -186,12 +177,7 @@ const Order = ({ topRef }: Props) => {
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'wbs_dropdown'}>
                             <FieldHeader headerText={'WBS'} />
-                            <WbsPicker
-                                wbsCode={wbsCode}
-                                setSingleField={setSingleField}
-                                setErrorMessage={setErrorMessage}
-                                setIsError={setIsError}
-                            />
+                            <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} errorProps={errorProps} />
                         </Grid>
                         <HelpIcon helpText={'info text'} />
                     </Grid>

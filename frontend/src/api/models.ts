@@ -53,3 +53,8 @@ export const initialFormState: OrderForm = {
     userShortnames: '',
     orderResponsible: '',
 }
+
+export type ErrorProps = {
+    setIsError: (newState: boolean) => void
+    setErrorMessage: (newState: string) => void
+}

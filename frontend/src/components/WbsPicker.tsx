@@ -2,17 +2,16 @@ import { useDebouncedAbortable } from '@equinor/fusion'
 import { SearchableDropdown } from '@equinor/fusion-components'
 import { useCallback, useEffect, useState } from 'react'
 import { apiBackend } from '../api/apiClient'
-import { Wbs } from '../api/models'
+import { Wbs, ErrorProps } from '../api/models'
 import { createDropdownOptionsFromWbs } from '../utils/helpers'
 
 interface Props {
     wbsCode: string
     setSingleField: (name: string, value: any) => void
-    setIsError: (newState: boolean) => void
-    setErrorMessage: (newState: string) => void
+    errorProps: ErrorProps
 }
 
-export const WbsPicker = ({ wbsCode, setSingleField, setIsError, setErrorMessage }: Props) => {
+export const WbsPicker = ({ wbsCode, setSingleField, errorProps }: Props) => {
     const api = new apiBackend()
     const [searchQuery, setSearchQuery] = useState('')
     const [isQuerying, setIsQuerying] = useState(false)
@@ -31,8 +30,8 @@ export const WbsPicker = ({ wbsCode, setSingleField, setIsError, setErrorMessage
             } catch (e) {
                 console.log('Error fetching WBS list')
                 if (e instanceof Error) {
-                    setErrorMessage(e.message)
-                    setIsError(true)
+                    errorProps.setErrorMessage(e.message)
+                    errorProps.setIsError(true)
                 }
                 setIsQuerying(false)
                 setWbsList([])
