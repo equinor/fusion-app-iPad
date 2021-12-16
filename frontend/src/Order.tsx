@@ -160,20 +160,19 @@ const Order = ({ topRef }: Props) => {
                                 onSelect={item => setSingleField('country', item.title)}
                             />
                         </Grid>
-                        <HelpIcon helpText={'info text'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5}>
                             <FieldHeader headerText={'Delivery address'} />
                             <TextInput
                                 value={deliveryAddress}
+                                placeholder="e.g. BE-SV NF4"
                                 onChange={value => {
                                     setSingleField('deliveryAddress', value)
                                 }}
                                 data-testid={'address_input'}
                             />
                         </Grid>
-                        <HelpIcon helpText={'info text'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'person_dropdown'}>
@@ -191,27 +190,26 @@ const Order = ({ topRef }: Props) => {
                             <FieldHeader headerText={'WBS'} />
                             <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} />
                         </Grid>
-                        <HelpIcon helpText={'info text'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'ex_dropdown'}>
                             <FieldHeader headerText={'EX classification'} />
                             <Select options={exClassOptions} onSelect={item => setSingleField('exClass', item.title)} />
                         </Grid>
-                        <HelpIcon helpText={'info text'} />
+                        <HelpIcon helpText={'Zone 1: Description. Zone2: Description'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'accessories_dropdown'}>
                             <FieldHeader headerText={'Accessories'} />
                             <AccessorySelector selectedAccessories={accessories} setSingleField={setSingleField} />
                         </Grid>
+                        <HelpIcon helpText={'Default accessories:'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'user_type_dropdown'}>
                             <FieldHeader headerText={'User type'} />
                             <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
                         </Grid>
-                        <HelpIcon helpText={'info text'} />
                     </Grid>
                     {userType === 'Equinor personnel' ? (
                         //Equinor employee device
@@ -250,7 +248,6 @@ const Order = ({ topRef }: Props) => {
                                 data-testid={'ipad_amount_input'}
                             />
                         </Grid>
-                        <HelpIcon helpText={'info text'} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={4}>
