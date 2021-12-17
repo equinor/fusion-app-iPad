@@ -162,6 +162,19 @@ const Order = ({ topRef }: Props) => {
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
+                        <Grid item xs={10} sm={5}>
+                            <FieldHeader headerText={'Delivery address'} />
+                            <TextInput
+                                value={deliveryAddress}
+                                placeholder="e.g. BE-SV NF4"
+                                onChange={value => {
+                                    setSingleField('deliveryAddress', value)
+                                }}
+                                data-testid={'address_input'}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'person_dropdown'}>
                             <FieldHeader headerText={'Ordering on behalf of'} />
                             <OrderBehalfofPicker
@@ -176,19 +189,6 @@ const Order = ({ topRef }: Props) => {
                         <Grid item xs={10} sm={5} data-testid={'wbs_dropdown'}>
                             <FieldHeader headerText={'WBS'} />
                             <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} />
-                        </Grid>
-                    </Grid>
-                    <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={10} sm={5}>
-                            <FieldHeader headerText={'Delivery address'} />
-                            <TextInput
-                                value={deliveryAddress}
-                                placeholder="e.g. BE-SV NF4"
-                                onChange={value => {
-                                    setSingleField('deliveryAddress', value)
-                                }}
-                                data-testid={'address_input'}
-                            />
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
