@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { apiBackend } from '../api/apiClient'
 import { Wbs, ErrorProps } from '../api/models'
 import { createDropdownOptionsFromWbs } from '../utils/helpers'
+import { useFetchWbs } from '../utils/hooks'
 
 interface Props {
     wbsCode: string
@@ -12,7 +13,6 @@ interface Props {
 }
 
 export const WbsPicker = ({ wbsCode, setSingleField, errorProps }: Props) => {
-    const api = new apiBackend()
     const [searchQuery, setSearchQuery] = useState('')
     const [isQuerying, setIsQuerying] = useState(false)
     const [wbsList, setWbsList] = useState<Wbs[]>([])
@@ -21,25 +21,9 @@ export const WbsPicker = ({ wbsCode, setSingleField, errorProps }: Props) => {
     }
     const list = createDropdownOptionsFromWbs(wbsList, wbsCode, isQuerying, searchQuery, validLength)
 
-    const fetchWbs = useCallback(async (query: string) => {
-        if (canQuery(query)) {
-            try {
-                const response = await api.getWbs(query)
-                setWbsList(response)
-                setIsQuerying(false)
-            } catch (e) {
-                console.log('Error fetching WBS list')
-                if (e instanceof Error) {
-                    errorProps.setErrorMessage(e.message)
-                    errorProps.setIsError(true)
-                }
-                setIsQuerying(false)
-                setWbsList([])
-            }
-        }
-    }, [])
-
     const canQuery = (searchQuery: string) => !!searchQuery && validLength(searchQuery)
+
+    const fetchWbs = useFetchWbs(canQuery, setIsQuerying, setWbsList, errorProps)
 
     useEffect(() => {
         if (canQuery(searchQuery)) {

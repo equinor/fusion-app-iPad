@@ -10,7 +10,7 @@ import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
-import { getCountriesAsync, useValidPositionsAsync } from './utils/hooks'
+import { useGetCountriesAsync, useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
 import { SubmitFormDialog, AmountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
@@ -68,7 +68,7 @@ const Order = ({ topRef }: Props) => {
         setFormState(prevState => ({ ...prevState, [name]: value }))
     }
 
-    getCountriesAsync(setCountryList, errorProps)
+    useGetCountriesAsync(setCountryList, errorProps)
     const countryDropdown = createDropdownOptions(countryList, country!)
 
     const currentContext = useCurrentContext()

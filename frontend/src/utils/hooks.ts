@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useApiClients, Context } from '@equinor/fusion'
 
 import { PositionDetails, ErrorProps } from '../api/models'
@@ -42,7 +42,7 @@ export const useValidPositionsAsync = (
     }, [currentContext])
 }
 
-export const getCountriesAsync = (setCountryList: (newCountries: string[]) => void, errorProps: ErrorProps) => {
+export const useGetCountriesAsync = (setCountryList: (newCountries: string[]) => void, errorProps: ErrorProps) => {
     const api = new apiBackend()
     useEffect(() => {
         api.getCountries().then(
@@ -54,5 +54,31 @@ export const getCountriesAsync = (setCountryList: (newCountries: string[]) => vo
                 errorProps.setIsError(true)
             }
         )
+    }, [])
+}
+
+export const useFetchWbs = (
+    canQuery: (query: string) => boolean,
+    setIsQuerying: (isQuerying: boolean) => void,
+    setWbsList: (response: any) => void,
+    errorProps: ErrorProps
+) => {
+    const api = new apiBackend()
+    return useCallback(async (query: string) => {
+        if (canQuery(query)) {
+            try {
+                const response = await api.getWbs(query)
+                setWbsList(response)
+                setIsQuerying(false)
+            } catch (e) {
+                console.log('Error fetching WBS list')
+                if (e instanceof Error) {
+                    errorProps.setErrorMessage(e.message)
+                    errorProps.setIsError(true)
+                }
+                setIsQuerying(false)
+                setWbsList([])
+            }
+        }
     }, [])
 }
