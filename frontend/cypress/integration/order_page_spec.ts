@@ -33,7 +33,7 @@ describe('Test Order page', () => {
         orderPage.getSimTypeWifiRadioButton().should('be.visible')
     })
 
-    it('Sim Type radio buttons function as expected"', () => {
+    it('Sim Type radio buttons function as expected', () => {
         orderPage.fillOrderForm()
 
         // Select external hire from dropdown
@@ -89,5 +89,16 @@ describe('Test Order page', () => {
 
         cy.wait('@submitForm')
         orderPage.getSubmitDialog().should('be.visible')
+    })
+
+    it('Form is cleared after submit', () => {
+        orderPage.assertInitialState()
+
+        orderPage.fillOrderForm()
+        orderPage.getSubmitButton().click()
+        cy.wait('@submitForm')
+        orderPage.getSubmitDialogOkButton().click()
+
+        orderPage.assertInitialState()
     })
 })

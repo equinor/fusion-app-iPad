@@ -6,6 +6,20 @@ export const getRadioButtonByDataTestId = (id: string) => {
     return cy.get(`[data-testid=${id}]`).children().eq(0)
 }
 
+export const getChecklistElement = (element: string) => {
+    return cy.get('li').contains(element)
+}
+
+export const getChecklistElementCheckbox = (element: string) => {
+    return getChecklistElement(element).prev().children().eq(0)
+}
+
+export const assertChecklistChecks = (checklist: string[], expectedChecked: string[]) => {
+    checklist.forEach(element => {
+        const checkedValue = expectedChecked.includes(element) ? 'be.checked' : 'not.be.checked'
+        getChecklistElementCheckbox(element).should(checkedValue)
+    })
+}
 /**
  * COPIED FROM https://github.com/equinor/fusion-bmt/
  *

@@ -17,6 +17,7 @@ Cypress.Commands.add('visitProject', (user: User, fusionProjectId: string = '123
 
     cy.visit(`${frontendUrl}/${fusionProjectId}`)
     cy.wait('@getCountries')
+    cy.wait('@getPeople')
 })
 
 declare global {
