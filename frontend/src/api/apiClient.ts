@@ -59,16 +59,22 @@ export class apiBackend {
 
     async getCountries(): Promise<string[]> {
         const path = 'countries'
-        return await this.GET<string[]>(path)
+        return await this.GET<string[]>(path).catch(e => {
+            throw new Error('Error getting countries from Common Library : ' + e)
+        })
     }
 
     async submitForm(form: string): Promise<string> {
         const path = 'order-form'
-        return await this.POST<string>(path, form)
+        return await this.POST<string>(path, form).catch(e => {
+            throw new Error('Error posting form to Service Now : ' + e)
+        })
     }
 
     async getWbs(wbsCode: string): Promise<Wbs[]> {
         const path = `wbs?wbsCode=${wbsCode}`
-        return await this.GET<Wbs[]>(path)
+        return await this.GET<Wbs[]>(path).catch(e => {
+            throw new Error('Error getting WBS codes from APIM : ' + e)
+        })
     }
 }

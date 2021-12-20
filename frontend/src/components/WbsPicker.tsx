@@ -2,16 +2,17 @@ import { useDebouncedAbortable } from '@equinor/fusion'
 import { SearchableDropdown } from '@equinor/fusion-components'
 import { useCallback, useEffect, useState } from 'react'
 import { apiBackend } from '../api/apiClient'
-import { Wbs } from '../api/models'
+import { Wbs, ErrorProps } from '../api/models'
 import { createDropdownOptionsFromWbs } from '../utils/helpers'
+import { useFetchWbs } from '../utils/hooks'
 
 interface Props {
     wbsCode: string
     setSingleField: (name: string, value: any) => void
+    errorProps: ErrorProps
 }
 
-export const WbsPicker = ({ wbsCode, setSingleField }: Props) => {
-    const api = new apiBackend()
+export const WbsPicker = ({ wbsCode, setSingleField, errorProps }: Props) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [isQuerying, setIsQuerying] = useState(false)
     const [wbsList, setWbsList] = useState<Wbs[]>([])
@@ -20,21 +21,9 @@ export const WbsPicker = ({ wbsCode, setSingleField }: Props) => {
     }
     const list = createDropdownOptionsFromWbs(wbsList, wbsCode, isQuerying, searchQuery, validLength)
 
-    const fetchWbs = useCallback(async (query: string) => {
-        if (canQuery(query)) {
-            try {
-                const response = await api.getWbs(query)
-                setWbsList(response)
-                setIsQuerying(false)
-            } catch (e) {
-                console.log('Error fetching WBS list')
-                setIsQuerying(false)
-                setWbsList([])
-            }
-        }
-    }, [])
-
     const canQuery = (searchQuery: string) => !!searchQuery && validLength(searchQuery)
+
+    const fetchWbs = useFetchWbs(canQuery, setIsQuerying, setWbsList, errorProps)
 
     useEffect(() => {
         if (canQuery(searchQuery)) {

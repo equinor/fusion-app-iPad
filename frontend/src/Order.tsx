@@ -5,16 +5,17 @@ import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-component
 import { Grid } from '@material-ui/core'
 
 import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
-import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState, Wbs } from './api/models'
+import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState, ErrorProps } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
 import { AccessorySelector } from './components/AccessorySelector'
 import { OrderBehalfofPicker } from './components/OrderBehalfofPicker'
-import { useValidPositionsAsync } from './utils/hooks'
+import { useGetCountriesAsync, useValidPositionsAsync } from './utils/hooks'
 import { apiBackend } from './api/apiClient'
 import { SubmitFormDialog, AmountWarningDialog } from './components/CustomDialogs'
 import { FieldHeader } from './components/FieldHeader'
 import { WbsPicker } from './components/WbsPicker'
+import { ErrorHandler } from './components/ErrorHandler'
 
 interface Props {
     topRef: React.RefObject<HTMLElement>
@@ -44,6 +45,8 @@ const Order = ({ topRef }: Props) => {
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false)
     const [resultRitm, setResultRitm] = useState('')
     const [isSubmitPopupOpen, setIsSubmitPopupOpen] = useState(false)
+    const [isError, setIsError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     const [countryList, setCountryList] = useState<string[]>([])
 
@@ -60,20 +63,17 @@ const Order = ({ topRef }: Props) => {
 
     const mandatoryFields = [country, orderResponsible, wbsCode, deliveryAddress, exClass, userType, iPadAmount]
 
+    const errorProps: ErrorProps = { setIsError, setErrorMessage }
     const setSingleField = (name: string, value: any) => {
         setFormState(prevState => ({ ...prevState, [name]: value }))
     }
 
-    useEffect(() => {
-        api.getCountries().then(response => {
-            setCountryList(response.sort())
-        })
-    }, [])
+    useGetCountriesAsync(setCountryList, errorProps)
     const countryDropdown = createDropdownOptions(countryList, country!)
 
     const currentContext = useCurrentContext()
 
-    useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext)
+    useValidPositionsAsync(setValidPositions, setHasFetchedPositions, currentContext, errorProps)
     const positionOptions = createDropdownOptionsFromPos(validPositions, orderResponsible, hasFetchedPositions)
 
     const validateIPadAmount = (iPadAmount: string) => {
@@ -151,6 +151,7 @@ const Order = ({ topRef }: Props) => {
     return (
         <>
             <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
+                <ErrorHandler isError={isError} errorMessage={errorMessage}></ErrorHandler>
                 <Grid container spacing={4} direction="column">
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'country_dropdown'}>
@@ -188,7 +189,7 @@ const Order = ({ topRef }: Props) => {
                     <Grid item container xs={12} spacing={3} alignItems="center">
                         <Grid item xs={10} sm={5} data-testid={'wbs_dropdown'}>
                             <FieldHeader headerText={'WBS'} />
-                            <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} />
+                            <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} errorProps={errorProps} />
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">

@@ -52,11 +52,12 @@ Cypress.Commands.add('interceptExternal', () => {
             body: getUserData(user),
         })
     })
+
     cy.intercept(countryURL, req => {
         req.reply({
             body: getCountries(),
         })
-    })
+    }).as('getCountries')
 
     // Mock Submit Button return
     cy.intercept(submitURL, req => {

@@ -16,6 +16,7 @@ Cypress.Commands.add('visitProject', (user: User, fusionProjectId: string = '123
     const frontendUrl = Cypress.env('FRONTEND_URL') || 'http://localhost:3000'
 
     cy.visit(`${frontendUrl}/${fusionProjectId}`)
+    cy.wait('@getCountries')
 })
 
 declare global {
