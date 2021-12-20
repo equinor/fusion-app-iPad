@@ -6,6 +6,7 @@ export const getRadioButtonByDataTestId = (id: string) => {
     return cy.get(`[data-testid=${id}]`).children().eq(0)
 }
 
+//Dropdown with checklist must already be open
 export const getChecklistElement = (element: string) => {
     return cy.get('li').contains(element)
 }
