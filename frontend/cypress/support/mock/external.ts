@@ -35,7 +35,7 @@ Cypress.Commands.add('interceptExternal', () => {
         req.reply({
             body: getFusionPositionData(position),
         })
-    })
+    }).as('getPeople')
 
     cy.intercept(projectsURL, req => {
         req.reply({

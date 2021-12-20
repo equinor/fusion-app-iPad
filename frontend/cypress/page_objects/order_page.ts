@@ -1,4 +1,5 @@
-import { DropdownSelect, getDropdownByDataTestId, getRadioButtonByDataTestId } from '../support/helpers'
+import { accessoryOptions, initialFormState } from '../../src/api/models'
+import { assertChecklistChecks, DropdownSelect, getDropdownByDataTestId, getRadioButtonByDataTestId } from '../support/helpers'
 
 const dropdownSelect = new DropdownSelect()
 
@@ -93,6 +94,19 @@ export class OrderPage {
         this.getExplosiveCategoryDropdown().click().type('{enter}')
         this.getShortnamesInputField().type('abc')
         this.getiPadAmountInputField().type('1')
+    }
+
+    assertInitialState = () => {
+        this.getCountryDropdown().find('input').should('have.value', initialFormState.country)
+        this.getDeliveryAddressInputField().should('have.text', initialFormState.deliveryAddress)
+        this.getPersonDropdown().find('input').should('have.value', initialFormState.orderResponsible)
+        this.getWbsDropdown().find('input').should('have.value', initialFormState.wbsCode)
+        this.getExplosiveCategoryDropdown().should('have.text', initialFormState.exClass)
+        this.getAccessoriesDropdown().click()
+        assertChecklistChecks(accessoryOptions, initialFormState.accessories)
+        this.getUserTypeDropdown().should('have.text', initialFormState.userType)
+        this.getShortnamesInputField().should('have.text', initialFormState.userShortnames)
+        this.getiPadAmountInputField().should('have.text', initialFormState.iPadAmount)
     }
     //#endregion Helper Functions
 }
