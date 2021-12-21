@@ -1,4 +1,4 @@
-import { PersonPhoto, SearchableDropdown, SearchableDropdownOption } from '@equinor/fusion-components'
+import { PersonPhoto, SearchableDropdown, SearchableDropdownOption, Spinner } from '@equinor/fusion-components'
 import { OrderForm, PositionDetails } from '../api/models'
 
 interface Props {
@@ -42,8 +42,15 @@ export const OrderBehalfofPicker = ({ positionOptions, positions, setSingleField
 
     const AsideComponent = (item: any) => {
         const posDetails = positions.find(e => e.positionId === item.item.key)
-
-        return posDetails?.assignedPerson ? <PersonPhoto person={posDetails?.assignedPerson} size="medium" hideTooltip /> : null
+        if (item.item.key == 'loading') {
+            return (
+                <div style={{ marginTop: '10px', marginRight: '20px' }}>
+                    <Spinner primary small />
+                </div>
+            )
+        } else {
+            return posDetails?.assignedPerson ? <PersonPhoto person={posDetails?.assignedPerson} size="medium" hideTooltip /> : null
+        }
     }
     return (
         <SearchableDropdown
