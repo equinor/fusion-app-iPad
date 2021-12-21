@@ -4,7 +4,7 @@ import { Button, Typography, Scrim } from '@equinor/eds-core-react'
 import { SearchableDropdown, TextInput, Select } from '@equinor/fusion-components'
 import { Grid } from '@material-ui/core'
 
-import { createDropdownOptions, createDropdownOptionsFromPos, loadingDropdown } from './utils/helpers'
+import { createDropdownOptions, createDropdownOptionsFromPos, loadingAsideComponent, loadingDropdown } from './utils/helpers'
 import { exClasses, userTypes, PositionDetails, OrderForm, initialFormState, ErrorProps } from './api/models'
 import { HelpIcon } from './components/HelpIcon'
 import { SimOrderRadio } from './components/SimOrderRadio'
@@ -159,6 +159,7 @@ const Order = ({ topRef }: Props) => {
                             <SearchableDropdown
                                 options={countryDropdown.length == 0 ? loadingDropdown : countryDropdown}
                                 onSelect={item => setSingleField('country', item.title)}
+                                asideComponent={loadingAsideComponent}
                             />
                         </Grid>
                     </Grid>

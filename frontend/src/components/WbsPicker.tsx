@@ -3,7 +3,7 @@ import { SearchableDropdown } from '@equinor/fusion-components'
 import { useCallback, useEffect, useState } from 'react'
 import { apiBackend } from '../api/apiClient'
 import { Wbs, ErrorProps } from '../api/models'
-import { createDropdownOptionsFromWbs } from '../utils/helpers'
+import { createDropdownOptionsFromWbs, loadingAsideComponent } from '../utils/helpers'
 import { useFetchWbs } from '../utils/hooks'
 
 interface Props {
@@ -74,6 +74,7 @@ export const WbsPicker = ({ wbsCode, setSingleField, errorProps }: Props) => {
             onSearchAsync={setSearchQuery}
             itemComponent={ItemComponent}
             selectedComponent={selectedComponent}
+            asideComponent={loadingAsideComponent}
         />
     )
 }
