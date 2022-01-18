@@ -32,7 +32,7 @@ npm run prettier_write
 ```
 
 ## Backend
-The backend is built using .NET 5.0.  
+The backend is built using .NET 6.0.  
 
 Swagger documentation for the backend can be found 
 [here](https://backend-fusion-app-ipad-dev.playground.radix.equinor.com/swagger).  
@@ -56,21 +56,17 @@ We use [dotnet format](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet
 to format and verify code style in backend based on the 
 [C# coding conventions](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions).  
 
-For first time installation of the tool run
-```
-cd backend
-dotnet tool restore
-```
+Dotnet format is included in the .NET6 SDK.
 
 To check the formating, run 
 ```
 cd backend
-dotnet format -w -s info -a info --check --verbosity diagnostic
+dotnet format --severity info --verbosity diagnostic --verify-no-changes
 ```
 and to fix the formatting run
 ```
 cd backend
-dotnet format -w -s info -a info
+dotnet format --severity info --verbosity diagnostic
 ```
 
 ## Docker
