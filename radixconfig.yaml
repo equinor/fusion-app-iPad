@@ -47,6 +47,12 @@ spec:
               memory: "3000Mi"
               cpu: "1000m"
           runAsNonRoot: true
+          variables:
+            AzureAd__ClientId: "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6"
+            AzureAd__DatabaseOwner__ClientId: "bc77effc-135f-4c3e-9eed-ba2c36a9434d"
+            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-DEV-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
       secrets:
         - AzureAd__ClientSecret
+        - AzureAd__DatabaseOwner__ClientSecret
         - WbsApi__SubscriptionKey

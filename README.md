@@ -37,8 +37,18 @@ The backend is built using .NET 6.0.
 Swagger documentation for the backend can be found 
 [here](https://backend-fusion-app-ipad-dev.playground.radix.equinor.com/swagger).  
 
+The common environment variables are stored in the ``appsettings.json`` file.
+When running locally, the environment variables from ``appsettings.Development.json``
+is used.  
+When running as a radix deployment, the environment variables that are not common,
+as well as the secrets, are stored in Radix as described
+[here](https://www.radix.equinor.com/docs/topic-runtime-env/#environment-variables)
+and
+[here](https://www.radix.equinor.com/docs/topic-concepts/#secret).
+
 To start the backend locally, you need to provide the **client secret** from 
-azure app registration, and the **Ocp-Apim-Subscription-Key** from
+the dev azure app registrations (DbOwner & Backend)
+and the **Ocp-Apim-Subscription-Key** from
 [APIM](https://api.equinor.com/products/corporate).
 One way to do this is to add a ``appsettings.Development.json`` file, which 
 you can make from the ``appsettings.Development.json.example`` file.  
