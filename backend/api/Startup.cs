@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Api.Authentication;
 using Api.Controllers;
+using Api.Database;
 using Api.Services;
 using Equinor.TI.CommonLibrary.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -148,6 +150,11 @@ namespace Api
             // Controller is scoped because a new instance should be initialized for each request
             services.AddScoped(typeof(WbsController), typeof(WbsController));
             #endregion
+
+            // Database connection
+            services.AddSqlDbContext<DatabaseContext>(Configuration.GetConnectionString("iPadDatabase"))
+                .AddAccessTokenSupport()
+                .AddSqlTokenProvider<SqlTokenProvider>(ServiceLifetime.Singleton);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
