@@ -4,9 +4,8 @@ namespace Api.Database.Entities
 {
     public class IPad
     {
-        public IPad(int id, string yellowTag, string lastKnownRITM, string owner, string project, string location, string exType, string userType, string simType, string status)
+        public IPad(string yellowTag, string lastKnownRITM, string owner, string project, string location, string exType, string userType, string simType, string status)
         {
-            Id = id;
             YellowTag = yellowTag;
             LastKnownRITM = lastKnownRITM;
             Owner = owner;

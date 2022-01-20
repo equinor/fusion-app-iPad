@@ -11,8 +11,8 @@ namespace Api.Authentication
     /// </summary>
     public class SqlTokenProvider : ISqlTokenProvider
     {
-       private readonly ClientSecretCredential _credentials;
-       private readonly static TokenRequestContext tokenRequest = new TokenRequestContext(new[] { "https://database.windows.net/.default" });
+        private readonly ClientSecretCredential _credentials;
+        private static readonly TokenRequestContext tokenRequest = new(new[] { "https://database.windows.net/.default" });
 
         public SqlTokenProvider(IConfiguration config)
         {
@@ -25,7 +25,7 @@ namespace Api.Authentication
 
         public async Task<string> GetAccessTokenAsync()
         {
-            var token = await _credentials.GetTokenAsync(tokenRequest);
+            AccessToken token = await _credentials.GetTokenAsync(tokenRequest);
             return token.Token;
         }
     }

@@ -9,7 +9,7 @@ namespace Api.Database
         {
         }
 
-        public DbSet<IPad> IPads  => Set<IPad>();
+        public DbSet<IPad> IPads => Set<IPad>();
 
     }
 }
