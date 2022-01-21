@@ -1,4 +1,4 @@
-name: Migrations
+name: UpdateDatabase
 
 on:
   issue_comment:
@@ -17,7 +17,7 @@ jobs:
       - name: Add comment
         uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
         with:
-          issue-number: ${{ context.issue.number }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             The database is being updated... :eyes:
 
@@ -58,7 +58,7 @@ jobs:
       - name: Add comment
         uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
         with:
-          issue-number: ${{ context.issue.number }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             The database was succesfully updated :sparkles:
       
