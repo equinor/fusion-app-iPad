@@ -1,10 +1,8 @@
 name: Migrations
 
 on:
-  pull_request:
-    branches: [ main ]
-    paths: [ backend/api/database/migrations ]
-
+  issue_comment:
+    types: [created]
 
 defaults:
   run:
@@ -13,6 +11,7 @@ defaults:
 jobs:
   run_migrations:
     runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '/UpdateDatabase')
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -30,5 +29,8 @@ jobs:
       - name: Update database
         run: dotnet ef database update --no-build
         env:
+        # Overwriting azure credentials with database owner credentials to perform migration
           AzureAd__ClientId: bc77effc-135f-4c3e-9eed-ba2c36a9434d
           AzureAd__ClientSecret: ${{ secrets.AZUREAD__DATABASEOWNER__CLIENTSECRET }}
+          ConnectionStrings__iPadDatabase: Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-DEV-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
