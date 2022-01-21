@@ -19,7 +19,7 @@ namespace Api.Database.Entities
 
         public int Id { get; set; }
 
-        [MaxLength(12)]
+        [MaxLength(140)]
         public string YellowTag { get; set; }
 
         [MaxLength(24)]
