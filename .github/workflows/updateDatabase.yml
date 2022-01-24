@@ -9,15 +9,56 @@ defaults:
     working-directory: backend/api
 
 jobs:
-  database_check_approved:
-    runs-on: ubuntu-latest
+  # The base job checks if comment is the right function and made on a pull request
+  base_check:
     if: |
       github.event.issue.pull_request &&
-      github.event.comment.body == '/UpdateDatabase' &&
-      github.event.pull_request.review.state != 'APPROVED'
+      github.event.comment.body == '/UpdateDatabase'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    outputs:
+      eyes_id: ${{ fromJson(steps.eyes.outputs.data).id }}
+    steps:
+      - name: React to comment
+        uses: octokit/request-action@v2.x
+        id: eyes
+        with:
+          route: POST /repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions
+          content: 'eyes'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  # Need to curl for the PR state as this does not exist in the github.event payload for issue_comment
+  get_mergeable:
+    needs: base_check
+    runs-on: ubuntu-latest
+    outputs:
+      mergeable: ${{ fromJson(steps.get.outputs.data).mergeable }}
+      eyes_id: ${{ needs.base_check.outputs.eyes_id }}
+    steps:
+      - uses: octokit/request-action@v2.x
+        id: get
+        with:
+          route: GET ${{ github.event.issue.pull_request.url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  if_not_mergeable_then_stop:
+    needs: get_mergeable
+    if: |
+      !needs.get_mergeable.outputs.mergeable
+    runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
+      - name: Remove 'eyes' reaction
+        uses: octokit/request-action@v2.x
+        with:
+          route: DELETE /repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions/${{ needs.get_mergeable.outputs.eyes_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: React to comment
         uses: peter-evans/create-or-update-comment@v1
         with:
@@ -30,22 +71,24 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: |
-            :no_entry: Cannot update database until the Pull Request has been approved! :no_entry:
-            github.event.issue.pull_request = ${{ github.event.issue.pull_request }}
-            github.event.issue.id = ${{ github.event.issue.id }}
-            github.event.issue.html_url = ${{ github.event.issue.html_url }}
-            github.event.issue.mergeable = ${{ github.event.issue.mergeable }}
+            :no_entry: Cannot update database until the Pull Request is mergeable! :no_entry:
+            (Current mergeable status: ${{ needs.get_mergeable.outputs.mergeable }} )
 
   database_update_start:
-    runs-on: ubuntu-latest
-    needs: database_check_approved
+    needs: get_mergeable
     if: |
-      github.event.issue.pull_request &&
-      github.event.comment.body == '/UpdateDatabase' &&
-      github.event.pull_request.review.state == 'APPROVED'
+      needs.get_mergeable.outputs.mergeable
+    runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
+      - name: Remove 'eyes' reaction
+        uses: octokit/request-action@v2.x
+        with:
+          route: DELETE /repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions/${{ needs.get_mergeable.outputs.eyes_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: React to comment
         uses: peter-evans/create-or-update-comment@v1
         with:
@@ -61,6 +104,7 @@ jobs:
             :eyes: Running migration command... :eyes:
 
   run_migrations:
+    needs: database_update_start
     runs-on: ubuntu-latest
     needs: database_update_start
     steps:
@@ -68,6 +112,7 @@ jobs:
         uses: actions/checkout@v2
 
       # Checks out to main branch by default, so we need to manually checkout to the PR the comment was made on
+      # in order to do the update database on the new migrations.
       - name: Checkout Pull Request
         run: hub pr checkout ${{ github.event.issue.number }}
         env:
@@ -107,6 +152,7 @@ jobs:
             :sparkles: Successfully ran migration command! :sparkles:
 
   database_failure:
+    needs: run_migrations
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     permissions:
@@ -118,5 +164,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: |
-            :x: Migration command failed, please see action log (below) for details :x:
+            :x: Migration failed, please see action log below for details :x:
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
