@@ -1,4 +1,4 @@
-name: Migrations
+name: UpdateDatabase
 
 on:
   issue_comment:
@@ -11,30 +11,36 @@ defaults:
 jobs:
   database_update_start:
     runs-on: ubuntu-latest
+    if: |
+      contains(github.event.comment.html_url, '/pull/') &&
+      github.event.comment.body == '/UpdateDatabase'
     permissions:
-      issues: write
+      pull-requests: write
     steps:
       - name: Add comment
-        uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
+        uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
           body: |
             The database is being updated... :eyes:
 
   run_migrations:
-    needs: database_update_start
     runs-on: ubuntu-latest
-    if: |
-      contains(github.event.comment.html_url, '/pull/') &&
-      contains(github.event.comment.body, '/UpdateDatabase')
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Checksout to main branch by default, so we need to manually checkout to the PR the comment was made on
+      - name: Checkout Pull Request
+        run: hub pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: "6.0.x"
       - name: Build project and dependencies
         run: dotnet build
 
@@ -44,21 +50,21 @@ jobs:
       - name: Update database
         run: dotnet ef database update --no-build
         env:
-        # Overwriting azure credentials with database owner credentials to perform migration
+          # Overwriting azure credentials with database owner credentials to perform migration
           AzureAd__ClientId: bc77effc-135f-4c3e-9eed-ba2c36a9434d
           AzureAd__ClientSecret: ${{ secrets.AZUREAD__DATABASEOWNER__CLIENTSECRET }}
           ConnectionStrings__iPadDatabase: Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-DEV-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
-          
+
   database_success:
     needs: run_migrations
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      pull-requests: write
     steps:
       - name: Add comment
-        uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
+        uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
           body: |
             The database was succesfully updated :sparkles:
-      
