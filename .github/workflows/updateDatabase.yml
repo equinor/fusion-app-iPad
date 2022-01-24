@@ -20,6 +20,8 @@ jobs:
     outputs:
       eyes_id: ${{ fromJson(steps.eyes.outputs.data).id }}
     steps:
+      # Using the post request directly to be able to remove the reaction later (Need reaction id for this)
+      # This allows the reaction to act as a status for the function.
       - name: React to comment
         uses: octokit/request-action@v2.x
         id: eyes
