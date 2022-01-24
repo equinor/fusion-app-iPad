@@ -9,29 +9,65 @@ defaults:
     working-directory: backend/api
 
 jobs:
-  database_update_start:
+  database_check_approved:
     runs-on: ubuntu-latest
     if: |
-      contains(github.event.comment.html_url, '/pull/') &&
-      github.event.comment.body == '/UpdateDatabase'
+      github.event.issue.pull_request &&
+      github.event.comment.body == '/UpdateDatabase' &&
+      github.event.pull_request.review.state != 'APPROVED'
     permissions:
       pull-requests: write
     steps:
+      - name: React to comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: confused, -1
+
       - name: Add comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: |
-            The database is being updated... :eyes:
+            :no_entry: Cannot update database until the Pull Request has been approved! :no_entry:
+            github.event.issue.pull_request = ${{ github.event.issue.pull_request }}
+            github.event.issue.id = ${{ github.event.issue.id }}
+            github.event.issue.html_url = ${{ github.event.issue.html_url }}
+            github.event.issue.mergeable = ${{ github.event.issue.mergeable }}
+
+  database_update_start:
+    runs-on: ubuntu-latest
+    needs: database_check_approved
+    if: |
+      github.event.issue.pull_request &&
+      github.event.comment.body == '/UpdateDatabase' &&
+      github.event.pull_request.review.state == 'APPROVED'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: React to comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: rocket, +1
+
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            :eyes: Running migration command... :eyes:
 
   run_migrations:
     runs-on: ubuntu-latest
+    needs: database_update_start
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Checksout to main branch by default, so we need to manually checkout to the PR the comment was made on
+      # Checks out to main branch by default, so we need to manually checkout to the PR the comment was made on
       - name: Checkout Pull Request
         run: hub pr checkout ${{ github.event.issue.number }}
         env:
@@ -41,6 +77,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "6.0.x"
+
       - name: Build project and dependencies
         run: dotnet build
 
@@ -48,10 +85,10 @@ jobs:
         run: dotnet tool install -g dotnet-ef
 
       - name: Update database
-        run: dotnet ef database update --no-build
+        run: dotnet ef database update --no-build --verbose
         env:
           # Overwriting azure credentials with database owner credentials to perform migration
-          AzureAd__ClientId: bc77effc-135f-4c3e-9eed-ba2c36a9434d
+          AzureAd__ClientId: FEIL
           AzureAd__ClientSecret: ${{ secrets.AZUREAD__DATABASEOWNER__CLIENTSECRET }}
           ConnectionStrings__iPadDatabase: Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-DEV-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
 
@@ -67,4 +104,19 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: |
-            The database was succesfully updated :sparkles:
+            :sparkles: Successfully ran migration command! :sparkles:
+
+  database_failure:
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            :x: Migration command failed, please see action log (below) for details :x:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
