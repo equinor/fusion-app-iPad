@@ -78,7 +78,28 @@ and to fix the formatting run
 cd backend
 dotnet format --severity info --verbosity diagnostic
 ```
+  
+## Database
+The backend is connected to a SQL database hosted in Azure in the Fusion "Database cluster".
+We are using 
+[Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
+to manage the database from our code.
 
+### Migrations
+Updates to the database structure are done in Github Actions.  
+  
+When a pull request contains changes in the `backend/api/Database/Migrations` folder,
+[a workflow](https://github.com/equinor/fusion-app-iPad/blob/main/.github/workflows/notifyMigrationChanges.yml)
+is triggered to notify that the pull request has database changes.
+After the approval process, a user can then trigger the database changes by commenting
+`/UpdateDatabase` on the pull request.
+This will trigger 
+[another workflow](https://github.com/equinor/fusion-app-iPad/blob/main/.github/workflows/updateDatabase.yml) 
+which updates the database with the new changes.
+  
+By doing migrations this way, we ensure that the commands themselves are scripted, and that the database
+changes become part of the review process of a pull request.
+  
 ## Docker
 To run the project using Docker, run ``docker-compose up --build``. This will
 build and run a docker container for both the frontend and backend.
