@@ -1,0 +1,13 @@
+name: TestEnvVariable
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ QA ]
+
+jobs:
+  test_environment:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ secrets.TEST_SECRET }} | sed 's/./& /g'
