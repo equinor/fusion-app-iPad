@@ -1,15 +1,18 @@
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
-  name: fusion-app-ipad
+  name: fusion-ipad-service
 spec:
   environments:
-    - name: dev
+    - name: ci
       build:
         from: main
+    - name: qa
+      build:
+        from: QA
     - name: prod
       build:
-        from: prod
+        from: Prod
 
   components:
     - name: frontend
@@ -19,7 +22,7 @@ spec:
           port: 3000
       publicPort: http
       environmentConfig:
-        - environment: dev
+        - environment: ci
           resources:
             requests:
               memory: "300Mi"
@@ -28,7 +31,29 @@ spec:
               memory: "3000Mi"
               cpu: "1000m"
           variables:
-            API_URL: "https://backend-fusion-app-ipad-dev.playground.radix.equinor.com"
+            API_URL: "https://backend-fusion-ipad-service-ci.radix.equinor.com"
+          runAsNonRoot: true
+        - environment: qa
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          variables:
+            API_URL: "https://backend-fusion-ipad-service-qa.radix.equinor.com"
+          runAsNonRoot: true
+        - environment: prod
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          variables:
+            API_URL: "https://backend-fusion-ipad-service-prod.radix.equinor.com"
           runAsNonRoot: true
 
     - name: backend
@@ -38,7 +63,7 @@ spec:
           port: 5000
       publicPort: http
       environmentConfig:
-        - environment: dev
+        - environment: ci
           resources:
             requests:
               memory: "300Mi"
@@ -50,7 +75,33 @@ spec:
           variables:
             AzureAd__ClientId: "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6"
             AzureAd__DatabaseOwner__ClientId: "bc77effc-135f-4c3e-9eed-ba2c36a9434d"
-            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-DEV-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-CI-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        - environment: qa
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          runAsNonRoot: true
+          variables:
+            AzureAd__ClientId: "3dfe0fab-617c-4120-9d73-17fb45e25ead"
+            AzureAd__DatabaseOwner__ClientId: "e9d36625-106e-44a7-8404-57f48675c1c9"
+            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-FQA-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        - environment: prod
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          runAsNonRoot: true
+          variables:
+            AzureAd__ClientId: "f0901b57-57c0-43c1-8a55-a8d814fc13ce"
+            AzureAd__DatabaseOwner__ClientId: "066fcbdf-b9cf-47a8-8a92-f67c32321154"
+            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-prod-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-FPRD-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
       secrets:
         - AzureAd__ClientSecret
