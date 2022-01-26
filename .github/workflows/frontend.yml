@@ -1,10 +1,20 @@
 name: Frontend
 
 on:
+  # Pushes to relevant branches should be double-checked.
   push:
-    branches: [ main ]
+    branches: [ main, QA, Prod ]
+    paths:
+      - ".github/workflows/frontend.yml"
+      - "frontend/**"
+      - "**/docker-compose.cypress.yml"
+
+  # Any pull request should be tested
   pull_request:
-    branches: [ main ]
+    paths:
+      - ".github/workflows/frontend.yml"
+      - "frontend/**"
+      - "**/docker-compose.cypress.yml"
 
 jobs:
   build_frontend:
