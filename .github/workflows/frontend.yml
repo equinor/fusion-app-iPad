@@ -1,23 +1,40 @@
 name: Frontend
 
 on:
+  # Any pull request should be tested
+  pull_request:
+
   # Pushes to relevant branches should be double-checked.
   push:
     branches: [ main, QA, Prod ]
-    paths:
-      - ".github/workflows/frontend.yml"
-      - "frontend/**"
-      - "**/docker-compose.cypress.yml"
-
-  # Any pull request should be tested
-  pull_request:
-    paths:
-      - ".github/workflows/frontend.yml"
-      - "frontend/**"
-      - "**/docker-compose.cypress.yml"
 
 jobs:
+  check_files:
+    runs-on: ubuntu-latest
+    outputs:
+      file_match: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Checks to see if any files in the PR match one of the listed patterns.
+      # We can use this filter to decide whether or not to run linters or tests.
+      # You can check if a path is in the PR by doing:
+      # if: ${{ steps.filter.outputs.backend == 'true' }}
+      # This will return true if there's a file which matches a pattern in the
+      # backend filter that was changed in the PR.
+      - uses: dorny/paths-filter@v2.2.1
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - ".github/workflows/frontend.yml"
+              - "frontend/**"
+              - "**/docker-compose.cypress.yml"
+
   build_frontend:
+    needs: check_files
+    if: ${{ needs.check_files.outputs.file_match == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -35,6 +52,8 @@ jobs:
 
 
   test_frontend:
+    needs: check_files
+    if: ${{ needs.check_files.outputs.file_match == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -50,6 +69,8 @@ jobs:
         run: npm test
 
   check_formatting:
+    needs: check_files
+    if: ${{ needs.check_files.outputs.file_match == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -62,6 +83,8 @@ jobs:
         run: npm run prettier_check
 
   cypress_run:
+    needs: check_files
+    if: ${{ needs.check_files.outputs.file_match == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
