@@ -73,9 +73,8 @@ spec:
               cpu: "1000m"
           runAsNonRoot: true
           variables:
+            KEYVAULT_ENDPOINT: "https://ipad-service-kv-ci.vault.azure.net/"
             AzureAd__ClientId: "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6"
-            AzureAd__DatabaseOwner__ClientId: "bc77effc-135f-4c3e-9eed-ba2c36a9434d"
-            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-CI-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         - environment: qa
           resources:
             requests:
@@ -86,9 +85,8 @@ spec:
               cpu: "1000m"
           runAsNonRoot: true
           variables:
+            KEYVAULT_ENDPOINT: "https://ipad-service-kv-fqa.vault.azure.net/"
             AzureAd__ClientId: "3dfe0fab-617c-4120-9d73-17fb45e25ead"
-            AzureAd__DatabaseOwner__ClientId: "e9d36625-106e-44a7-8404-57f48675c1c9"
-            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-FQA-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         - environment: prod
           resources:
             requests:
@@ -99,11 +97,8 @@ spec:
               cpu: "1000m"
           runAsNonRoot: true
           variables:
+            KEYVAULT_ENDPOINT: "https://ipad-service-kv-fprd.vault.azure.net/"
             AzureAd__ClientId: "f0901b57-57c0-43c1-8a55-a8d814fc13ce"
-            AzureAd__DatabaseOwner__ClientId: "066fcbdf-b9cf-47a8-8a92-f67c32321154"
-            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-prod-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-FPRD-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
       secrets:
         - AzureAd__ClientSecret
-        - AzureAd__DatabaseOwner__ClientSecret
-        - WbsApi__SubscriptionKey

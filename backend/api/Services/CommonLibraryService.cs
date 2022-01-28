@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Equinor.TI.CommonLibrary.Client;
-using Microsoft.Extensions.Logging;
+﻿using Equinor.TI.CommonLibrary.Client;
 
 namespace Api.Services
 {
@@ -12,7 +8,7 @@ namespace Api.Services
         private readonly ILogger<CommonLibraryService> _logger;
 
         /// <summary>
-        /// Logger and ClientOptions are provided by the Dependency Injection manager <see cref="Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+        /// Logger and ClientOptions are provided by the Dependency Injection manager <see cref="IServiceCollection"/>
         /// in the  <see cref="Startup"/> class, as is standard in ASP.NET projects. 
         /// See <see href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-6.0"/>
         /// </summary>
