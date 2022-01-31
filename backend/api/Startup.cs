@@ -16,6 +16,8 @@ namespace Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            // Adding Audience as Common Library needs it.
+            Configuration.GetSection("AzureAd")["Audience"] = Configuration.GetSection("AzureAd")["ClientId"];
         }
 
         public IConfiguration Configuration { get; }
