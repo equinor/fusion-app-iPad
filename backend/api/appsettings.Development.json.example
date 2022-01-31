@@ -1,14 +1,8 @@
 {
+  "KEYVAULT_ENDPOINT": "https://ipad-service-kv-ci.vault.azure.net/",
   "AzureAd": {
     "ClientId": "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6",
-    "ClientSecret": "INSERT SECRET HERE",
-    "DatabaseOwner": {
-      "ClientId": "bc77effc-135f-4c3e-9eed-ba2c36a9434d",
-      "ClientSecret": "INSERT SECRET HERE"
-    }
-  },
-  "WbsApi": {
-    "SubscriptionKey": "INSERT SUBSCRIPTION KEY HERE"
+    "ClientSecret": "Fill in here or preferrably in ASP.NET Secret Manager"
   },
   "Logging": {
     "LogLevel": {

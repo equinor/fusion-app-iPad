@@ -1,15 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-
-namespace Api.Services
+﻿namespace Api.Services
 {
     public class ServiceNowService
     {
         private readonly ILogger<CommonLibraryService> _logger;
 
         /// <summary>
-        /// Logger is provided by the Dependency Injection manager <see cref="Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+        /// Logger is provided by the Dependency Injection manager <see cref="IServiceCollection"/>
         /// in the  <see cref="Startup"/> class, as is standard in ASP.NET projects. 
         /// See <see href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-6.0"/>
         /// </summary>

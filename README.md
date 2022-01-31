@@ -40,20 +40,24 @@ Swagger documentation for the backend can be found
 The common environment variables are stored in the ``appsettings.json`` file.
 When running locally, the environment variables from ``appsettings.Development.json``
 is used.  
-When running as a radix deployment, the environment variables that are not common,
-as well as the secrets, are stored in Radix as described
+When running as a radix deployment, the environment variables that are not common
+to all environments (CI, QA and Prod) are stored in Radix as described
 [here](https://www.radix.equinor.com/docs/topic-runtime-env/#environment-variables)
 and
 [here](https://www.radix.equinor.com/docs/topic-concepts/#secret).
 
-To start the backend locally, you need to provide the **client secret** from 
-the dev azure app registrations (DbOwner & Backend)
-and the **Ocp-Apim-Subscription-Key** from
-[APIM](https://api.equinor.com/products/corporate).
+To start the backend locally, you need to provide some environment variables.
 One way to do this is to add a ``appsettings.Development.json`` file, which 
 you can make from the ``appsettings.Development.json.example`` file.  
 In the ``appsettings.Development.json``, fill in the missing values.
-
+The **client secret** is the only secret needed to run locally because it is
+needed for the connection to the Azure KeyVault.
+This can be provided either through the
+[ASP.NET Secret Manager](https://www.sharepointcafe.net/2021/04/secret-manager-in-dotnet-core.html)
+or in the `appsettings.Development.json` file.
+  
+All other environment variables and secrets are stored in the Azure KeyVault.
+  
 You can then run
 ```
 cd backend/api
