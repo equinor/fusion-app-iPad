@@ -4,7 +4,7 @@
 
 namespace Api.Database.Migrations
 {
-    public partial class Initialdatabase : Migration
+    public partial class InitialDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

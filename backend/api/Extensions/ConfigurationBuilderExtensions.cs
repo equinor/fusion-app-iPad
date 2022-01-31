@@ -14,16 +14,16 @@ namespace Api.Extensions
             string? clientId = builtConfig.GetSection("AzureAd")["ClientId"];
             string? clientSecret = builtConfig.GetSection("AzureAd")["ClientSecret"];
 
-            if (keyVaultEndpoint is null)
+            if (keyVaultEndpoint is null or "")
                 throw new InvalidOperationException("Store the Key Vault endpoint in a KEYVAULT_ENDPOINT environment variable.");
 
-            if (clientId is null)
+            if (clientId is null or "")
                 throw new InvalidOperationException("Store the Client Id in a AzureAd__ClientId environment variable.");
 
-            if (tenantId is null)
+            if (tenantId is null or "")
                 throw new InvalidOperationException("Store the Tenant Id in a AzureAd__Tenant environment variable.");
 
-            if (clientSecret is null)
+            if (clientSecret is null or "")
                 throw new InvalidOperationException("Store the Client Secret in a AzureAd__ClientSecret secret.");
 
             string? connectionString = $"RunAs=App;AppId={clientId};TenantId={tenantId};AppKey={clientSecret}";

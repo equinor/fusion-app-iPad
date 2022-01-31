@@ -76,7 +76,7 @@ namespace Api.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IPads", (string)null);
+                    b.ToTable("IPads");
                 });
 #pragma warning restore 612, 618
         }
