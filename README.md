@@ -105,8 +105,11 @@ By doing migrations this way, we ensure that the commands themselves are scripte
 changes become part of the review process of a pull request.
   
 ## Docker
-To run the project using Docker, run ``docker-compose up --build``. This will
-build and run a docker container for both the frontend and backend.
+To run the project using Docker, you need to provide the ClientSecret as an environment variable to the image.  
+This can be done by adding a ".env-file" **outside the directory** and referencing it using the `--env-file` flag.  
+From the repository root, you can then run ``docker-compose --env-file <path-to-env-file> up --build``. This will
+build and run a docker container for both the frontend and backend.  
+The `--env-file` flag must come before the `up` command.
 
 ## Testing
 Cypress is used as a E2E test framework. To run Cypress tests locally, run
