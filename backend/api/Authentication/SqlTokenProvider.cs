@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using Azure.Core;
+﻿using Azure.Core;
 using Azure.Identity;
 using Fusion.Infrastructure.Database;
-using Microsoft.Extensions.Configuration;
 
 namespace Api.Authentication
 {

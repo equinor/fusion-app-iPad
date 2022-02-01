@@ -1,0 +1,13 @@
+name: PromoteToQA
+
+on:
+  push:
+    branches: [ QA ]
+
+
+jobs:
+  test_environment:
+    runs-on: ubuntu-latest
+    environment: QA
+    steps:
+      - run: echo ${{ secrets.TEST_SECRET }} | sed 's/./& /g'

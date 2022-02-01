@@ -1,15 +1,18 @@
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
-  name: fusion-app-ipad
+  name: fusion-ipad-service
 spec:
   environments:
-    - name: dev
+    - name: ci
       build:
         from: main
+    - name: qa
+      build:
+        from: QA
     - name: prod
       build:
-        from: prod
+        from: Prod
 
   components:
     - name: frontend
@@ -19,7 +22,7 @@ spec:
           port: 3000
       publicPort: http
       environmentConfig:
-        - environment: dev
+        - environment: ci
           resources:
             requests:
               memory: "300Mi"
@@ -28,7 +31,29 @@ spec:
               memory: "3000Mi"
               cpu: "1000m"
           variables:
-            API_URL: "https://backend-fusion-app-ipad-dev.playground.radix.equinor.com"
+            API_URL: "https://backend-fusion-ipad-service-ci.radix.equinor.com"
+          runAsNonRoot: true
+        - environment: qa
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          variables:
+            API_URL: "https://backend-fusion-ipad-service-qa.radix.equinor.com"
+          runAsNonRoot: true
+        - environment: prod
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          variables:
+            API_URL: "https://backend-fusion-ipad-service-prod.radix.equinor.com"
           runAsNonRoot: true
 
     - name: backend
@@ -38,7 +63,7 @@ spec:
           port: 5000
       publicPort: http
       environmentConfig:
-        - environment: dev
+        - environment: ci
           resources:
             requests:
               memory: "300Mi"
@@ -48,11 +73,32 @@ spec:
               cpu: "1000m"
           runAsNonRoot: true
           variables:
+            KEYVAULT_ENDPOINT: "https://ipad-service-kv-ci.vault.azure.net/"
             AzureAd__ClientId: "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6"
-            AzureAd__DatabaseOwner__ClientId: "bc77effc-135f-4c3e-9eed-ba2c36a9434d"
-            ConnectionStrings__iPadDatabase: "Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-DEV-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        - environment: qa
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          runAsNonRoot: true
+          variables:
+            KEYVAULT_ENDPOINT: "https://ipad-service-kv-fqa.vault.azure.net/"
+            AzureAd__ClientId: "3dfe0fab-617c-4120-9d73-17fb45e25ead"
+        - environment: prod
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "50m"
+            limits:
+              memory: "3000Mi"
+              cpu: "1000m"
+          runAsNonRoot: true
+          variables:
+            KEYVAULT_ENDPOINT: "https://ipad-service-kv-fprd.vault.azure.net/"
+            AzureAd__ClientId: "f0901b57-57c0-43c1-8a55-a8d814fc13ce"
 
       secrets:
         - AzureAd__ClientSecret
-        - AzureAd__DatabaseOwner__ClientSecret
-        - WbsApi__SubscriptionKey
