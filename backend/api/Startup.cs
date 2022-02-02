@@ -149,6 +149,8 @@ namespace Api
             services.AddSqlDbContext<DatabaseContext>(Configuration.GetConnectionString("iPadDatabase"))
                 .AddAccessTokenSupport()
                 .AddSqlTokenProvider<SqlTokenProvider>(ServiceLifetime.Singleton);
+
+            services.AddSingleton<IPadDatabaseAccess, IPadDatabaseAccess>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
