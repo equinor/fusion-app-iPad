@@ -35,7 +35,7 @@ npm run prettier_write
 The backend is built using .NET 6.0.  
 
 Swagger documentation for the backend can be found 
-[here](https://backend-fusion-app-ipad-dev.playground.radix.equinor.com/swagger).  
+[here](https://backend-fusion-ipad-service-ci.radix.equinor.com/swagger).  
 
 The common environment variables are stored in the ``appsettings.json`` file.
 When running locally, the environment variables from ``appsettings.Development.json``
@@ -128,6 +128,18 @@ dotnet test
 ```  
 
 ## Deployment
-For now, the application is only deployed to the Radix _playground_ cluster.
-Link to the application can be found
-[here](https://frontend-fusion-app-ipad-dev.playground.radix.equinor.com/).  
+We have 3 different environments deployed, CI, QA and Prod. The CI environment corresponds to the main branch,
+while QA and Prod have their respective branches. Promotions to the different branches are done through pull-requests.
+The application is deployed to Radix.
+
+### CI
+* [Frontend](https://frontend-fusion-ipad-service-ci.radix.equinor.com/)
+* [Backend](https://backend-fusion-ipad-service-ci.radix.equinor.com/swagger)
+
+### QA
+* [Frontend](https://frontend-fusion-ipad-service-qa.radix.equinor.com/)
+* [Backend](https://backend-fusion-ipad-service-qa.radix.equinor.com/swagger)
+
+### Prod
+* [Frontend](https://frontend-fusion-ipad-service-prod.radix.equinor.com/)
+* [Backend](https://backend-fusion-ipad-service-prod.radix.equinor.com/swagger)

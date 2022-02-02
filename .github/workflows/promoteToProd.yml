@@ -1,8 +1,8 @@
-name: PromoteToQA
+name: PromoteToProd
 
 on:
   push:
-    branches: [ QA ]
+    branches: [ Prod ]
 
 jobs:
   tag_commit:
@@ -13,15 +13,15 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "QA"
-          prerelease: true
-          title: "QA Build"
+          automatic_release_tag: "Prod"
+          prerelease: false
+          title: "Release"
 
   run_migrations:
     uses: ./.github/workflows/runMigrations.yml
     with:
       PullRequestCheckout: false
-      Environment: QA
+      Environment: PROD
     secrets:
       ClientId: ${{secrets.AZURE_CLIENT_ID}}
       KeyVaultUrl: ${{secrets.KEYVAULT_URL}}

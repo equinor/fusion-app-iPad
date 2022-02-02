@@ -1,0 +1,83 @@
+name: RunMigrations
+
+on:
+  workflow_call:
+    inputs:
+      PullRequestCheckout:
+        required: false
+        type: boolean
+      Environment:
+        required: true
+        type: string
+    secrets:
+      KeyVaultUrl:
+        required: true
+      ClientId:
+        required: true
+      ClientSecret:
+        required: true
+
+defaults:
+  run:
+    working-directory: backend/api
+
+jobs:
+  # Access to azure is granted through federated credentials and OpenID
+  
+  # Waiting for feedback from Hans to see if accessing keyvault is possible.
+
+  #read_keyvault:
+  #  runs-on: ubuntu-latest
+  #  environment: ${{ inputs.Environment }}
+  #  outputs:
+  #    DatabaseClientId: ${{ steps.get_secrets.outputs.AzureAd--DatabaseOwner--ClientId }}
+  #    DatabaseClientSecret: ${{ steps.get_secrets.outputs.AzureAd--DatabaseOwner--ClientSecret }}
+  #    DatabaseConnectionString: ${{ steps.get_secrets.outputs.ConnectionStrings--iPadDatabase }}
+  #  steps:
+  #    - uses: Azure/login@v1
+  #      with:
+  #        client-id: d83c2116-0a79-4a0d-8276-d51cdb4a6fd6 # ${{ secrets.AZURE_CLIENT_ID }}
+  #        tenant-id: 3aa4a235-b6e2-48d5-9195-7fcf05b459b0 # ${{ secrets.AZURE_TENANT_ID }}
+  #        subscription-id: 63b791ae-b2bc-41a1-ac66-806c4e69bffe # ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #        allow-no-subscriptions: true
+
+  #    - uses: Azure/get-keyvault-secrets@v1
+  #      with:
+  #        keyvault: ${{ secrets.KEYVAULT_NAME }}
+  #        secrets: 'AzureAd--DatabaseOwner--ClientSecret, AzureAd--DatabaseOwner--ClientId, ConnectionStrings--iPadDatabase'
+  #      id: get_secrets
+
+  run_migrations:
+    #needs: read_keyvault
+    environment: ${{ inputs.Environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Checks out to main branch by default, so we need to manually checkout to the PR the comment was made on
+      # in order to do the update database on the new migrations.
+      - name: Checkout Pull Request
+        if: ${{ inputs.PullRequestCheckout }}
+        run: hub pr checkout ${{ github.event.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Build project and dependencies
+        run: dotnet build
+
+      - name: Install dotnet ef tool
+        run: dotnet tool install -g dotnet-ef
+
+      - name: Update database
+        run: dotnet ef database update --no-build --verbose
+        env:
+          AzureAd__ClientId: ${{ secrets.ClientId }} # ${{ needs.read_keyvault.Outputs.DatabaseClientId}}
+          AzureAd__ClientSecret: ${{ secrets.ClientSecret }} # ${{ needs.read_keyvault.Outputs.DatabaseClientSecret }}
+          KEYVAULT_ENDPOINT: "${{ secrets.KeyVaultUrl }}"
+          PERFORM_MIGRATION: "TRUE"
