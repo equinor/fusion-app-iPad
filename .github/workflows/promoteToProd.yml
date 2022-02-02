@@ -1,20 +1,20 @@
-name: PromoteToQA
+name: PromoteToProd
 
 on:
   push:
-    branches: [ QA ]
+    branches: [ Prod ]
 
 jobs:
   tag_commit:
     runs-on: ubuntu-latest
     steps:
-      - run: gh release create --generate-notes --prerelease --target QA
+      - run: gh release create --generate-notes --target Prod
 
   run_migrations:
     uses: ./.github/workflows/runMigrations.yml
     with:
       PullRequestCheckout: false
-      Environment: QA
+      Environment: PROD
     secrets:
       ClientId: ${{secrets.AZURE_CLIENT_ID}}
       KeyVaultUrl: ${{secrets.KEYVAULT_URL}}

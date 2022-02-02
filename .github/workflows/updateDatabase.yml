@@ -108,36 +108,14 @@ jobs:
 
   run_migrations:
     needs: database_update_start
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      # Checks out to main branch by default, so we need to manually checkout to the PR the comment was made on
-      # in order to do the update database on the new migrations.
-      - name: Checkout Pull Request
-        run: hub pr checkout ${{ github.event.issue.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "6.0.x"
-
-      - name: Build project and dependencies
-        run: dotnet build
-
-      - name: Install dotnet ef tool
-        run: dotnet tool install -g dotnet-ef
-
-      - name: Update database
-        run: dotnet ef database update --no-build --verbose
-        env:
-          # Overwriting azure credentials with database owner credentials to perform migration
-          AzureAd__ClientId: bc77effc-135f-4c3e-9eed-ba2c36a9434d
-          AzureAd__ClientSecret: ${{ secrets.AZUREAD__DATABASEOWNER__CLIENTSECRET }}
-          ConnectionStrings__iPadDatabase: Server=tcp:fusion-test-sqlserver.database.windows.net,1433;Initial Catalog=Fusion-Apps-IPad-Service-DEV-DB;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+    uses: ./.github/workflows/runMigrations.yml
+    with:
+      PullRequestCheckout: true
+      Environment: CI
+    secrets:
+      ClientId: ${{secrets.AZURE_CLIENT_ID}}
+      KeyVaultUrl: ${{secrets.KEYVAULT_URL}}
+      ClientSecret: ${{secrets.AZURE_CLIENT_SECRET}}
 
   database_success:
     needs: run_migrations
