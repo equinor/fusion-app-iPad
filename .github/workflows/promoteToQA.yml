@@ -8,7 +8,14 @@ jobs:
   tag_commit:
     runs-on: ubuntu-latest
     steps:
-      - run: gh release create --generate-notes --prerelease --target QA
+      - uses: actions/checkout@v2
+      - name: Create a Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "QA"
+          prerelease: true
+          title: "QA Build"
 
   run_migrations:
     uses: ./.github/workflows/runMigrations.yml
