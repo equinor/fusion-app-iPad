@@ -65,5 +65,43 @@ namespace Api.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Gets an iPad by its database ID
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <returns> The iPad, if it exists </returns>
+        /// <response code="200"> The iPad was successfully returned </response>
+        /// <response code="404"> There was no iPad with the given ID in the database </response>
+        [HttpGet]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(List<IPad>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<IPad>>> GetIpadById([FromRoute] int id)
+        {
+            try
+            {
+                _logger.LogInformation($"Querying to get iPad by ID from database.");
+
+                var iPad = await _database.GetIpadById(id);
+
+                if(iPad is null)
+                {
+                    _logger.LogError("No iPad with id: {id} in database", id);
+                    return NotFound();
+                }
+
+                _logger.LogInformation("Successful GET iPad with id: {id} from database.", id);
+
+                return Ok(iPad);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Getting iPads from database");
+                throw;
+            }
+
+        }
     }
 }

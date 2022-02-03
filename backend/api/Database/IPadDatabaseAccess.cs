@@ -1,6 +1,8 @@
-﻿using Api.Database.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Api.Database.Entities;
 using Api.Database.Models;
 using Api.Utilities;
+
 
 namespace Api.Database
 {
@@ -20,5 +22,11 @@ namespace Api.Database
         {
             return await PagedList<IPad>.ToPagedList(_dbContext.IPads.Select(iPad => iPad), iPadParameters.PageNumber, iPadParameters.PageSize);
         }
+
+        public async Task<IPad?> GetIpadById(int id)
+        {
+            return await _dbContext.IPads.FirstOrDefaultAsync(ipad => ipad.Id == id);
+        }
+
     }
 }
