@@ -40,7 +40,7 @@ namespace Api.Controllers
             {
                 _logger.LogInformation($"Querying to get list of iPads from database.");
 
-                var iPads = await _database.GetIPads(iPadParameters);
+                var iPads = await _database.GetIpads(iPadParameters);
 
                 var metadata = new
                 {

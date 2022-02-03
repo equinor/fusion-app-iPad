@@ -16,7 +16,7 @@ namespace Api.Database
             _dbContext = context;
         }
 
-        public async Task<PagedList<IPad>> GetIPads(IPadParameters iPadParameters)
+        public async Task<PagedList<IPad>> GetIpads(IPadParameters iPadParameters)
         {
             return await PagedList<IPad>.ToPagedList(_dbContext.IPads.Select(iPad => iPad), iPadParameters.PageNumber, iPadParameters.PageSize);
         }
