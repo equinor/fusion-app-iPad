@@ -103,5 +103,38 @@ namespace Api.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Registers a new iPad in the database
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <returns> Id of new iPad </returns>
+        /// <response code="201"> The iPad was succesfully posted to database </response>
+        /// <response code="400"> The iPad data is invalid </response>
+        [HttpPost]
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<int>> PostIpad([FromBody] IPad iPad)
+        {
+            _logger.LogInformation($"Posting new iPad to database");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid data.");
+
+            try
+            {
+                int newId = await _database.AddIpad(iPad);
+
+                _logger.LogInformation($"Successful POST of iPad to database");
+
+                return CreatedAtAction(nameof(GetIpadById), new { id = newId }, iPad);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"POSTing iPad to database");
+                throw;
+            }
+        }
     }
 }

@@ -28,5 +28,11 @@ namespace Api.Database
             return await _dbContext.IPads.FirstOrDefaultAsync(ipad => ipad.Id == id);
         }
 
+        public async Task<int> AddIpad(IPad iPad)
+        {
+            var entry = _dbContext.IPads.Add(iPad);
+            await _dbContext.SaveChangesAsync();
+            return entry.Entity.Id;
+        }
     }
 }
