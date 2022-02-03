@@ -1,34 +1,35 @@
 version: "3.7"
 services:
-    frontend:
-        build: frontend
-        depends_on:
-            - backend
-            - mock-auth
-        ports:
-            - "3000:3000"
-        environment:
-            - API_URL=http://localhost:5000
-    backend:
-        build: backend
-        depends_on:
-            - mock-auth
-        ports:
-            - "5000:5000"
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Test
-            - FRONTEND_URL=http://localhost:3000
-    mock-auth:
-        image: ghcr.io/navikt/mock-oauth2-server:0.3.4
-        ports:
-            - "8080:8080"
-        environment:
-            - JSON_CONFIG_PATH=/mnt/conf/config.json
-        volumes:
-            - "./frontend/cypress/auth_server:/mnt/conf"
-    cypress:
-        build:
-            context: ./
-            dockerfile: ./frontend/cypress.Dockerfile
-        depends_on:
-            - frontend
+  frontend:
+    build: frontend
+    depends_on:
+      - backend
+      - mock-auth
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://localhost:5000
+      - AD_CLIENT_ID=d83c2116-0a79-4a0d-8276-d51cdb4a6fd6
+  backend:
+    build: backend
+    depends_on:
+      - mock-auth
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Test
+      - FRONTEND_URL=http://localhost:3000
+  mock-auth:
+    image: ghcr.io/navikt/mock-oauth2-server:0.3.4
+    ports:
+      - "8080:8080"
+    environment:
+      - JSON_CONFIG_PATH=/mnt/conf/config.json
+    volumes:
+      - "./frontend/cypress/auth_server:/mnt/conf"
+  cypress:
+    build:
+      context: ./
+      dockerfile: ./frontend/cypress.Dockerfile
+    depends_on:
+      - frontend
