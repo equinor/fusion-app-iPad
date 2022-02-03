@@ -32,6 +32,7 @@ spec:
               cpu: "1000m"
           variables:
             API_URL: "https://backend-fusion-ipad-service-ci.radix.equinor.com"
+            AD_CLIENT_ID: "d83c2116-0a79-4a0d-8276-d51cdb4a6fd6"
           runAsNonRoot: true
         - environment: qa
           resources:
@@ -43,6 +44,7 @@ spec:
               cpu: "1000m"
           variables:
             API_URL: "https://backend-fusion-ipad-service-qa.radix.equinor.com"
+            AD_CLIENT_ID: "3dfe0fab-617c-4120-9d73-17fb45e25ead"
           runAsNonRoot: true
         - environment: prod
           resources:
@@ -54,6 +56,7 @@ spec:
               cpu: "1000m"
           variables:
             API_URL: "https://backend-fusion-ipad-service-prod.radix.equinor.com"
+            AD_CLIENT_ID: "f0901b57-57c0-43c1-8a55-a8d814fc13ce"
           runAsNonRoot: true
 
     - name: backend
