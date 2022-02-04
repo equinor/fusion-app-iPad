@@ -136,5 +136,46 @@ namespace Api.Controllers
                 throw;
             }
         }
+
+        /// <summary>
+        /// Deletes an iPad from the database
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <returns> The iPad, if deleted </returns>
+        /// <response code="200"> The iPad was succesfully deleted from the database </response>
+        /// <response code="404"> There was no iPad with the given ID in the database </response>
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<int>> DeleteIpad([FromRoute] int id)
+        {
+            try
+            {
+                _logger.LogInformation($"Querying to get iPad by ID from database.");
+
+                var iPad = await _database.GetIpadById(id);
+
+                if (iPad is null)
+                {
+                    _logger.LogError("No iPad with id: {id} in database", id);
+                    return NotFound();
+                }
+
+                _logger.LogInformation("Attempting to remove iPad with id: {id} from database.", id);
+
+                var removedIpad = await _database.DeleteIpad(iPad);
+
+                _logger.LogInformation("iPad with id: {id} successfully deleted from database.", id);
+
+                return Ok(iPad);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Deleting iPad from database");
+                throw;
+            }
+        }
     }
 }

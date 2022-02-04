@@ -34,5 +34,13 @@ namespace Api.Database
             await _dbContext.SaveChangesAsync();
             return entry.Entity.Id;
         }
+
+        public async Task<IPad> DeleteIpad(IPad iPad)
+        {
+            _dbContext.IPads.Remove(iPad);
+            await _dbContext.SaveChangesAsync();
+            return iPad;
+        }
+
     }
 }
