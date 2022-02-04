@@ -33,7 +33,7 @@ namespace Api.Services
 
         public async Task<List<WbsModel>> GetWbsListAsync(string? wbsCode)
         {
-            HttpClient? httpClient = _httpClientFactory.CreateClient(ClientName);
+            var httpClient = _httpClientFactory.CreateClient(ClientName);
 
             HttpResponseMessage responseMessage;
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
@@ -59,7 +59,7 @@ namespace Api.Services
             _logger.LogInformation("Successfully retrieved WBS list from APIM");
             try
             {
-                List<WbsResponseModel>? wbsList = JsonSerializer.Deserialize<List<WbsResponseModel>>(wbsJson);
+                var wbsList = JsonSerializer.Deserialize<List<WbsResponseModel>>(wbsJson);
                 return wbsList != null ? wbsList.Select(apiResponse => new WbsModel
                 {
                     Code = apiResponse.Code,
