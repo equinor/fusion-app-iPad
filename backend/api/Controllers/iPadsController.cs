@@ -138,6 +138,49 @@ namespace Api.Controllers
         }
 
         /// <summary>
+        /// Updates an iPad in the database
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <returns> Updated iPad </returns>
+        /// <response code="200"> The iPad was succesfully updated </response>
+        /// <response code="400"> The iPad data is invalid </response>
+        /// <response code="404"> There was no iPad with the given ID in the database </response>
+        [HttpPut]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<int>> UpdateIpad([FromRoute] int id, [FromBody] IPad iPad)
+        {
+            _logger.LogInformation("Updating iPad with id: {id}", id);
+
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid data.");
+
+            if (id != iPad.Id)
+            {
+                _logger.LogError("Id: {id} not corresponding to updated iPad", id);
+                return BadRequest("Inconsistent Id");
+            }
+
+            try
+            {
+                var updatedIpad = await _database.UpdateIpad(iPad);
+
+                _logger.LogInformation($"Successful PUT of iPad to database");
+
+                return Ok(iPad);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"PUTing iPad to database");
+                throw;
+            }
+        }
+
+
+        /// <summary>
         /// Deletes an iPad from the database
         /// </summary>
         /// <remarks>

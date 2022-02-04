@@ -35,6 +35,13 @@ namespace Api.Database
             return entry.Entity.Id;
         }
 
+        public async Task<IPad> UpdateIpad(IPad iPad)
+        {
+            _dbContext.IPads.Update(iPad);
+            await _dbContext.SaveChangesAsync();
+            return iPad;
+        }
+
         public async Task<IPad> DeleteIpad(IPad iPad)
         {
             _dbContext.IPads.Remove(iPad);
