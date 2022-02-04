@@ -76,9 +76,9 @@ namespace Api.Controllers
         /// <response code="404"> There was no iPad with the given ID in the database </response>
         [HttpGet]
         [Route("{id}")]
-        [ProducesResponseType(typeof(List<IPad>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<IPad>>> GetIpadById([FromRoute] int id)
+        public async Task<ActionResult<IPad>> GetIpadById([FromRoute] int id)
         {
             try
             {
@@ -113,9 +113,10 @@ namespace Api.Controllers
         /// <response code="201"> The iPad was succesfully posted to database </response>
         /// <response code="400"> The iPad data is invalid </response>
         [HttpPost]
-        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(IPad), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<int>> PostIpad([FromBody] IPad iPad)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IPad>> PostIpad([FromBody] IPad iPad)
         {
             _logger.LogInformation($"Posting new iPad to database");
 
@@ -151,7 +152,8 @@ namespace Api.Controllers
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<int>> UpdateIpad([FromRoute] int id, [FromBody] IPad iPad)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IPad>> UpdateIpad([FromRoute] int id, [FromBody] IPad iPad)
         {
             _logger.LogInformation("Updating iPad with id: {id}", id);
 
@@ -192,7 +194,8 @@ namespace Api.Controllers
         [Route("{id}")]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<int>> DeleteIpad([FromRoute] int id)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IPad>> DeleteIpad([FromRoute] int id)
         {
             try
             {
