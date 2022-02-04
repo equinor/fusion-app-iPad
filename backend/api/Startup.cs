@@ -42,7 +42,13 @@ namespace Api
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
+                    .RequireRole(Configuration.GetSection("Roles").GetChildren().Select(c => c.Value))
                     .Build();
+
+                // Database access is regulated by scopes instead of roles
+                options.AddPolicy("DatabasePolicy", new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build());
             });
 
             services.AddCors(options =>

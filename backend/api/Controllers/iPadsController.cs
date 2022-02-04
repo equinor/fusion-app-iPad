@@ -1,12 +1,16 @@
 ﻿using Api.Database;
 using Api.Database.Entities;
 using Api.Database.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    // Database access is regulated by scopes instead of roles
+    [Authorize("DatabasePolicy")]
+    [Route("[controller]")]
     [ApiController]
     public class iPadsController : ControllerBase
     {
