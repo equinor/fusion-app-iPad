@@ -1,9 +1,7 @@
 ﻿using Api.Database;
 using Api.Database.Entities;
 using Api.Database.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Api.Controllers
@@ -86,7 +84,7 @@ namespace Api.Controllers
 
                 var iPad = await _database.GetIpadById(id);
 
-                if(iPad is null)
+                if (iPad is null)
                 {
                     _logger.LogError("No iPad with id: {id} in database", id);
                     return NotFound();

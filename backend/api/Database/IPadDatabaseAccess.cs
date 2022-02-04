@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Api.Database.Entities;
+﻿using Api.Database.Entities;
 using Api.Database.Models;
 using Api.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Api.Database

@@ -8,7 +8,7 @@ namespace Api.Extensions
     {
         public static void ConfigureKeyVault(this IConfigurationBuilder config)
         {
-            IConfigurationRoot? builtConfig = config.Build();
+            var builtConfig = config.Build();
             string? keyVaultEndpoint = builtConfig["KEYVAULT_ENDPOINT"];
             string? tenantId = builtConfig.GetSection("AzureAd")["TenantId"];
             string? clientId = builtConfig.GetSection("AzureAd")["ClientId"];

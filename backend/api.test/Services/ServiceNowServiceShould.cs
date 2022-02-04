@@ -32,7 +32,7 @@ namespace Api.Test.Services
         public void ThrowArgumentExceptionFromWrongFormFormat()
         {
             const string Form = "ErrorForm";
-            AggregateException e = Assert.Throws<AggregateException>(() =>
+            var e = Assert.Throws<AggregateException>(() =>
             {
                 _service.SubmitIpadOrderForm(Form).Wait();
             });
