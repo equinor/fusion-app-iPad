@@ -3,6 +3,7 @@ using Api.Authentication;
 using Api.Controllers;
 using Api.Database;
 using Api.Services;
+using Api.Utilities;
 using Equinor.TI.CommonLibrary.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,8 @@ namespace Api
                     .Build();
 
                 // Database access is regulated by scopes instead of roles
+                // Scopes are not required by data annotations in controller
+                // Scopes are not claimed when selecting in swagger (not part of acces token)
                 options.AddPolicy("DatabasePolicy", new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build());
@@ -81,7 +84,7 @@ namespace Api
                         {
                             TokenUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/token"),
                             AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize"),
-                            Scopes = { { $"api://{Configuration["AzureAd:ClientId"]}/User.Impersonation", "User Impersonation" } }
+                            Scopes = Tools.BuildSwaggerScopes(Configuration)
                         }
                     }
                 });

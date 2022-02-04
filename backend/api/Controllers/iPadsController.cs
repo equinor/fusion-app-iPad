@@ -16,11 +16,14 @@ namespace Api.Controllers
     {
         private readonly IPadDatabaseAccess _database;
         private readonly ILogger<iPadsController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public iPadsController(IPadDatabaseAccess database, ILogger<iPadsController> logger)
+        public iPadsController(IPadDatabaseAccess database, ILogger<iPadsController> logger, IConfiguration configuration)
         {
             _database = database;
             _logger = logger;
+            _configuration = configuration;
+
         }
 
         /// <summary>
@@ -35,7 +38,10 @@ namespace Api.Controllers
         /// <response code="200"> The list of iPads was successfully returned </response>
         [HttpGet]
         [ProducesResponseType(typeof(List<IPad>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequiredScope("Database.Read")]
         public async Task<ActionResult<List<IPad>>> GetIpads([FromQuery] IPadParameters iPadParameters)
         {
             try
@@ -79,7 +85,11 @@ namespace Api.Controllers
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Read")]
         public async Task<ActionResult<IPad>> GetIpadById([FromRoute] int id)
         {
             try
@@ -117,7 +127,10 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Create")]
         public async Task<ActionResult<IPad>> PostIpad([FromBody] IPad iPad)
         {
             _logger.LogInformation($"Posting new iPad to database");
@@ -153,8 +166,11 @@ namespace Api.Controllers
         [Route("{id}")]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Modify")]
         public async Task<ActionResult<IPad>> UpdateIpad([FromRoute] int id, [FromBody] IPad iPad)
         {
             _logger.LogInformation("Updating iPad with id: {id}", id);
@@ -195,8 +211,11 @@ namespace Api.Controllers
         [HttpDelete]
         [Route("{id}")]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Modify")]
         public async Task<ActionResult<IPad>> DeleteIpad([FromRoute] int id)
         {
             try
