@@ -34,7 +34,7 @@ namespace Api.Authentication
 
         public async Task<string> GetAccessTokenAsync()
         {
-            AccessToken token = await _credentials.GetTokenAsync(tokenRequest);
+            var token = await _credentials.GetTokenAsync(tokenRequest);
             return token.Token;
         }
     }
