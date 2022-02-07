@@ -1,14 +1,15 @@
-﻿using Api.Database;
+﻿using Api.ActionFilters;
+using Api.Database;
 using Api.Database.Entities;
 using Api.Database.Models;
+using Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
-    // Database access is regulated by scopes instead of roles
+    // Database access is regulated by special roles for other applications in addition to the user roles
     [Authorize("DatabasePolicy")]
     [Route("/ipads")]
     [ApiController]
@@ -40,7 +41,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [RequiredScope("Database.Read")]
+        [RBAC(Role.DatabaseRead)]
         public async Task<ActionResult<List<IPad>>> GetIpads([FromQuery] IPadParameters iPadParameters)
         {
             try
@@ -88,7 +89,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Read")]
+        [RBAC(Role.DatabaseRead)]
         public async Task<ActionResult<IPad>> GetIpadById([FromRoute] int id)
         {
             try
@@ -129,7 +130,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Create")]
+        [RBAC(Role.DatabaseCreate)]
         public async Task<ActionResult<IPad>> PostIpad([FromBody] IPad iPad)
         {
             _logger.LogInformation($"Posting new iPad to database");
@@ -169,7 +170,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Modify")]
+        [RBAC(Role.DatabaseModify)]
         public async Task<ActionResult<IPad>> UpdateIpad([FromRoute] int id, [FromBody] IPad iPad)
         {
             _logger.LogInformation("Updating iPad with id: {id}", id);
@@ -213,7 +214,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [RequiredScope(RequiredScopesConfigurationKey = "Scopes:Database:Modify")]
+        [RBAC(Role.DatabaseModify)]
         public async Task<ActionResult<IPad>> DeleteIpad([FromRoute] int id)
         {
             try

@@ -2,15 +2,8 @@
 {
     public static class Tools
     {
-        public static Dictionary<string,string> BuildSwaggerScopes(IConfiguration configuration)
-        {
-            var scopes = configuration.GetSection("Scopes:Database").GetChildren().Select(c => c.Value);
-            var result = new Dictionary<string, string>();
-            foreach (string scope in scopes)
-            {
-                result.Add($"api://{configuration["AzureAd:ClientId"]}/{scope}", scope);
-            }
-            return result;
-        }
+        public static IEnumerable<string> GetRoles(IConfiguration configuration) => configuration.GetSection("Roles").GetChildren().Select(c => c.Value);
+        public static IEnumerable<string> GetDatabaseRoles(IConfiguration configuration) => configuration.GetSection("ApplicationRoles:Database").GetChildren().Select(c => c.Value);
+
     }
 }

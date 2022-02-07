@@ -43,14 +43,13 @@ namespace Api
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .RequireRole(Configuration.GetSection("Roles").GetChildren().Select(c => c.Value))
+                    .RequireRole(Tools.GetRoles(Configuration))
                     .Build();
 
-                // Database access is regulated by scopes instead of roles
-                // Scopes are not required by data annotations in controller
-                // Scopes are not claimed when selecting in swagger (not part of acces token)
+                // Database access is also available through special roles for other applications
                 options.AddPolicy("DatabasePolicy", new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
+                    .RequireRole(Tools.GetRoles(Configuration).Concat(Tools.GetDatabaseRoles(Configuration)))
                     .Build());
             });
 
@@ -83,8 +82,7 @@ namespace Api
                         Implicit = new OpenApiOAuthFlow
                         {
                             TokenUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/token"),
-                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize"),
-                            Scopes = Tools.BuildSwaggerScopes(Configuration)
+                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize")
                         }
                     }
                 });
