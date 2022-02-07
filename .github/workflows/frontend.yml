@@ -6,7 +6,7 @@ on:
 
   # Pushes to relevant branches should be double-checked.
   push:
-    branches: [ main, QA, Prod ]
+    branches: [main, QA, Prod]
 
 jobs:
   check_files:
@@ -46,7 +46,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: "14.x"
       - run: npm install
       - run: npm run build
 
@@ -103,6 +103,7 @@ jobs:
           working-directory: ./frontend
           config-file: cypress.json
         env:
+          AD_CLIENT_ID: d83c2116-0a79-4a0d-8276-d51cdb4a6fd6
           FRONTEND_URL: http://localhost:3000
           API_URL: http://localhost:5000
           AUTH_URL: http://localhost:8080

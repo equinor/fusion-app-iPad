@@ -10,20 +10,19 @@ namespace Api.Controllers
 {
     // Database access is regulated by scopes instead of roles
     [Authorize("DatabasePolicy")]
-    [Route("[controller]")]
+    [Route("/ipads")]
     [ApiController]
-    public class iPadsController : ControllerBase
+    public class IPadsController : ControllerBase
     {
         private readonly IPadDatabaseAccess _database;
-        private readonly ILogger<iPadsController> _logger;
+        private readonly ILogger<IPadsController> _logger;
         private readonly IConfiguration _configuration;
 
-        public iPadsController(IPadDatabaseAccess database, ILogger<iPadsController> logger, IConfiguration configuration)
+        public IPadsController(IPadDatabaseAccess database, ILogger<IPadsController> logger, IConfiguration configuration)
         {
             _database = database;
             _logger = logger;
             _configuration = configuration;
-
         }
 
         /// <summary>
@@ -140,11 +139,11 @@ namespace Api.Controllers
 
             try
             {
-                int newId = await _database.AddIpad(iPad);
+                var newIpad = await _database.AddIpad(iPad);
 
                 _logger.LogInformation($"Successful POST of iPad to database");
 
-                return CreatedAtAction(nameof(GetIpadById), new { id = newId }, iPad);
+                return CreatedAtAction(nameof(GetIpadById), new { id = newIpad.Id }, newIpad);
             }
             catch (Exception e)
             {
@@ -198,7 +197,6 @@ namespace Api.Controllers
                 throw;
             }
         }
-
 
         /// <summary>
         /// Deletes an iPad from the database
