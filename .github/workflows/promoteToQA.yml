@@ -14,8 +14,8 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "QA"
-          prerelease: true
-          title: "QA Build"
+          prerelease: false
+          title: "QA"
 
   run_migrations:
     uses: ./.github/workflows/runMigrations.yml
