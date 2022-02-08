@@ -15,7 +15,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "Prod"
           prerelease: false
-          title: "Release"
+          title: "Prod"
 
   run_migrations:
     uses: ./.github/workflows/runMigrations.yml
