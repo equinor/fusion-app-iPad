@@ -3,6 +3,7 @@ using Api.Authentication;
 using Api.Controllers;
 using Api.Database;
 using Api.Services;
+using Api.Utilities;
 using Equinor.TI.CommonLibrary.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -42,7 +43,14 @@ namespace Api
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
+                    .RequireRole(Tools.GetRoles(Configuration))
                     .Build();
+
+                // Database access is also available through special roles for other applications
+                options.AddPolicy("DatabasePolicy", new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .RequireRole(Tools.GetRoles(Configuration).Concat(Tools.GetDatabaseRoles(Configuration)))
+                    .Build());
             });
 
             services.AddCors(options =>
@@ -74,8 +82,7 @@ namespace Api
                         Implicit = new OpenApiOAuthFlow
                         {
                             TokenUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/token"),
-                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize"),
-                            Scopes = { { $"api://{Configuration["AzureAd:ClientId"]}/User.Impersonation", "User Impersonation" } }
+                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize")
                         }
                     }
                 });

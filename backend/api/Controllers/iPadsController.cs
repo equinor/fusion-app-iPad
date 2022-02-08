@@ -1,22 +1,29 @@
-﻿using Api.Database;
+﻿using Api.ActionFilters;
+using Api.Database;
 using Api.Database.Entities;
 using Api.Database.Models;
+using Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
-    [Route("api/ipads")]
+    // Database access is regulated by special roles for other applications in addition to the user roles
+    [Authorize("DatabasePolicy")]
+    [Route("/ipads")]
     [ApiController]
     public class IPadsController : ControllerBase
     {
         private readonly IPadDatabaseAccess _database;
         private readonly ILogger<IPadsController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public IPadsController(IPadDatabaseAccess database, ILogger<IPadsController> logger)
+        public IPadsController(IPadDatabaseAccess database, ILogger<IPadsController> logger, IConfiguration configuration)
         {
             _database = database;
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -31,7 +38,10 @@ namespace Api.Controllers
         /// <response code="200"> The list of iPads was successfully returned </response>
         [HttpGet]
         [ProducesResponseType(typeof(List<IPad>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RBAC(Role.DatabaseRead)]
         public async Task<ActionResult<List<IPad>>> GetIpads([FromQuery] IPadParameters iPadParameters)
         {
             try
@@ -75,7 +85,11 @@ namespace Api.Controllers
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RBAC(Role.DatabaseRead)]
         public async Task<ActionResult<IPad>> GetIpadById([FromRoute] int id)
         {
             try
@@ -113,7 +127,10 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RBAC(Role.DatabaseCreate)]
         public async Task<ActionResult<IPad>> PostIpad([FromBody] IPad iPad)
         {
             _logger.LogInformation($"Posting new iPad to database");
@@ -149,8 +166,11 @@ namespace Api.Controllers
         [Route("{id}")]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RBAC(Role.DatabaseModify)]
         public async Task<ActionResult<IPad>> UpdateIpad([FromRoute] int id, [FromBody] IPad iPad)
         {
             _logger.LogInformation("Updating iPad with id: {id}", id);
@@ -179,7 +199,6 @@ namespace Api.Controllers
             }
         }
 
-
         /// <summary>
         /// Deletes an iPad from the database
         /// </summary>
@@ -191,8 +210,11 @@ namespace Api.Controllers
         [HttpDelete]
         [Route("{id}")]
         [ProducesResponseType(typeof(IPad), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [RBAC(Role.DatabaseModify)]
         public async Task<ActionResult<IPad>> DeleteIpad([FromRoute] int id)
         {
             try
