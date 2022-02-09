@@ -54,6 +54,19 @@ export const initialFormState: OrderForm = {
     orderResponsible: '',
 }
 
+export type iPad = {
+    id: number
+    yellowTag: string
+    lastKnownRITM: string
+    owner: string
+    project: string
+    location: string
+    exType: string
+    userType: string
+    simType: string
+    status: string
+}
+
 export type ErrorProps = {
     setIsError: (newState: boolean) => void
     setErrorMessage: (newState: string) => void

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Order from './Order'
 import Support from './Support'
 import Return from './Return'
+import TablePage from './TablePage'
 
 const { List, Tab, Panel, Panels } = Tabs
 
@@ -23,6 +24,7 @@ const Welcome = () => {
                 <Tab ref={topRef}>Order iPad</Tab>
                 <Tab>Return iPad</Tab>
                 <Tab>Support</Tab>
+                <Tab>Table</Tab>
             </List>
             <Panels>
                 <StyledTabPanel>
@@ -33,6 +35,9 @@ const Welcome = () => {
                 </StyledTabPanel>
                 <StyledTabPanel>
                     <Support />
+                </StyledTabPanel>
+                <StyledTabPanel>
+                    <TablePage />
                 </StyledTabPanel>
             </Panels>
         </Tabs>

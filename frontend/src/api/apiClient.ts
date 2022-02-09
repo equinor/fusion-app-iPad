@@ -1,5 +1,5 @@
 import { IFusionContext } from '@equinor/fusion'
-import { Wbs } from './models'
+import { iPad, Wbs } from './models'
 import { config } from '../config'
 
 export class apiBackend {
@@ -75,6 +75,13 @@ export class apiBackend {
         const path = `wbs?wbsCode=${wbsCode}`
         return await this.GET<Wbs[]>(path).catch(e => {
             throw new Error('Error getting WBS codes from APIM : ' + e)
+        })
+    }
+
+    async getIpads(): Promise<iPad[]> {
+        const path = 'api/ipads'
+        return await this.GET<iPad[]>(path).catch(e => {
+            throw new Error('Error getting iPads from database : ' + e)
         })
     }
 }
