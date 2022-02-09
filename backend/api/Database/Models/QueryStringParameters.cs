@@ -4,10 +4,17 @@
     {
         private const int MaxPageSize = 100;
 
+        /// <summary>
+        /// Defaults to '1' if left empty
+        /// </summary>
         public int PageNumber { get; set; } = 1;
 
         private int _pageSize = 10;
 
+        /// <summary>
+        /// <para>Defaults to '10' if left empty.</para>
+        /// Max value is '100'
+        /// </summary>
         public int PageSize
         {
             get

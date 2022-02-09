@@ -30,14 +30,21 @@ namespace Api.Controllers
         /// Gets a list of the iPads in the database.
         /// </summary>
         /// <remarks>
-        /// Responses are paginated and can be set by query parameters "pageNumber" and "pageSize"
-        /// Default values are pageSize=10 and pageNumber=1
-        /// Max value for pageSize is set to 100
+        /// Responses are paginated.
+        ///
+        /// Example query:
+        ///
+        ///     /ipads?exClass=non&amp;userType=equinor&amp;owner=to&amp;tag=12&amp;ritm=ritm
+        ///
+        /// <para> This query gets all iPads with ExClass="Non EX", UserType="Equinor Personnel", whose Owner contains the substring "to"
+        /// , whose YellowTag contains the substring "12", and whose LastKnownRITM contains the substring "ritm"</para>
         /// </remarks>
         /// <returns> List of iPads </returns>
         /// <response code="200"> The list of iPads was successfully returned </response>
+        /// <response code="400"> The query is invalid </response>
         [HttpGet]
         [ProducesResponseType(typeof(List<IPad>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -69,9 +76,11 @@ namespace Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Getting iPads from database");
-                throw;
+                if (e is ArgumentException)
+                    return BadRequest(e.Message);
+                else
+                    throw;
             }
-
         }
 
         /// <summary>

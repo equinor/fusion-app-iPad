@@ -3,7 +3,6 @@ using Api.Database.Models;
 using Api.Utilities;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Api.Database
 {
     /// <summary>
@@ -20,7 +19,18 @@ namespace Api.Database
 
         public async Task<PagedList<IPad>> GetIpads(IPadParameters iPadParameters)
         {
-            return await PagedList<IPad>.ToPagedList(_dbContext.IPads.Select(iPad => iPad), iPadParameters.PageNumber, iPadParameters.PageSize);
+            // construct filter
+            var filter = IpadQueries.ConstructFilter(iPadParameters);
+
+            var ipads = _dbContext.IPads.Where(filter).AsNoTracking();
+
+            // Apply searches
+            IpadQueries.SearchByOwner(ref ipads, iPadParameters.Owner);
+            IpadQueries.SearchByTag(ref ipads, iPadParameters.Tag);
+            IpadQueries.SearchByRitm(ref ipads, iPadParameters.Ritm);
+
+            // Query database and return paged result
+            return await PagedList<IPad>.ToPagedList(ipads, iPadParameters.PageNumber, iPadParameters.PageSize);
         }
 
         public async Task<IPad?> GetIpadById(int id)
@@ -48,6 +58,5 @@ namespace Api.Database
             await _dbContext.SaveChangesAsync();
             return entry.Entity;
         }
-
     }
 }
