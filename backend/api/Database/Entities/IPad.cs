@@ -27,19 +27,13 @@ namespace Api.Database.Entities
         [MaxLength(128)]
         public string DeliveryAddress { get; set; }
 
-        [Required]
-        [MaxLength(64)]
         public ExClassEnum ExClass { get; set; }
 
-        [Required]
-        [MaxLength(64)]
-        public UserTypeEnum UserType { get; set; }
+        public UserTypeEnum? UserType { get; set; }
 
-        [MaxLength(64)]
         public SimTypeEnum SimType { get; set; }
 
         [Required]
-        [MaxLength(64)]
         public StatusEnum Status { get; set; }
     }
 }
