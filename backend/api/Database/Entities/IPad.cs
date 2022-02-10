@@ -35,7 +35,6 @@ namespace Api.Database.Entities
         [MaxLength(128)]
         public string Project { get; set; }
 
-        [Required]
         [MaxLength(128)]
         public string DeliveryAddress { get; set; }
 
@@ -47,7 +46,6 @@ namespace Api.Database.Entities
         [MaxLength(64)]
         public string UserType { get; set; }
 
-        [Required]
         [MaxLength(64)]
         public string SimType { get; set; }
 
