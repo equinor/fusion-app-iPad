@@ -59,7 +59,7 @@ jobs:
       # in order to do the update database on the new migrations.
       - name: Checkout Pull Request
         if: ${{ inputs.PullRequestCheckout }}
-        run: hub pr checkout ${{ github.event.number }}
+        run: hub pr checkout ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
