@@ -19,10 +19,10 @@ namespace Api.Database.Entities
 
         public int Id { get; set; }
 
-        [MaxLength(12)]
+        [MaxLength(128)]
         public string YellowTag { get; set; }
 
-        [MaxLength(24)]
+        [MaxLength(128)]
         public string LastKnownRITM { get; set; }
 
         [Required]
