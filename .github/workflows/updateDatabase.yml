@@ -36,22 +36,21 @@ jobs:
     needs: base_check
     runs-on: windows-latest
     outputs:
-      approved_review: ${{ fromJson(steps.get.outputs.data).total_count }}
+      review_state: ${{ fromJson(steps.get.outputs.data).state }}
       eyes_id: ${{ needs.base_check.outputs.eyes_id }}
     steps:
       - uses: octokit/request-action@v2.x
         id: get
         with: # Search in PR's for this ID with review approved.
               # If no results, the PR is not approved
-          route: GET https://api.github.com/search/issues?q={q}
-          q: repo:equinor/fusion-app-iPad is:pr state:open number:${{ github.event.issue.number }} review:approved
+          route: GET repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/reviews
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   if_not_approved_then_stop:
     needs: get_review_state
     if: |
-      needs.get_review_state.outputs.approved_review == 0
+      needs.get_review_state.outputs.review_state != "APPROVED"
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -80,7 +79,7 @@ jobs:
   database_update_start:
     needs: get_review_state
     if: |
-      needs.get_review_state.outputs.approved_review > 0
+      needs.get_review_state.outputs.review_state == APPROVED
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
