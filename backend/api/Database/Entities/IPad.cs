@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Api.Database.Models;
 
 namespace Api.Database.Entities
 {
@@ -28,18 +29,17 @@ namespace Api.Database.Entities
 
         [Required]
         [MaxLength(64)]
-        public string ExType { get; set; }
+        public ExClassEnum ExClass { get; set; }
 
         [Required]
         [MaxLength(64)]
-        public string UserType { get; set; }
+        public UserTypeEnum UserType { get; set; }
 
         [MaxLength(64)]
-        public string SimType { get; set; }
+        public SimTypeEnum SimType { get; set; }
 
         [Required]
         [MaxLength(64)]
-        public string Status { get; set; }
-
+        public StatusEnum Status { get; set; }
     }
 }

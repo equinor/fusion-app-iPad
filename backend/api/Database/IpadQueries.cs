@@ -6,8 +6,6 @@ namespace Api.Database
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo",
     Justification = "Entity framework does not support translating culture info to SQL calls")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1309:Use ordinal string comparison",
-    Justification = "Entity framework does not support translating string comparison rules to SQL calls")]
     public static class IpadQueries
     {
         public static void SearchByOwner(ref IQueryable<IPad> ipads, string? owner)
@@ -52,7 +50,7 @@ namespace Api.Database
                     throw new ArgumentException($"Parameter '{nameof(parameters.ExClass)}' was '{parameters.ExClass}'. " +
                         $"Expected one of [ {string.Join(", ", IPadParameters.ExClassQueryToValue.Keys)} ]");
 
-                exFilter = i => i.ExType.Equals(IPadParameters.ExClassQueryToValue[parameters.ExClass]);
+                exFilter = i => i.ExClass.Equals(IPadParameters.ExClassQueryToValue[parameters.ExClass]);
             }
 
             if (parameters.UserType is not null && !string.IsNullOrWhiteSpace(parameters.UserType))

@@ -23,16 +23,16 @@
         /// </summary>
         public string? Owner { get; set; }
 
-        public static readonly Dictionary<string, string> ExClassQueryToValue = new(StringComparer.OrdinalIgnoreCase)
+        public static readonly Dictionary<string, ExClassEnum> ExClassQueryToValue = new(StringComparer.OrdinalIgnoreCase)
         {
-            { "non", "Non EX" },
-            { "zone1", "EX Zone 1" },
-            { "zone2", "EX Zone 2" }
+            { "non", ExClassEnum.NonEx },
+            { "zone1", ExClassEnum.NonEx },
+            { "zone2", ExClassEnum.NonEx }
         };
-        public static readonly Dictionary<string, string> UserTypeQueryToValue = new(StringComparer.OrdinalIgnoreCase)
+        public static readonly Dictionary<string, UserTypeEnum> UserTypeQueryToValue = new(StringComparer.OrdinalIgnoreCase)
         {
-            { "equinor", "Equinor Personnel" },
-            { "external", "External hire or Contractor" },
+            { "equinor", UserTypeEnum.Equinor },
+            { "external", UserTypeEnum.External },
         };
 
     }
