@@ -43,7 +43,7 @@ jobs:
         id: get
         with: # Search in PR's for this ID with review approved.
               # If no results, the PR is not approved
-          route: GET repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/reviews
+          route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/reviews
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
