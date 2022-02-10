@@ -30,6 +30,9 @@ namespace Api.Database.Entities
         public string Owner { get; set; }
 
         [MaxLength(128)]
+        public string? Assignee { get; set; }
+
+        [MaxLength(128)]
         public string Project { get; set; }
 
         [Required]
