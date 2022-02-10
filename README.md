@@ -8,7 +8,7 @@ Equinor Design System ([EDS](https://eds.equinor.com/)) and
 [Fusion components](https://github.com/equinor/fusion-components) are used. 
 
 To run the frontend locally, you need to explicitly provide an ``API_URL``
-variable. This can be done by either setting an environment variable or creating
+and ``AD_CLIENT_ID`` variable. This can be done by either setting an environment variable or creating
 an ``.env`` file in ``frontend``. An example file ``.env.example`` is provided.
 You can then run
 ```
