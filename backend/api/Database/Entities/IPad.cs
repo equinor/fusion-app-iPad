@@ -10,7 +10,7 @@ namespace Api.Database.Entities
             LastKnownRITM = lastKnownRITM;
             Owner = owner;
             Project = project;
-            Location = location;
+            DeliveryAddress = location;
             ExType = exType;
             UserType = userType;
             SimType = simType;
@@ -34,7 +34,7 @@ namespace Api.Database.Entities
 
         [Required]
         [MaxLength(128)]
-        public string Location { get; set; }
+        public string DeliveryAddress { get; set; }
 
         [Required]
         [MaxLength(64)]
