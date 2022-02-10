@@ -36,7 +36,7 @@ jobs:
     needs: base_check
     runs-on: windows-latest
     outputs:
-      review_state: ${{ fromJson(steps.get.outputs.data).state }}
+      review_state: ${{ fromJson(steps.get.outputs.data)[0].state }}
       eyes_id: ${{ needs.base_check.outputs.eyes_id }}
     steps:
       - uses: octokit/request-action@v2.x
