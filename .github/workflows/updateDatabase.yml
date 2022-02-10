@@ -77,9 +77,8 @@ jobs:
             :no_entry: Cannot update database until the Pull Request is approved! :no_entry:
 
   database_update_start:
-    needs: [ get_review_state, if_not_approved_then_stop ]
-    # This is like an "else" for the 'if' in the "if_not_approved_then_stop"-job
-    if: always() && (needs.if_not_approved_then_stop.result == 'failure') 
+    needs: get_review_state
+    if: contains(needs.get_review_state.outputs.review_state, 'APPROVED')
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
