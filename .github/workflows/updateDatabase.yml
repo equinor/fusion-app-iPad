@@ -36,7 +36,7 @@ jobs:
     needs: base_check
     runs-on: windows-latest
     outputs:
-      review_state: ${{ fromJson(steps.get.outputs.data).*.state }}
+      review_approved: ${{ contains(fromJson(steps.get.outputs.data).*.state, 'APPROVED') }}
       eyes_id: ${{ needs.base_check.outputs.eyes_id }}
     steps:
       - uses: octokit/request-action@v2.x
@@ -49,8 +49,7 @@ jobs:
 
   if_not_approved_then_stop:
     needs: get_review_state
-    if: |
-      !contains(needs.get_review_state.outputs.review_state, 'APPROVED')
+    if: ${{ !needs.get_review_state.outputs.review_approved }}
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -78,7 +77,7 @@ jobs:
 
   database_update_start:
     needs: get_review_state
-    if: contains(needs.get_review_state.outputs.review_state, 'APPROVED')
+    if: ${{ needs.get_review_state.outputs.review_approved }}
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
