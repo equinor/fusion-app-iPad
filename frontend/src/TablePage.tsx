@@ -25,7 +25,7 @@ const TablePage = () => {
             setIsFetching(false)
         })
     }, [])
-    const topRef = useRef<HTMLButtonElement>(null)
+
     type DataItemProps = {
         item: iPad
         rowIndex: number
@@ -209,7 +209,7 @@ const TablePage = () => {
                     setIsOrderIpadOpen(false)
                 }}
             >
-                <Order topRef={topRef} />
+                <Order />
             </ModalSideSheet>
             <Button onClick={() => setIsOrderIpadOpen(true)}>Order iPad</Button>
             <DataTable columns={columns} data={iPads} isFetching={isFetching} rowIdentifier={'id'}></DataTable>
