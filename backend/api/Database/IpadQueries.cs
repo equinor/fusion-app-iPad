@@ -41,26 +41,8 @@ namespace Api.Database
         /// <param name="parameters"> The variable containing the filter params </param>
         public static Expression<Func<IPad, bool>> ConstructFilter(IPadParameters parameters)
         {
-            Expression<Func<IPad, bool>> exFilter = i => true;
-            Expression<Func<IPad, bool>> userFilter = i => true;
-
-            if (parameters.ExClass is not null && !string.IsNullOrWhiteSpace(parameters.ExClass))
-            {
-                if (!IPadParameters.ExClassQueryToValue.ContainsKey(parameters.ExClass))
-                    throw new ArgumentException($"Parameter '{nameof(parameters.ExClass)}' was '{parameters.ExClass}'. " +
-                        $"Expected one of [ {string.Join(", ", IPadParameters.ExClassQueryToValue.Keys)} ]");
-
-                exFilter = i => i.ExClass.Equals(IPadParameters.ExClassQueryToValue[parameters.ExClass]);
-            }
-
-            if (parameters.UserType is not null && !string.IsNullOrWhiteSpace(parameters.UserType))
-            {
-                if (!IPadParameters.UserTypeQueryToValue.ContainsKey(parameters.UserType))
-                    throw new ArgumentException($"Parameter '{nameof(parameters.UserType)}' was '{parameters.UserType}'. " +
-                        $"Expected one of [ {string.Join(", ", IPadParameters.UserTypeQueryToValue.Keys)} ]");
-
-                userFilter = i => i.UserType.Equals(IPadParameters.UserTypeQueryToValue[parameters.UserType]);
-            }
+            Expression<Func<IPad, bool>> exFilter = parameters.ExClass is null ? i => true : i => i.ExClass == parameters.ExClass;
+            Expression<Func<IPad, bool>> userFilter = parameters.UserType is null ? i => true : i => i.UserType == parameters.UserType;
 
             // The parameter of the filter expression
             var i = Expression.Parameter(typeof(IPad));
