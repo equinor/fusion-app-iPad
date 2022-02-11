@@ -1,17 +1,17 @@
+import { FC, useCallback, useState } from 'react'
 import { Button, Icon, Menu, Typography } from '@equinor/eds-core-react'
 import { assignment_return, edit, more_vertical, person, report } from '@equinor/eds-icons'
+import { useAsyncPagination, Pagination, Page } from '@equinor/fusion'
 import { DataTable, DataTableColumn, ModalSideSheet, styling } from '@equinor/fusion-components'
-import { FC, useEffect, useRef, useState } from 'react'
 
 import { apiBackend } from './api/apiClient'
-import { iPad } from './api/models'
+import { iPad, DataItemProps } from './api/models'
 import Order from './Order'
 
 const TablePage = () => {
+    const pageSize = 10
     const api = new apiBackend()
-    const [iPads, setIPads] = useState<iPad[]>([])
     const [selectedIpad, setSelectedIpad] = useState<iPad>()
-    const [isFetching, setIsFetching] = useState(true)
 
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [isChangeOwnerOpen, setIsChangeOwnerOpen] = useState(false)
@@ -19,17 +19,13 @@ const TablePage = () => {
     const [isReturnOpen, setIsReturnOpen] = useState(false)
     const [isOrderIpadOpen, setIsOrderIpadOpen] = useState(false)
 
-    useEffect(() => {
-        api.getIpads().then(response => {
-            setIPads(response)
-            setIsFetching(false)
-        })
+    const { isFetching, pagination, pagedData, setCurrentPage } = useAsyncPagination(
+        async (pagination: Pagination) => await api.getIpads(pagination.currentPage.index + 1, pageSize),
+        pageSize
+    )
+    const onPaginationChange = useCallback((newPage: Page, perPage: number) => {
+        setCurrentPage(newPage.index, perPage)
     }, [])
-
-    type DataItemProps = {
-        item: iPad
-        rowIndex: number
-    }
 
     const editIpadEntryButton: FC<DataItemProps> = ({ item }) => {
         const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
@@ -212,7 +208,14 @@ const TablePage = () => {
                 <Order />
             </ModalSideSheet>
             <Button onClick={() => setIsOrderIpadOpen(true)}>Order iPad</Button>
-            <DataTable columns={columns} data={iPads} isFetching={isFetching} rowIdentifier={'id'}></DataTable>
+            <DataTable
+                columns={columns}
+                data={pagedData}
+                pagination={pagination}
+                onPaginationChange={onPaginationChange}
+                isFetching={isFetching}
+                rowIdentifier={'id'}
+            ></DataTable>
         </div>
     )
 }
