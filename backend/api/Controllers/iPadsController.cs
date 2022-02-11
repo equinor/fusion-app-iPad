@@ -76,10 +76,7 @@ namespace Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Getting iPads from database");
-                if (e is ArgumentException)
-                    return BadRequest(e.Message);
-                else
-                    throw;
+                throw;
             }
         }
 
