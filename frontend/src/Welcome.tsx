@@ -16,28 +16,19 @@ const StyledTabPanel = styled(Panel)`
 
 const Welcome = () => {
     const [activeTab, setActiveTab] = useState(0)
-    const topRef = useRef<HTMLButtonElement>(null)
 
     return (
         <Tabs activeTab={activeTab} onChange={setActiveTab}>
             <List>
-                <Tab ref={topRef}>Order iPad</Tab>
-                <Tab>Return iPad</Tab>
-                <Tab>Support</Tab>
                 <Tab>Table</Tab>
+                <Tab>Return iPad</Tab>
             </List>
             <Panels>
                 <StyledTabPanel>
-                    <Order topRef={topRef} />
+                    <TablePage />
                 </StyledTabPanel>
                 <StyledTabPanel>
                     <Return />
-                </StyledTabPanel>
-                <StyledTabPanel>
-                    <Support />
-                </StyledTabPanel>
-                <StyledTabPanel>
-                    <TablePage />
                 </StyledTabPanel>
             </Panels>
         </Tabs>
