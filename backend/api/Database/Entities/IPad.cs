@@ -39,11 +39,15 @@ namespace Api.Database.Entities
 
         public ExClassEnum ExClass { get; set; }
 
-        public UserTypeEnum? UserType { get; set; }
+        public UserTypeEnum UserType { get; set; }
 
         public SimTypeEnum SimType { get; set; }
 
         [Required]
         public StatusEnum Status { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime ModifiedAt { get; set; }
     }
 }
