@@ -67,7 +67,7 @@ namespace Api.Controllers
                     iPads.HasPrevious
                 };
 
-                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                Response.Headers.Add(QueryStringParameters.PaginationHeader, JsonConvert.SerializeObject(metadata));
 
                 _logger.LogInformation($"Successful GET list of iPads from database.");
 

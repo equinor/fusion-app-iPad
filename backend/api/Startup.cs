@@ -2,6 +2,7 @@
 using Api.Authentication;
 using Api.Controllers;
 using Api.Database;
+using Api.Database.Models;
 using Api.Services;
 using Api.Utilities;
 using Equinor.TI.CommonLibrary.Client;
@@ -61,6 +62,7 @@ namespace Api
                             "http://localhost:3000",
                             "https://*.equinor.com")
                     .AllowAnyHeader()
+                    .WithExposedHeaders(QueryStringParameters.PaginationHeader)
                     .AllowAnyMethod()
                     .SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
