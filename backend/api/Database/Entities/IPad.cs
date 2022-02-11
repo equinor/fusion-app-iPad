@@ -1,56 +1,53 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Api.Database.Models;
 
 namespace Api.Database.Entities
 {
+#nullable disable
     public class IPad
     {
-        public IPad(string yellowTag, string lastKnownRITM, string owner, string project, string location, string exType, string userType, string simType, string status)
-        {
-            YellowTag = yellowTag;
-            LastKnownRITM = lastKnownRITM;
-            Owner = owner;
-            Project = project;
-            Location = location;
-            ExType = exType;
-            UserType = userType;
-            SimType = simType;
-            Status = status;
-        }
-
         public int Id { get; set; }
 
-        [MaxLength(12)]
+        [MaxLength(128)]
         public string YellowTag { get; set; }
 
-        [MaxLength(24)]
+        [MaxLength(128)]
         public string LastKnownRITM { get; set; }
 
         [Required]
         [MaxLength(128)]
         public string Owner { get; set; }
 
+        [Required]
+        [MaxLength(128)]
+        public string OwnerId { get; set; }
+
+        [MaxLength(128)]
+        public string Assignee { get; set; }
+
+        [MaxLength(128)]
+        public string AssigneeId { get; set; }
+
         [MaxLength(128)]
         public string Project { get; set; }
 
-        [Required]
         [MaxLength(128)]
-        public string Location { get; set; }
+        public string ProjectId { get; set; }
+
+        [MaxLength(128)]
+        public string DeliveryAddress { get; set; }
+
+        public ExClassEnum ExClass { get; set; }
+
+        public UserTypeEnum UserType { get; set; }
+
+        public SimTypeEnum SimType { get; set; }
 
         [Required]
-        [MaxLength(64)]
-        public string ExType { get; set; }
+        public StatusEnum Status { get; set; }
 
-        [Required]
-        [MaxLength(64)]
-        public string UserType { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        [Required]
-        [MaxLength(64)]
-        public string SimType { get; set; }
-
-        [Required]
-        [MaxLength(64)]
-        public string Status { get; set; }
-
+        public DateTime ModifiedAt { get; set; }
     }
 }
