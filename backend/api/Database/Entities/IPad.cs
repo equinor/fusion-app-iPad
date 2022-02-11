@@ -18,11 +18,21 @@ namespace Api.Database.Entities
         [MaxLength(128)]
         public string Owner { get; set; }
 
+        [Required]
+        [MaxLength(128)]
+        public string OwnerId { get; set; }
+
         [MaxLength(128)]
         public string Assignee { get; set; }
 
         [MaxLength(128)]
+        public string AssigneeId { get; set; }
+
+        [MaxLength(128)]
         public string Project { get; set; }
+
+        [MaxLength(128)]
+        public string ProjectId { get; set; }
 
         [MaxLength(128)]
         public string DeliveryAddress { get; set; }
