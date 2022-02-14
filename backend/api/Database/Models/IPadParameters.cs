@@ -3,13 +3,13 @@
     public class IPadParameters : QueryStringParameters
     {
         /// <summary>
-        /// Must be one of [ 'non', 'zone1', 'zone2' ]
+        /// Enum: [ 'NonEx' = 0 | 'Zone1' = 1 | 'Zone2' = 2 ]
         /// </summary>
-        public string? ExClass { get; set; }
+        public ExClassEnum? ExClass { get; set; }
         /// <summary>
-        /// Must be one of [ 'equinor', 'external' ]
+        /// Enum: [ 'Equinor' = 0 | 'External' = 1 ]
         /// </summary>
-        public string? UserType { get; set; }
+        public UserTypeEnum? UserType { get; set; }
         /// <summary>
         /// Search by Tag
         /// </summary>
@@ -22,18 +22,5 @@
         /// Search by Owner
         /// </summary>
         public string? Owner { get; set; }
-
-        public static readonly Dictionary<string, ExClassEnum> ExClassQueryToValue = new(StringComparer.OrdinalIgnoreCase)
-        {
-            { "non", ExClassEnum.NonEx },
-            { "zone1", ExClassEnum.NonEx },
-            { "zone2", ExClassEnum.NonEx }
-        };
-        public static readonly Dictionary<string, UserTypeEnum> UserTypeQueryToValue = new(StringComparer.OrdinalIgnoreCase)
-        {
-            { "equinor", UserTypeEnum.Equinor },
-            { "external", UserTypeEnum.External },
-        };
-
     }
 }

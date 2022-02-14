@@ -34,9 +34,9 @@ namespace Api.Controllers
         ///
         /// Example query:
         ///
-        ///     /ipads?exClass=non&amp;userType=equinor&amp;owner=to&amp;tag=12&amp;ritm=ritm
+        ///     /ipads?exClass=zone1&amp;userType=equinor&amp;owner=to&amp;tag=12&amp;ritm=ritm
         ///
-        /// <para> This query gets all iPads with ExClass="Non EX", UserType="Equinor Personnel", whose Owner contains the substring "to"
+        /// <para> This query gets all iPads with ExClass="Zone1", UserType="Equinor", whose Owner contains the substring "to"
         /// , whose YellowTag contains the substring "12", and whose LastKnownRITM contains the substring "ritm"</para>
         /// </remarks>
         /// <returns> List of iPads </returns>
@@ -76,10 +76,7 @@ namespace Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Getting iPads from database");
-                if (e is ArgumentException)
-                    return BadRequest(e.Message);
-                else
-                    throw;
+                throw;
             }
         }
 

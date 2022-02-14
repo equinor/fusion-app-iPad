@@ -20,14 +20,14 @@ namespace Api.Database
         public async Task<PagedList<IPad>> GetIpads(IPadParameters iPadParameters)
         {
             // construct filter
-            var filter = IpadQueries.ConstructFilter(iPadParameters);
+            var filter = IPadQueries.ConstructFilter(iPadParameters);
 
             var ipads = _dbContext.IPads.Where(filter).AsNoTracking();
 
             // Apply searches
-            IpadQueries.SearchByOwner(ref ipads, iPadParameters.Owner);
-            IpadQueries.SearchByTag(ref ipads, iPadParameters.Tag);
-            IpadQueries.SearchByRitm(ref ipads, iPadParameters.Ritm);
+            IPadQueries.SearchByOwner(ref ipads, iPadParameters.Owner);
+            IPadQueries.SearchByTag(ref ipads, iPadParameters.Tag);
+            IPadQueries.SearchByRitm(ref ipads, iPadParameters.Ritm);
 
             // Query database and return paged result
             return await PagedList<IPad>.ToPagedList(ipads, iPadParameters.PageNumber, iPadParameters.PageSize);
