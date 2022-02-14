@@ -59,12 +59,23 @@ export type iPad = {
     yellowTag: string
     lastKnownRITM: string
     owner: string
+    ownerId: string
+    assignee: string
+    assigneeId: string
     project: string
-    location: string
-    exType: string
-    userType: string
-    simType: string
-    status: string
+    projectId: string
+    deliveryAddress: string
+    exClass: number
+    userType: number
+    simType: number
+    status: number
+    createdAt: string
+    modifiedAt: string
+}
+
+export type DataItemProps = {
+    item: iPad
+    rowIndex: number
 }
 
 export type ErrorProps = {

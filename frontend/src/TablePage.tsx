@@ -116,18 +116,18 @@ const TablePage = () => {
             label: 'Owner',
         },
         {
+            key: 'assignee',
+            accessor: 'assignee',
+            label: 'Assignee',
+        },
+        {
             key: 'project',
             accessor: 'project',
             label: 'Project',
         },
         {
-            key: 'location',
-            accessor: 'location',
-            label: 'Location',
-        },
-        {
-            key: 'exType',
-            accessor: 'exType',
+            key: 'exClass',
+            accessor: 'exClass',
             label: 'EX-Type',
         },
         {
