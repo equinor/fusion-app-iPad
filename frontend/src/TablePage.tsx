@@ -7,6 +7,9 @@ import { DataTable, DataTableColumn, ModalSideSheet, styling } from '@equinor/fu
 import { apiBackend } from './api/apiClient'
 import { iPad, DataItemProps } from './api/models'
 import { ChangeAssignedPerson } from './components/ChangeAssignedPerson'
+import { ExClassColumn } from './components/ExClassColumn'
+import { SimTypeColumn } from './components/SimTypeColumn'
+import { StatusColumn } from './components/StatusColumn'
 import Order from './Order'
 
 const TablePage = () => {
@@ -139,16 +142,19 @@ const TablePage = () => {
             key: 'exClass',
             accessor: 'exClass',
             label: 'EX-Type',
+            component: ExClassColumn,
         },
         {
             key: 'simType',
             accessor: 'simType',
             label: 'SIM-Type',
+            component: SimTypeColumn,
         },
         {
             key: 'status',
             accessor: 'status',
             label: 'Status',
+            component: StatusColumn,
         },
         {
             key: 'edit',
