@@ -1,23 +1,33 @@
 import { FC, useCallback, useState } from 'react'
 import { Button, Icon, Menu, Typography } from '@equinor/eds-core-react'
 import { assignment_return, edit, more_vertical, person, report } from '@equinor/eds-icons'
-import { useAsyncPagination, Pagination, Page } from '@equinor/fusion'
+import { useAsyncPagination, Pagination, Page, useNotificationCenter } from '@equinor/fusion'
 import { DataTable, DataTableColumn, ModalSideSheet, styling } from '@equinor/fusion-components'
 
 import { apiBackend } from './api/apiClient'
 import { iPad, DataItemProps } from './api/models'
+import { ChangeAssignedPerson } from './components/ChangeAssignedPerson'
 import Order from './Order'
 
 const TablePage = () => {
     const pageSize = 10
     const api = new apiBackend()
-    const [selectedIpad, setSelectedIpad] = useState<iPad>()
+    const sendNotificationAsync = useNotificationCenter()
 
+    const [selectedIpad, setSelectedIpad] = useState<iPad>()
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [isChangeOwnerOpen, setIsChangeOwnerOpen] = useState(false)
     const [isReportDamageOpen, setIsReportDamageOpen] = useState(false)
     const [isReturnOpen, setIsReturnOpen] = useState(false)
     const [isOrderIpadOpen, setIsOrderIpadOpen] = useState(false)
+
+    const displayNotification = async (notification: string) => {
+        await sendNotificationAsync({
+            level: 'low',
+            title: notification,
+            cancelLabel: 'dismiss',
+        })
+    }
 
     const { isFetching, pagination, pagedData, setCurrentPage } = useAsyncPagination(
         async (pagination: Pagination) => await api.getIpads(pagination.currentPage.index + 1, pageSize),
@@ -167,7 +177,12 @@ const TablePage = () => {
                     setIsEditOpen(false)
                 }}
             >
-                <>Edit iPad with id {selectedIpad?.id}</>
+                <ChangeAssignedPerson
+                    iPad={selectedIpad}
+                    assigneeId={selectedIpad?.assigneeId}
+                    setIsEditOpen={setIsEditOpen}
+                    displayNotification={displayNotification}
+                />
             </ModalSideSheet>
             <ModalSideSheet
                 header="Change iPad owner"

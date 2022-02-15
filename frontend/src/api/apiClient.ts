@@ -12,7 +12,7 @@ export class apiBackend {
         return await context.auth.container.acquireTokenAsync(config.AD_CLIENT_ID)
     }
 
-    private async query<T>(method: 'GET' | 'POST' | 'DELETE', path: string, body?: T): Promise<{ body: T; headers: Headers }> {
+    private async query<T>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, body?: T): Promise<{ body: T; headers: Headers }> {
         const token = await this.fetchAccessToken()
 
         const headers = {
@@ -47,6 +47,10 @@ export class apiBackend {
 
     private async POST<T>(path: string, body: T): Promise<{ body: T; headers: Headers }> {
         return this.query('POST', path, body)
+    }
+
+    private async PUT<T>(path: string, body: T): Promise<{ body: T; headers: Headers }> {
+        return this.query('PUT', path, body)
     }
 
     private async DELETE<T>(path: string, body: T): Promise<{ body: T; headers: Headers }> {
@@ -91,5 +95,13 @@ export class apiBackend {
         })
         const pagination = JSON.parse(result.headers.get('x-pagination') as string)
         return { totalCount: pagination.TotalCount, items: result.body }
+    }
+
+    async putIpad(id: number, updatedIPad: iPad): Promise<iPad> {
+        const path = `ipads/${id}`
+        const result = await this.PUT(path, updatedIPad).catch(e => {
+            throw new Error('Error updating iPad : ' + e)
+        })
+        return result.body
     }
 }
