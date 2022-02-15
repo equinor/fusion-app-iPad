@@ -1,4 +1,3 @@
-import { Chip } from '@equinor/eds-core-react'
 import { FC } from 'react'
 import { DataItemProps, status } from '../api/models'
 
