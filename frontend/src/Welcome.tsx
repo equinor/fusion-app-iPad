@@ -20,15 +20,23 @@ const Welcome = () => {
     return (
         <Tabs activeTab={activeTab} onChange={setActiveTab}>
             <List>
-                <Tab>Table</Tab>
+                <Tab>Order iPad</Tab>
                 <Tab>Return iPad</Tab>
+                <Tab>Support</Tab>
+                <Tab>Database</Tab>
             </List>
             <Panels>
                 <StyledTabPanel>
-                    <TablePage />
+                    <Order />
                 </StyledTabPanel>
                 <StyledTabPanel>
                     <Return />
+                </StyledTabPanel>
+                <StyledTabPanel>
+                    <Support />
+                </StyledTabPanel>
+                <StyledTabPanel>
+                    <TablePage />
                 </StyledTabPanel>
             </Panels>
         </Tabs>
