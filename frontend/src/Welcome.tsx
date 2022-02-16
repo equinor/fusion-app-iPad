@@ -27,7 +27,7 @@ const Welcome = () => {
             </List>
             <Panels>
                 <StyledTabPanel>
-                    <Order />
+                    <Order isSideSheet={false} />
                 </StyledTabPanel>
                 <StyledTabPanel>
                     <Return />

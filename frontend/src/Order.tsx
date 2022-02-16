@@ -17,7 +17,11 @@ import { FieldHeader } from './components/FieldHeader'
 import { WbsPicker } from './components/WbsPicker'
 import { ErrorHandler } from './components/ErrorHandler'
 
-const Order = () => {
+interface Props {
+    isSideSheet: boolean
+}
+
+const Order = ({ isSideSheet }: Props) => {
     const api = new apiBackend()
 
     const [
@@ -50,6 +54,8 @@ const Order = () => {
     const [isiPadAmountWarning, setIsiPadAmountWarning] = useState(false)
     const [isWarningPopupOpen, setIsWarningPopupOpen] = useState(false)
     const iPadAmountWarningLimit = 10
+
+    const mdSize = isSideSheet ? 11 : 5
 
     const [validPositions, setValidPositions] = useState<PositionDetails[]>([])
     const [hasFetchedPositions, setHasFetchedPositions] = useState(false)
@@ -139,11 +145,11 @@ const Order = () => {
 
     return (
         <>
-            <div style={{ margin: 25 }}>
+            <div style={{ margin: 25, minWidth: '250px', maxWidth: '1500px' }}>
                 <ErrorHandler isError={isError} errorMessage={errorMessage}></ErrorHandler>
                 <Grid container spacing={4} direction="column">
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={12} sm={11} data-testid={'country_dropdown'}>
+                        <Grid item xs={10} sm={10} md={mdSize} data-testid={'country_dropdown'}>
                             <FieldHeader headerText={'Country'} />
                             <SearchableDropdown
                                 options={countryDropdown.length == 0 ? loadingDropdown : countryDropdown}
@@ -153,7 +159,7 @@ const Order = () => {
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={11} sm={11}>
+                        <Grid item xs={10} sm={10} md={mdSize}>
                             <FieldHeader headerText={'Delivery address'} />
                             <TextInput
                                 value={deliveryAddress}
@@ -166,7 +172,7 @@ const Order = () => {
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={11} sm={11} data-testid={'person_dropdown'}>
+                        <Grid item xs={10} sm={10} md={mdSize} data-testid={'person_dropdown'}>
                             <FieldHeader headerText={'Ordering on behalf of'} />
                             <OrderBehalfofPicker
                                 positionOptions={positionOptions}
@@ -177,27 +183,27 @@ const Order = () => {
                         <HelpIcon helpText={'info text'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={11} sm={11} data-testid={'wbs_dropdown'}>
+                        <Grid item xs={10} sm={10} md={mdSize} data-testid={'wbs_dropdown'}>
                             <FieldHeader headerText={'WBS'} />
                             <WbsPicker wbsCode={wbsCode} setSingleField={setSingleField} errorProps={errorProps} />
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={11} sm={11} data-testid={'ex_dropdown'}>
+                        <Grid item xs={10} sm={10} md={mdSize} data-testid={'ex_dropdown'}>
                             <FieldHeader headerText={'EX classification'} />
                             <Select options={exClassOptions} onSelect={item => setSingleField('exClass', item.title)} />
                         </Grid>
                         <HelpIcon helpText={'Zone 1: Description. Zone2: Description'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={11} sm={11} data-testid={'accessories_dropdown'}>
+                        <Grid item xs={10} sm={10} md={mdSize} data-testid={'accessories_dropdown'}>
                             <FieldHeader headerText={'Accessories'} />
                             <AccessorySelector selectedAccessories={accessories} setSingleField={setSingleField} />
                         </Grid>
                         <HelpIcon helpText={'Default accessories:'} />
                     </Grid>
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={11} sm={11} data-testid={'user_type_dropdown'}>
+                        <Grid item xs={10} sm={10} md={mdSize} data-testid={'user_type_dropdown'}>
                             <FieldHeader headerText={'User type'} />
                             <Select options={userTypeOptions} onSelect={item => setSingleField('userType', item.title)} />
                         </Grid>
@@ -205,7 +211,7 @@ const Order = () => {
                     {userType === 'Equinor personnel' ? (
                         //Equinor employee device
                         <Grid item container xs={12} spacing={3} alignItems="center">
-                            <Grid item xs={11} sm={11}>
+                            <Grid item xs={10} sm={10} md={mdSize}>
                                 <Grid container direction="row">
                                     <FieldHeader headerText={'Shortname users'} />
                                     <Typography variant="body_short" style={{ fontSize: '13px', marginLeft: '4px' }}>
@@ -224,10 +230,10 @@ const Order = () => {
                         </Grid>
                     ) : (
                         //External employee device
-                        <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} />
+                        <SimOrderRadio radioCheckedSIM={simType} setSingleField={setSingleField} isSideSheet={isSideSheet} />
                     )}
                     <Grid item container xs={12} spacing={3} alignItems="center">
-                        <Grid item xs={11} sm={11}>
+                        <Grid item xs={10} sm={10} md={mdSize}>
                             <FieldHeader headerText={'Number of iPads'} />
                             <TextInput
                                 value={iPadAmount}

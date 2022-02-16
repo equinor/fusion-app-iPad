@@ -224,7 +224,7 @@ const TablePage = () => {
                     setIsOrderIpadOpen(false)
                 }}
             >
-                <Order />
+                <Order isSideSheet={true} />
             </ModalSideSheet>
             <Button onClick={() => setIsOrderIpadOpen(true)}>Order iPad</Button>
             <DataTable
