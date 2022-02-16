@@ -59,13 +59,6 @@ Cypress.Commands.add('interceptExternal', () => {
         })
     }).as('getCountries')
 
-    // Mock Submit Button return
-    cy.intercept(submitURL, req => {
-        req.reply({
-            body: '"RITM1234567_MOCKED"',
-        })
-    }).as('submitForm')
-
     cy.intercept(wbsURL, req => {
         req.reply({
             body: getWbs(),
