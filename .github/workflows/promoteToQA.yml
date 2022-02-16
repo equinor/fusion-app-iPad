@@ -4,9 +4,11 @@ on:
   push:
     branches: [ QA ]
 
+
 jobs:
   tag_commit:
     runs-on: ubuntu-latest
+    environment: QA
     steps:
       - uses: actions/checkout@v2
       - name: Create a Release
