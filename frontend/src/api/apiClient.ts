@@ -72,14 +72,6 @@ export class apiBackend {
         return result.body
     }
 
-    async submitForm(form: string): Promise<string> {
-        const path = 'order-form'
-        const result = await this.POST<string>(path, form).catch(e => {
-            throw new Error('Error posting form to Service Now : ' + e)
-        })
-        return result.body
-    }
-
     async getWbs(wbsCode: string): Promise<Wbs[]> {
         const path = `wbs?wbsCode=${wbsCode}`
         const result = await this.GET<Wbs[]>(path).catch(e => {
