@@ -80,7 +80,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x' # SDK Version to use; x will use the latest version of the 6.0 channel
+        dotnet-version: '6.0.101'
 
     # Dotnet format is included in the .NET6 SDK
     # By default, the task ensures the exit code is 0
