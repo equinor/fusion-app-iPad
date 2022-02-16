@@ -14,7 +14,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - BUILD_MODE=development
+      - ASPNETCORE_ENVIRONMENT=Development
       - KEYVAULT_ENDPOINT=https://ipad-service-kv-ci.vault.azure.net/
       - AzureAd__ClientId=d83c2116-0a79-4a0d-8276-d51cdb4a6fd6
-      - AzureAd__ClientSecret="${ClientSecret}"
+      - AzureAd__ClientSecret=${ClientSecret}
