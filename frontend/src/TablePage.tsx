@@ -197,9 +197,7 @@ const TablePage = () => {
                     setIsChangeOwnerOpen(false)
                 }}
             >
-                <>
-                    Change owner of iPad with id {selectedIpad?.id}. Current owner is {selectedIpad?.owner}
-                </>
+                <>Change owner sideSheetPage</>
             </ModalSideSheet>
             <ModalSideSheet
                 header="Report iPad damage"
@@ -208,7 +206,7 @@ const TablePage = () => {
                     setIsReportDamageOpen(false)
                 }}
             >
-                <>Report damage on iPad with id {selectedIpad?.id}</>
+                <>Report damage sideSheetPage</>
             </ModalSideSheet>
             <ModalSideSheet
                 header="Return iPad"
@@ -217,7 +215,7 @@ const TablePage = () => {
                     setIsReturnOpen(false)
                 }}
             >
-                <>Return iPad with id {selectedIpad?.id}</>
+                <>Return iPad sideSheetPage</>
             </ModalSideSheet>
             <ModalSideSheet
                 header="Order iPad"
