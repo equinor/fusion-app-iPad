@@ -41,9 +41,8 @@ const Order = ({ topRef }: Props) => {
         setFormState,
     ] = useState<OrderForm>(initialFormState)
 
-    const [isRitmReceived, setIsRitmReceived] = useState(false)
+    const [isOrderSubmitted, setIsOrderSubmitted] = useState(false)
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false)
-    const [resultRitm, setResultRitm] = useState('')
     const [isSubmitPopupOpen, setIsSubmitPopupOpen] = useState(false)
     const [isError, setIsError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
@@ -111,15 +110,9 @@ const Order = ({ topRef }: Props) => {
         const orderFormString = buildOrderForm()
         const form = JSON.stringify(orderFormString)
         console.log('Submitting form: ' + form)
-
         setIsSubmitPopupOpen(true)
-
-        const response = await api.submitForm(form)
-
-        setIsRitmReceived(true)
-        setResultRitm(response)
-
-        console.log(response)
+        //Call POST to database here
+        setIsOrderSubmitted(true)
     }
 
     const onClickSubmit = async () => {
@@ -139,11 +132,11 @@ const Order = ({ topRef }: Props) => {
         }
     }
 
-    // This callback is called when the order is submitted and the user confirms the RITM returned
-    const onRitmConfirmed = () => {
+    // This callback is called when the order is submitted and the user confirms
+    const onOrderConfirmed = () => {
         setFormState(initialFormState)
-        // Clear ritm received flag
-        setIsRitmReceived(false)
+        // Clear order received flag
+        setIsOrderSubmitted(false)
         handleClose()
         scrollToTop()
     }
@@ -267,7 +260,7 @@ const Order = ({ topRef }: Props) => {
             </div>
             {isSubmitPopupOpen && (
                 <Scrim onClose={handleClose}>
-                    <SubmitFormDialog onConfirmClick={onRitmConfirmed} ritm={resultRitm} isLoading={!isRitmReceived}></SubmitFormDialog>
+                    <SubmitFormDialog onConfirmClick={onOrderConfirmed} isLoading={!isOrderSubmitted}></SubmitFormDialog>
                 </Scrim>
             )}
             {isWarningPopupOpen && (
