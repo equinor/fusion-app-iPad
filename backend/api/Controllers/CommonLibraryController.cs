@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    // Exclude from swagger documentation
+    [ApiExplorerSettings(IgnoreApi = true)]
     [ApiController]
     [Route("/countries")]
     public class CommonLibraryController : Controller
