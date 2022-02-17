@@ -35,7 +35,7 @@ npm run prettier_write
 The backend is built using .NET 6.0.  
 
 Swagger documentation for the backend can be found 
-[here](https://backend-fusion-ipad-service-ci.radix.equinor.com/swagger).  
+[here](https://backend-fusion-ipad-service-prod.radix.equinor.com/swagger).  
 
 The common environment variables are stored in the ``appsettings.json`` file.
 When running locally, the environment variables from ``appsettings.Development.json``
