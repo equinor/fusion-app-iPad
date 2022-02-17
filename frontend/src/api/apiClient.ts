@@ -1,5 +1,5 @@
-import { IFusionContext } from '@equinor/fusion'
-import { Wbs } from './models'
+import { IFusionContext, PagedResult } from '@equinor/fusion'
+import { iPad, Wbs } from './models'
 import { config } from '../config'
 
 export class apiBackend {
@@ -12,7 +12,7 @@ export class apiBackend {
         return await context.auth.container.acquireTokenAsync(config.AD_CLIENT_ID)
     }
 
-    private async query<T>(method: 'GET' | 'POST' | 'DELETE', path: string, body?: T): Promise<T> {
+    private async query<T>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, body?: T): Promise<{ body: T; headers: Headers }> {
         const token = await this.fetchAccessToken()
 
         const headers = {
@@ -35,46 +35,65 @@ export class apiBackend {
             return response.text().then(errorText => {
                 throw new Error(`Error with query: ${errorText}`)
             })
-        return response.json().catch(e => {
+        const responseBody = await response.json().catch(e => {
             throw new Error(`Error getting json from response: ${e}`)
         })
+        return { body: responseBody, headers: response.headers }
     }
 
-    private async GET<T>(path: string): Promise<T> {
+    private async GET<T>(path: string): Promise<{ body: T; headers: Headers }> {
         return this.query('GET', path)
     }
 
-    private async POST<T>(path: string, body: T): Promise<T> {
+    private async POST<T>(path: string, body: T): Promise<{ body: T; headers: Headers }> {
         return this.query('POST', path, body)
     }
 
-    private async DELETE<T>(path: string, body: T): Promise<T> {
+    private async PUT<T>(path: string, body: T): Promise<{ body: T; headers: Headers }> {
+        return this.query('PUT', path, body)
+    }
+
+    private async DELETE<T>(path: string, body: T): Promise<{ body: T; headers: Headers }> {
         return this.query('DELETE', path, body)
     }
 
     async helloWorld(): Promise<string> {
         const path = ''
-        return await this.GET<string>(path)
+        return await (
+            await this.GET<string>(path)
+        ).body
     }
 
     async getCountries(): Promise<string[]> {
         const path = 'countries'
-        return await this.GET<string[]>(path).catch(e => {
+        const result = await this.GET<string[]>(path).catch(e => {
             throw new Error('Error getting countries from Common Library : ' + e)
         })
-    }
-
-    async submitForm(form: string): Promise<string> {
-        const path = 'order-form'
-        return await this.POST<string>(path, form).catch(e => {
-            throw new Error('Error posting form to Service Now : ' + e)
-        })
+        return result.body
     }
 
     async getWbs(wbsCode: string): Promise<Wbs[]> {
         const path = `wbs?wbsCode=${wbsCode}`
-        return await this.GET<Wbs[]>(path).catch(e => {
+        const result = await this.GET<Wbs[]>(path).catch(e => {
             throw new Error('Error getting WBS codes from APIM : ' + e)
         })
+        return result.body
+    }
+
+    async getIpads(pageNumber = 1, pageSize = 10): Promise<PagedResult<iPad>> {
+        const path = `ipads?PageNumber=${pageNumber}&PageSize=${pageSize}`
+        const result = await this.GET<iPad[]>(path).catch(e => {
+            throw new Error('Error getting iPads from database : ' + e)
+        })
+        const pagination = JSON.parse(result.headers.get('x-pagination') as string)
+        return { totalCount: pagination.TotalCount, items: result.body }
+    }
+
+    async putIpad(id: number, updatedIPad: iPad): Promise<iPad> {
+        const path = `ipads/${id}`
+        const result = await this.PUT(path, updatedIPad).catch(e => {
+            throw new Error('Error updating iPad : ' + e)
+        })
+        return result.body
     }
 }
