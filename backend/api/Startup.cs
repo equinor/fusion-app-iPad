@@ -156,6 +156,8 @@ namespace Api
 
             // Database access is Scoped because it depends on SqlDbContext which is also scoped
             services.AddScoped<IPadDatabaseAccess, IPadDatabaseAccess>();
+
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

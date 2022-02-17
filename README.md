@@ -39,7 +39,7 @@ Swagger documentation for the backend can be found
 
 The common environment variables are stored in the ``appsettings.json`` file.
 When running locally, the environment variables from ``appsettings.Development.json``
-is used.  
+are used.  
 When running as a radix deployment, the environment variables that are not common
 to all environments (CI, QA and Prod) are stored in Radix as described
 [here](https://www.radix.equinor.com/docs/topic-runtime-env/#environment-variables)
@@ -143,3 +143,10 @@ The application is deployed to Radix.
 ### Prod
 * [Frontend](https://frontend-fusion-ipad-service-prod.radix.equinor.com/)
 * [Backend](https://backend-fusion-ipad-service-prod.radix.equinor.com/swagger)
+
+## Monitoring
+We use [Azure Application Insights](https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core)
+to monitor the backend of our application.
+  
+We have one application insight instance for each environment, each in their respective resource group in Azure.  
+The connection strings for the AI instances are stored in the keyvault.
