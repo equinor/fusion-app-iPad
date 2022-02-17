@@ -3,6 +3,7 @@ using Api.Authentication;
 using Api.Controllers;
 using Api.Database;
 using Api.Database.Models;
+using Api.Extensions;
 using Api.Services;
 using Api.Utilities;
 using Equinor.TI.CommonLibrary.Client;
@@ -15,21 +16,26 @@ namespace Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
+            _env = env;
             Configuration = configuration;
             // Adding Audience as Common Library needs it.
             Configuration.GetSection("AzureAd")["Audience"] = Configuration.GetSection("AzureAd")["ClientId"];
         }
 
         public IConfiguration Configuration { get; }
+        private readonly IWebHostEnvironment _env;
 
         private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(o =>
+            {
+                o.Conventions.Add(new ActionHidingConvention(_env.IsDevelopment()));
+            });
 
             // Security Setup
             #region Security Setup
