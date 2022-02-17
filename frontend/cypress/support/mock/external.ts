@@ -35,7 +35,7 @@ Cypress.Commands.add('interceptExternal', () => {
         req.reply({
             body: getFusionPositionData(position),
         })
-    })
+    }).as('getPeople')
 
     cy.intercept(projectsURL, req => {
         req.reply({
@@ -52,18 +52,12 @@ Cypress.Commands.add('interceptExternal', () => {
             body: getUserData(user),
         })
     })
+
     cy.intercept(countryURL, req => {
         req.reply({
             body: getCountries(),
         })
-    })
-
-    // Mock Submit Button return
-    cy.intercept(submitURL, req => {
-        req.reply({
-            body: '"RITM1234567_MOCKED"',
-        })
-    }).as('submitForm')
+    }).as('getCountries')
 
     cy.intercept(wbsURL, req => {
         req.reply({

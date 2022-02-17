@@ -53,3 +53,53 @@ export const initialFormState: OrderForm = {
     userShortnames: '',
     orderResponsible: '',
 }
+
+export enum exClass {
+    'Non Ex' = 0,
+    'Zone 1' = 1,
+    'Zone 2' = 2,
+}
+
+export enum userType {
+    Equinor = 0,
+    External = 1,
+}
+
+export enum simType {
+    WiFi = 0,
+    Cellular = 1,
+}
+
+export enum status {
+    Ordered = 0,
+    Delivered = 1,
+}
+
+export type iPad = {
+    id: number
+    yellowTag: string
+    lastKnownRITM: string
+    owner: string
+    ownerId: string
+    assignee: string
+    assigneeId: string
+    project: string
+    projectId: string
+    deliveryAddress: string
+    exClass: exClass
+    userType: userType
+    simType: simType
+    status: status
+    createdAt: string
+    modifiedAt: string
+}
+
+export type DataItemProps = {
+    item: iPad
+    rowIndex: number
+}
+
+export type ErrorProps = {
+    setIsError: (newState: boolean) => void
+    setErrorMessage: (newState: string) => void
+}

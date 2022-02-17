@@ -1,0 +1,28 @@
+name: PromoteToQA
+
+on:
+  push:
+    branches: [ QA ]
+
+jobs:
+  tag_commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create a Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "QA"
+          prerelease: false
+          title: "QA"
+
+  run_migrations:
+    uses: ./.github/workflows/runMigrations.yml
+    with:
+      PullRequestCheckout: false
+      Environment: QA
+    secrets:
+      ClientId: ${{secrets.AZURE_CLIENT_ID}}
+      KeyVaultUrl: ${{secrets.KEYVAULT_URL}}
+      ClientSecret: ${{secrets.AZURE_CLIENT_SECRET}}

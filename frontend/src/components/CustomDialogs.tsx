@@ -13,12 +13,11 @@ const Wrapper = styled.div`
 `
 
 interface SubmitFormDialogProps {
-    ritm: string
     onConfirmClick: () => void
     isLoading: boolean
 }
 
-export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitFormDialogProps) => {
+export const SubmitFormDialog = ({ onConfirmClick, isLoading }: SubmitFormDialogProps) => {
     const testIdName = 'submit_dialog'
     return (
         <>
@@ -32,10 +31,7 @@ export const SubmitFormDialog = ({ ritm, onConfirmClick, isLoading }: SubmitForm
                 <Dialog data-testid={testIdName}>
                     <Dialog.Title>Order successful!</Dialog.Title>
                     <Dialog.CustomContent>
-                        <Typography variant="body_short">
-                            The order was submitted successfully to Service Now. The RITM for your order is
-                        </Typography>
-                        <Typography variant="body_short_bold">{ritm}</Typography>
+                        <Typography variant="body_short">The order was successfully submitted.</Typography>
                     </Dialog.CustomContent>
                     <Dialog.Actions>
                         <Wrapper>

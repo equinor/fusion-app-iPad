@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
+using Api.Authentication;
 using Api.Controllers;
+using Api.Database;
+using Api.Database.Models;
 using Api.Services;
+using Api.Utilities;
 using Equinor.TI.CommonLibrary.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 
@@ -22,6 +18,8 @@ namespace Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            // Adding Audience as Common Library needs it.
+            Configuration.GetSection("AzureAd")["Audience"] = Configuration.GetSection("AzureAd")["ClientId"];
         }
 
         public IConfiguration Configuration { get; }
@@ -46,7 +44,14 @@ namespace Api
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
+                    .RequireRole(Tools.GetRoles(Configuration))
                     .Build();
+
+                // Database access is also available through special roles for other applications
+                options.AddPolicy("DatabasePolicy", new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .RequireRole(Tools.GetRoles(Configuration).Concat(Tools.GetDatabaseRoles(Configuration)))
+                    .Build());
             });
 
             services.AddCors(options =>
@@ -57,6 +62,7 @@ namespace Api
                             "http://localhost:3000",
                             "https://*.equinor.com")
                     .AllowAnyHeader()
+                    .WithExposedHeaders(QueryStringParameters.PaginationHeader)
                     .AllowAnyMethod()
                     .SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
@@ -78,8 +84,7 @@ namespace Api
                         Implicit = new OpenApiOAuthFlow
                         {
                             TokenUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/token"),
-                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize"),
-                            Scopes = { { $"api://{Configuration["AzureAd:ClientId"]}/User.Impersonation", "User Impersonation" } }
+                            AuthorizationUrl = new Uri($"{Configuration["AzureAd:Instance"]}/{Configuration["AzureAd:TenantId"]}/oauth2/authorize")
                         }
                     }
                 });
@@ -129,17 +134,6 @@ namespace Api
             services.AddScoped(typeof(CommonLibraryController), typeof(CommonLibraryController));
             #endregion
 
-            // Service Now Integration
-            #region Service Now Integration
-
-            // Service is of singleton type because it should be the same for all requests
-            // TODO: Verify if this should be singleton
-            services.AddSingleton(typeof(ServiceNowService), typeof(ServiceNowService));
-
-            // Controller is scoped because a new instance should be initialized for each request
-            services.AddScoped(typeof(ServiceNowController), typeof(ServiceNowController));
-            #endregion
-
             //WBS API Integration
             #region WBS API Integration
 
@@ -148,6 +142,14 @@ namespace Api
             // Controller is scoped because a new instance should be initialized for each request
             services.AddScoped(typeof(WbsController), typeof(WbsController));
             #endregion
+
+            // Database connection
+            services.AddSqlDbContext<DatabaseContext>(Configuration.GetConnectionString("iPadDatabase"))
+                .AddAccessTokenSupport()
+                .AddSqlTokenProvider<SqlTokenProvider>(ServiceLifetime.Singleton);
+
+            // Database access is Scoped because it depends on SqlDbContext which is also scoped
+            services.AddScoped<IPadDatabaseAccess, IPadDatabaseAccess>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

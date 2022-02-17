@@ -1,15 +1,15 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useApiClients, Context } from '@equinor/fusion'
 
-import { PositionDetails } from '../api/models'
+import { PositionDetails, ErrorProps } from '../api/models'
 import { getName, getValidPosition } from './helpers'
+import { apiBackend } from '../api/apiClient'
 
 export const useValidPositionsAsync = (
     setValidPositions: (newPositions: PositionDetails[]) => void,
     setHasFetched: (newState: boolean) => void,
     currentContext: Context | null,
-    setIsError: (newState: boolean) => void,
-    setErrorMessage: (newState: string) => void
+    errorProps: ErrorProps
 ) => {
     const apiClients = useApiClients()
     const positionNames = ['CC Manager', 'Construction Manager', 'Commissioning Manager', 'Project Manager', 'Project Director']
@@ -34,10 +34,51 @@ export const useValidPositionsAsync = (
                     setHasFetched(true)
                 },
                 reason => {
-                    setErrorMessage(reason)
-                    setIsError(true)
+                    errorProps.setErrorMessage(reason)
+                    errorProps.setIsError(true)
                 }
             )
         }
     }, [currentContext])
+}
+
+export const useGetCountriesAsync = (setCountryList: (newCountries: string[]) => void, errorProps: ErrorProps) => {
+    const api = new apiBackend()
+    useEffect(() => {
+        api.getCountries().then(
+            response => {
+                setCountryList(response.sort())
+            },
+            reason => {
+                errorProps.setErrorMessage(reason)
+                errorProps.setIsError(true)
+            }
+        )
+    }, [])
+}
+
+export const useFetchWbs = (
+    canQuery: (query: string) => boolean,
+    setIsQuerying: (isQuerying: boolean) => void,
+    setWbsList: (response: any) => void,
+    errorProps: ErrorProps
+) => {
+    const api = new apiBackend()
+    return useCallback(async (query: string) => {
+        if (canQuery(query)) {
+            try {
+                const response = await api.getWbs(query)
+                setWbsList(response)
+                setIsQuerying(false)
+            } catch (e) {
+                console.log('Error fetching WBS list')
+                if (e instanceof Error) {
+                    errorProps.setErrorMessage(e.message)
+                    errorProps.setIsError(true)
+                }
+                setIsQuerying(false)
+                setWbsList([])
+            }
+        }
+    }, [])
 }

@@ -33,7 +33,7 @@ describe('Test Order page', () => {
         orderPage.getSimTypeWifiRadioButton().should('be.visible')
     })
 
-    it('Sim Type radio buttons function as expected"', () => {
+    it('Sim Type radio buttons function as expected', () => {
         orderPage.fillOrderForm()
 
         // Select external hire from dropdown
@@ -56,7 +56,7 @@ describe('Test Order page', () => {
         orderPage.fillOrderForm()
         orderPage.getSubmitButton().should('not.be.disabled')
         orderPage.getSubmitButton().click()
-        cy.wait('@submitForm')
+        //TODO: Wait for POST to database
         orderPage.getSubmitDialog().should('be.visible')
         orderPage.getSubmitDialogOkButton().click()
     })
@@ -87,7 +87,18 @@ describe('Test Order page', () => {
         orderPage.getAmountWarningDialog().should('be.visible')
         orderPage.getAmountWarningDialogConfirmButton().click()
 
-        cy.wait('@submitForm')
+        //TODO: Wait for POST to database
         orderPage.getSubmitDialog().should('be.visible')
+    })
+
+    it('Form is cleared after submit', () => {
+        orderPage.assertInitialState()
+
+        orderPage.fillOrderForm()
+        orderPage.getSubmitButton().click()
+        //TODO: Wait for POST to database
+        orderPage.getSubmitDialogOkButton().click()
+
+        orderPage.assertInitialState()
     })
 })

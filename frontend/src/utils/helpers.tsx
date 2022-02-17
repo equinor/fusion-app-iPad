@@ -1,5 +1,5 @@
 import { PositionInstance } from '@equinor/fusion'
-import { SearchableDropdownOption, SelectOption } from '@equinor/fusion-components'
+import { SearchableDropdownOption, SelectOption, Spinner } from '@equinor/fusion-components'
 import { PositionDetails, Wbs } from '../api/models'
 
 export const createDropdownOptions = (list: string[], selectedOption: string): SearchableDropdownOption[] | SelectOption[] => {
@@ -93,7 +93,20 @@ export const getName = (instance: PositionInstance) => {
 export const loadingDropdown: SearchableDropdownOption[] = [
     {
         title: 'Loading...',
-        key: '0',
+        key: 'loading',
         isDisabled: true,
     },
 ]
+
+export const loadingAsideComponent = (item: any) => {
+    if (item.item) {
+        if (item.item.key == 'loading') {
+            return (
+                <div style={{ marginTop: '10px', marginRight: '20px' }}>
+                    <Spinner primary small />
+                </div>
+            )
+        }
+    }
+    return null
+}

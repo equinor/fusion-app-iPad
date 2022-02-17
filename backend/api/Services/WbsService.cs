@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Web;
 using Api.Models;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 
 namespace Api.Services
@@ -22,7 +15,7 @@ namespace Api.Services
         public const string ClientName = "WbsApiClient";
 
         /// <summary>
-        /// Logger is provided by the Dependency Injection manager <see cref="Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+        /// Logger is provided by the Dependency Injection manager <see cref="IServiceCollection"/>
         /// in the <see cref="Startup"/> class, as is standard in ASP.NET projects. 
         /// See <see href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-6.0"/>
         /// </summary>
@@ -40,7 +33,7 @@ namespace Api.Services
 
         public async Task<List<WbsModel>> GetWbsListAsync(string? wbsCode)
         {
-            HttpClient? httpClient = _httpClientFactory.CreateClient(ClientName);
+            var httpClient = _httpClientFactory.CreateClient(ClientName);
 
             HttpResponseMessage responseMessage;
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
@@ -60,13 +53,13 @@ namespace Api.Services
             if (!responseMessage.IsSuccessStatusCode)
             {
                 _logger.LogError("Non-success status code '{StatusCode}' retrieved when querying WBS API with code '{wbsCode}'", responseMessage.StatusCode, wbsCode);
-                throw new AggregateException("Non-success status code when querying WBS API");
+                throw new AggregateException($"Non-success status code: {responseMessage.StatusCode} when querying WBS API");
             }
             string wbsJson = await responseMessage.Content.ReadAsStringAsync();
             _logger.LogInformation("Successfully retrieved WBS list from APIM");
             try
             {
-                List<WbsResponseModel>? wbsList = JsonSerializer.Deserialize<List<WbsResponseModel>>(wbsJson);
+                var wbsList = JsonSerializer.Deserialize<List<WbsResponseModel>>(wbsJson);
                 return wbsList != null ? wbsList.Select(apiResponse => new WbsModel
                 {
                     Code = apiResponse.Code,
