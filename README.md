@@ -1,6 +1,22 @@
 # iPad Service
 **Fusion app for iPad orders, returns and service.**
 
+![Frontend](https://github.com/equinor/fusion-app-iPad/actions/workflows/frontend.yml/badge.svg)
+![Backend](https://github.com/equinor/fusion-app-iPad/actions/workflows/backend.yml/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0b37a44f66044dbc81fff906344b476e)](https://www.codacy.com/gh/equinor/fusion-app-iPad/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=equinor/fusion-app-iPad&amp;utm_campaign=Badge_Grade)
+[![Cypress](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/5svyyo&style=flat&logo=cypress)](https://dashboard.cypress.io/projects/5svyyo/runs)
+
+## Deployments
+We have 3 different environments deployed, CI, QA and Prod. The CI environment corresponds to the main branch,
+while QA and Prod have their respective branches. Promotions to the different branches are done through pull-requests.
+The application is deployed to Radix.
+
+| Environment | Deployment                                                                                                                                                | Status                                                                                                       |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| CI          | [Frontend](https://frontend-fusion-ipad-service-ci.radix.equinor.com/)<br>[Backend](https://backend-fusion-ipad-service-ci.radix.equinor.com/swagger)     | ![CI](https://api.radix.equinor.com/api/v1/applications/fusion-ipad-service/environments/ci/buildstatus)     |
+| QA          | [Frontend](https://frontend-fusion-ipad-service-qa.radix.equinor.com/)<br>[Backend](https://backend-fusion-ipad-service-qa.radix.equinor.com/swagger)     | ![QA](https://api.radix.equinor.com/api/v1/applications/fusion-ipad-service/environments/qa/buildstatus)     |
+| Prod        | [Frontend](https://frontend-fusion-ipad-service-prod.radix.equinor.com/)<br>[Backend](https://backend-fusion-ipad-service-prod.radix.equinor.com/swagger) | ![Prod](https://api.radix.equinor.com/api/v1/applications/fusion-ipad-service/environments/prod/buildstatus) |
+
 ## Frontend
 The frontend is built using Typescript and React, and was created using the
 [fusion-cli](https://github.com/equinor/fusion-cli). Components from the
@@ -126,23 +142,6 @@ xUnit is used for unit testing the backend code. To run all xUnit tests, run
 cd backend
 dotnet test
 ```  
-
-## Deployment
-We have 3 different environments deployed, CI, QA and Prod. The CI environment corresponds to the main branch,
-while QA and Prod have their respective branches. Promotions to the different branches are done through pull-requests.
-The application is deployed to Radix.
-
-### CI
-* [Frontend](https://frontend-fusion-ipad-service-ci.radix.equinor.com/)
-* [Backend](https://backend-fusion-ipad-service-ci.radix.equinor.com/swagger)
-
-### QA
-* [Frontend](https://frontend-fusion-ipad-service-qa.radix.equinor.com/)
-* [Backend](https://backend-fusion-ipad-service-qa.radix.equinor.com/swagger)
-
-### Prod
-* [Frontend](https://frontend-fusion-ipad-service-prod.radix.equinor.com/)
-* [Backend](https://backend-fusion-ipad-service-prod.radix.equinor.com/swagger)
 
 ## Monitoring
 We use [Azure Application Insights](https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core)
