@@ -30,7 +30,7 @@ namespace Api.Database
             IPadQueries.SearchByRitm(ref ipads, iPadParameters.Ritm);
 
             // Query database and return paged result
-            return await PagedList<IPad>.ToPagedList(ipads, iPadParameters.PageNumber, iPadParameters.PageSize);
+            return await PagedList<IPad>.ToPagedList(ipads.OrderBy(i => i.Id), iPadParameters.PageNumber, iPadParameters.PageSize);
         }
 
         public async Task<IPad?> GetIpadById(int id)
