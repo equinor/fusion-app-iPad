@@ -4,6 +4,7 @@ using Api.Controllers;
 using Api.Database;
 using Api.Database.Models;
 using Api.Extensions;
+using Api.Filters;
 using Api.Services;
 using Api.Utilities;
 using Equinor.TI.CommonLibrary.Client;
@@ -80,6 +81,8 @@ namespace Api
             #region Integrate Swagger
             services.AddSwaggerGen(c =>
             {
+                // Add documentation for health-endpoint
+                c.DocumentFilter<HealthCheckFilter>();
                 // Add implicit flow authentication to Swagger
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
@@ -190,7 +193,7 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/health");
+                endpoints.MapHealthChecks(HealthCheckFilter.HealthCheckEndpoint);
             });
         }
     }

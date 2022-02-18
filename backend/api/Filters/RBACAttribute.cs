@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 
-namespace Api.ActionFilters
+namespace Api.Filters
 {
     public sealed class RBACAttribute : TypeFilterAttribute
     {
