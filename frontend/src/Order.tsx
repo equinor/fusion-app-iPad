@@ -248,23 +248,19 @@ const Order = ({ isSideSheet }: Props) => {
                     </Grid>
                 </Grid>
             </div>
-            {isSubmitPopupOpen && (
-                <Scrim onClose={handleClose}>
-                    <SubmitFormDialog onConfirmClick={onOrderConfirmed} isLoading={!isOrderSubmitted}></SubmitFormDialog>
-                </Scrim>
-            )}
-            {isWarningPopupOpen && (
-                <Scrim onClose={handleClose}>
-                    <AmountWarningDialog
-                        onCancelClick={handleClose}
-                        onConfirmClick={() => {
-                            handleClose()
-                            submitForm()
-                        }}
-                        amount={iPadAmount}
-                    ></AmountWarningDialog>
-                </Scrim>
-            )}
+            <Scrim open={isSubmitPopupOpen} onClose={handleClose}>
+                <SubmitFormDialog onConfirmClick={onOrderConfirmed} isLoading={!isOrderSubmitted}></SubmitFormDialog>
+            </Scrim>
+            <Scrim open={isWarningPopupOpen} onClose={handleClose}>
+                <AmountWarningDialog
+                    onCancelClick={handleClose}
+                    onConfirmClick={() => {
+                        handleClose()
+                        submitForm()
+                    }}
+                    amount={iPadAmount}
+                ></AmountWarningDialog>
+            </Scrim>
         </>
     )
 }
