@@ -158,6 +158,8 @@ namespace Api
             services.AddScoped<IPadDatabaseAccess, IPadDatabaseAccess>();
 
             services.AddApplicationInsightsTelemetry();
+
+            services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -188,6 +190,7 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }
