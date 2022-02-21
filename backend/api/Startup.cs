@@ -4,6 +4,7 @@ using Api.Controllers;
 using Api.Database;
 using Api.Database.Models;
 using Api.Extensions;
+using Api.Filters;
 using Api.Services;
 using Api.Utilities;
 using Equinor.TI.CommonLibrary.Client;
@@ -80,6 +81,8 @@ namespace Api
             #region Integrate Swagger
             services.AddSwaggerGen(c =>
             {
+                // Add documentation for health-endpoint
+                c.DocumentFilter<HealthCheckFilter>();
                 // Add implicit flow authentication to Swagger
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
@@ -158,6 +161,8 @@ namespace Api
             services.AddScoped<IPadDatabaseAccess, IPadDatabaseAccess>();
 
             services.AddApplicationInsightsTelemetry();
+
+            services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -188,6 +193,7 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks(HealthCheckFilter.HealthCheckEndpoint);
             });
         }
     }

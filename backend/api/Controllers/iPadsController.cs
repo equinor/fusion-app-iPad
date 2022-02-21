@@ -1,7 +1,7 @@
-﻿using Api.ActionFilters;
-using Api.Database;
+﻿using Api.Database;
 using Api.Database.Entities;
 using Api.Database.Models;
+using Api.Filters;
 using Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
