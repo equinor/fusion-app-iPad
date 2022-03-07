@@ -1,4 +1,8 @@
 # iPad Service
+```diff 
+- This project has been discontinued and its deployments are suspended (for now). 
+```
+---
 **Fusion app for iPad orders, returns and service.**
 
 ![Frontend](https://github.com/equinor/fusion-app-iPad/actions/workflows/frontend.yml/badge.svg)
